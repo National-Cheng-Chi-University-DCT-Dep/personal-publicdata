@@ -110,6 +110,6 @@ Personal Interests & Activities。
 
 * **Lead Guitarist | UN AVEC DEUX** | 2015-09~2024-01
 
-* **Award-winning metal band** | recipient of the "Finals of Iron Rose Competition" from the Taoyuan City Government| 2023-09
+* **Award-winning metal band** | As a key member of an award-winning metal band, received the "Iron Rose Award - Finalist" from a Taoyuan City Government music competition  (2023).
 
-* **Completed a multi-city performance tour in Japan** | 2023-10
+* **Completed a multi-city performance tour in Japan** | Successfully co-organized and completed Osaka based performance tour across Japan, demonstrating strong teamwork, logistical planning, and cross-cultural collaboration (2023).
