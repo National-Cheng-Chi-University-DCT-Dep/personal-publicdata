@@ -1,0 +1,19 @@
+https://www.dennisleehappy.org/
+
+https://admin-dev.dennisleehappy.org/
+(0 TRUST IMPLEMENTATION)
+
+https://ai-security-online-demo.dennisleehappy.org/
+(edge computing and ai integration for building dynamic IPS)
+
+https://bk-creative-dev-frontstage.dennisleehappy.org/
+(FOR https://yodex.com.tw/ DEV ENV)
+
+https://government.dennisleehappy.org/
+(GOVERNMENT INFRA SEARCH)
+
+https://shipeng-dev.dennisleehappy.org
+(AIot project for smart city)
+
+https://web3.dennisleehappy.org
+(eth web 3 smart contract info search and smart contract game)
