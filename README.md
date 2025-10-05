@@ -190,7 +190,7 @@
     ___
 
 
-    依「錄取難易度」排序的雅思要求總表
+   ##  依「錄取難易度」排序的雅思要求總表
 極限保底區 (錄取難易度：極低)
 波蘭 | UITM (Rzeszów) - M.Sc. in Cybersecurity Management
 
