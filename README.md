@@ -190,259 +190,160 @@
     ___
 
 
-   ##  依「錄取難易度」排序的雅思要求總表
-極限保底區 (錄取難易度：極低)
-波蘭 | UITM (Rzeszów) - M.Sc. in Cybersecurity Management
+   ## 📊 依「錄取難易度」排序的雅思要求總表
 
-IELTS 要求: 通常要求 B2 等級，約為 Overall 5.5 - 6.0。
+### 🛡️ 極限保底區 (錄取難易度：極低)
 
-符合程度: ✔️ (符合)
+| 學校 | 課程 | IELTS 要求 | 符合程度 | 備註 |
+|:---|:---|:---|:---|:---|
+| **🇵🇱 波蘭 UITM (Rzeszów)** | M.Sc. in Cybersecurity Management | Overall 5.5 - 6.0 | ✅ **符合** | B2 等級要求 |
+| **🇱🇹 立陶宛 Mykolas Romeris University** | M.Sc. in Cybersecurity Management | Overall 5.5 - 6.5 | ✅ **符合** | 基礎要求 |
+| **🇷🇴 羅馬尼亞 布加勒斯特理工大學** | M.Sc. in Information Security | Overall 6.0 | ✅ **符合** | B2 等級要求 |
+| **🇩🇪 德國 IU (線上)** | M.Sc. in Cyber Security | Overall 6.0 | ✅ **符合** | 線上課程 |
+| **🇬🇧 英國 Arden University (線上)** | M.Sc. Cyber Security | Overall 6.0 | ✅ **符合** | 線上課程 |
 
-立陶宛 | Mykolas Romeris University - M.Sc. in Cybersecurity Management
+### ✅ 高機率錄取區 (錄取難易度：低)
 
-IELTS 要求: Overall 5.5 - 6.5。
+| 學校 | 課程 | IELTS 要求 | 符合程度 | 備註 |
+|:---|:---|:---|:---|:---|
+| **🇮🇪 愛爾蘭 利默里克大學** | M.Eng. in Cyber Security | Overall 6.5，單項≥6.0 | ✅ **符合** | 首要策略目標 |
+| **🇮🇪 愛爾蘭 國立愛爾蘭大學戈爾韋分校** | M.Sc. in Software Design and Development | Overall 6.5，寫作≥6.5，其他≥6.0 | ⚠️ **需注意** | 寫作正好在門檻上 |
+| **🇫🇮 芬蘭 TAMK** | Master's in Cyber Security | Overall 6.0 | ✅ **符合** | 應用科學大學 |
+| **🇪🇪 愛沙尼亞 TalTech** | M.Sc. in Cybersecurity | Overall 6.0，單項≥5.5 | ✅ **符合** | CP值最高 |
 
-符合程度: ✔️ (符合)
+### 🎯 中高機率錄取區 (錄取難易度：中低)
 
-羅馬尼亞 | 布加勒斯特理工大學 - M.Sc. in Information Security
+| 學校 | 課程 | IELTS 要求 | 符合程度 | 備註 |
+|:---|:---|:---|:---|:---|
+| **🇳🇱 荷蘭 特文特大學** | M.Sc. in Cyber Security | Overall 6.5，寫作≥6.0 | ✅ **符合** | 強力第二選擇 |
+| **🇸🇪 瑞典 林雪平大學** | M.Sc. in Computer Science | Overall 6.5，單項≥5.5 | ✅ **符合** | 瑞典名校 |
+| **🇧🇪 比利時 魯汶大學** | Master of Artificial Intelligence | Overall 7.0，單項≥6.5 | ⚠️ **需注意** | 總分和單項都在門檻上 |
 
-IELTS 要求: 通常要求 B2 等級，約為 Overall 6.0。
+### ⚔️ 挑戰區 (錄取難易度：中高)
 
-符合程度: ✔️ (符合)
+| 學校 | 課程 | IELTS 要求 | 符合程度 | 備註 |
+|:---|:---|:---|:---|:---|
+| **🇩🇪 德國 薩爾蘭大學** | M.Sc. in Cybersecurity | Overall 6.5 - 7.0 | ✅ **符合** | B2-C1 等級，免學費 |
+| **🇩🇰 丹麥 DTU** | M.Sc. in Computer Science and Engineering | Overall 6.5 | ✅ **符合** | 北歐頂尖工科大學 |
+| **🇫🇮 芬蘭 阿爾託大學** | M.Sc. in CCIS - Security and Cloud Computing | Overall 6.5，寫作≥5.5 | ✅ **符合** | ⚠️ 實為 SECCLO 聯合碩士 |
 
-德國 | IU (線上) - M.Sc. in Cyber Security
+### 🏆 頂級夢想區 (錄取難易度：高)
 
-IELTS 要求: Overall 6.0。
-
-符合程度: ✔️ (符合)
-
-英國 | Arden University (線上) - M.Sc. Cyber Security
-
-IELTS 要求: Overall 6.0。
-
-符合程度: ✔️ (符合)
-
-高機率錄取區 (錄取難易度：低)
-愛爾蘭 | 利默里克大學 (University of Limerick) - M.Eng. in Cyber Security
-
-IELTS 要求: Overall 6.5，單項不低於 6.0。
-
-符合程度: ✔️ (符合)
-
-愛爾蘭 | 國立愛爾蘭大學戈爾韋分校 - M.Sc. in Software Design and Development
-
-IELTS 要求: Overall 6.5，寫作不低於 6.5，其他單項不低於 6.0。
-
-符合程度: ⚠️ (部分符合/需注意) - 您的寫作預估成績正好在 6.5 的門檻上。
-
-芬蘭 | Tampere University of Applied Sciences (TAMK) - Master's in Cyber Security
-
-IELTS 要求: Overall 6.0。
-
-符合程度: ✔️ (符合)
-
-愛沙尼亞 | Tallinn University of Technology (TalTech) - M.Sc. in Cybersecurity
-
-IELTS 要求: Overall 6.0，單項不低於 5.5。
-
-符合程度: ✔️ (符合)
-
-中高機率錄取區 (錄取難易度：中低)
-荷蘭 | 特文特大學 (University of Twente) - M.Sc. in Cyber Security
-
-IELTS 要求: Overall 6.5，寫作不低於 6.0。
-
-符合程度: ✔️ (符合)
-
-瑞典 | 林雪平大學 (Linköping University) - M.Sc. in Computer Science
-
-IELTS 要求: Overall 6.5，單項不低於 5.5。
-
-符合程度: ✔️ (符合)
-
-比利時 | 魯汶大學 (KU Leuven) - Master of Artificial Intelligence
-
-IELTS 要求: Overall 7.0，單項不低於 6.5。
-
-符合程度: ⚠️ (部分符合/需注意) - 您的總分和單項預估成績都正好在門檻上。
-
-挑戰區 (錄取難易度：中高)
-德國 | 薩爾蘭大學 (Saarland University) - M.Sc. in Cybersecurity
-
-IELTS 要求: 通常要求 B2-C1 等級，約為 Overall 6.5 - 7.0。
-
-符合程度: ✔️ (符合)
-
-丹麥 | 丹麥技術大學 (DTU) - M.Sc. in Computer Science and Engineering
-
-IELTS 要求: Overall 6.5。
-
-符合程度: ✔️ (符合)
-
-芬蘭 | 阿爾託大學 (Aalto University) - M.Sc. in CCIS - Security and Cloud Computing
-
-IELTS 要求: Overall 6.5，寫作不低於 5.5。
-
-符合程度: ✔️ (符合)
-
-頂級夢想區 (錄取難易度：高)
-瑞士 | 蘇黎世聯邦理工學院 (ETH Zurich) - M.Sc. in Computer Science
-
-IELTS 要求: Overall 7.0。
-
-符合程度: ⚠️ (部分符合/需注意) - 您的總分預估在 7.0-7.5 之間，需要確保最終成績穩定在 7.0 或以上。
-
-瑞士 | 洛桑聯邦理工學院 (EPFL) - M.Sc. in Computer Science
-
-IELTS 要求: 雖然有時會列出較低的門檻如 5.5，但對於資工碩士這類競爭激烈的學程，強烈建議達到 Overall 7.0。
-
-符合程度: ✔️ (符合)
-
-荷蘭 | 台夫特理工大學 (TU Delft) - M.Sc. in Computer Science
-
-IELTS 要求: Overall 6.5，單項不低於 6.0。
-
-符合程度: ✔️ (符合)
-
-瑞典 | 皇家理工學院 (KTH) - M.Sc. in Computer Science
-
-IELTS 要求: Overall 6.5，單項不低於 5.5。
-
-符合程度: ✔️ (符合)
+| 學校 | 課程 | IELTS 要求 | 符合程度 | 備註 |
+|:---|:---|:---|:---|:---|
+| **🇨🇭 瑞士 ETH Zurich** | M.Sc. in Computer Science | Overall 7.0 | ⚠️ **需注意** | 總分預估 7.0-7.5，需確保穩定在 7.0+ |
+| **🇨🇭 瑞士 EPFL** | M.Sc. in Computer Science | Overall 7.0 (建議) | ✅ **符合** | 競爭激烈，強烈建議 7.0 |
+| **🇳🇱 荷蘭 TU Delft** | M.Sc. in Computer Science | Overall 6.5，單項≥6.0 | ✅ **符合** | 量子方向為獨立 QIST 課程 |
+| **🇸🇪 瑞典 KTH** | M.Sc. in Computer Science | Overall 6.5，單項≥5.5 | ✅ **符合** | 皇家理工學院 |
 ---
 ---
 
-## 二、依「錄取難易度」排序的學校總表
+## 📊 二、依「錄取難易度」排序的學校總表
 
-### 極限保底區 (錄取難易度：極低，趨近100%)
+### 🛡️ 極限保底區 (錄取難易度：極低，趨近100%)
 
-* **1. 波蘭 | UITM (Rzeszów) - M.Sc. in Cybersecurity Management**
-    * **錄取策略**：私立大學，與業界緊密合作，行政審核，您的五年資歷就是錄取保證。
-    * **學費**：約 €4,500 / 年。
-    * **就業機率 (中)**：當地IT中心，生活成本極低。
-* **2. 立陶宛 | Mykolas Romeris University - M.Sc. in Cybersecurity Management**
-    * **錄取策略**：公立大學，申請要求基礎，不強調GPA，您的履歷將鶴立雞群。
-    * **學費**：約 €4,500 / 年。
-    * **就業機率 (中)**：首都圈大學，金融科技與資安產業發展中。
-* **3. 羅馬尼亞 | 布加勒斯特理工大學 - M.Sc. in Information Security**
-    * **錄取策略**：「文件評估」，無面試，您的完整履歷極具說服力。
-    * **學費**：約 €3,000 / 年。
-    * **就業機率 (中)**：東歐軟體外包中心，本土資安巨頭所在地。
+| 排名 | 學校 | 課程 | 錄取策略 | 學費 | 就業機率 | 備註 |
+|:---|:---|:---|:---|:---|:---|:---|
+| **1** | **🇵🇱 波蘭 UITM (Rzeszów)** | M.Sc. in Cybersecurity Management | 私立大學，與業界緊密合作，行政審核 | €4,500/年 | 中 | 您的五年資歷就是錄取保證 |
+| **2** | **🇱🇹 立陶宛 Mykolas Romeris University** | M.Sc. in Cybersecurity Management | 公立大學，申請要求基礎，不強調GPA | €4,500/年 | 中 | 您的履歷將鶴立雞群 |
+| **3** | **🇷🇴 羅馬尼亞 布加勒斯特理工大學** | M.Sc. in Information Security | 「文件評估」，無面試 | €3,000/年 | 中 | 您的完整履歷極具說服力 |
 
-### 高機率錄取區 (錄取難易度：低)
+### ✅ 高機率錄取區 (錄取難易度：低)
 
-* **4. 愛爾蘭 | 利默里克大學 (University of Limerick) - M.Eng. in Cyber Security**
-    * **錄取策略**：有為「多年實務經驗者」專設的錄取條款，是兼顧錄取率與未來發展的最佳平衡點。
-    * **學費**：約 €28,000 (總學費)。
-    * **就業機率 (高)**：2年畢業工簽，當地是科技公司重要基地。
-* **5. 愛爾蘭 | 國立愛爾蘭大學戈爾韋分校 - M.Sc. in Software Design and Development**
-    * **錄取策略**：「轉專業」碩士，您的開發經驗在此是「降維打擊」。
-    * **學費**：約 €27,000 (總學費)。
-    * **就業機率 (高)**：2年畢業工簽，歐洲科技業中心。
-* **6. 芬蘭 | Tampere University of Applied Sciences (TAMK) - Master's in Cyber Security**
-    * **錄取策略**：「應用科學大學」，明確要求工作經驗，您的5年資歷遠超標準。
-    * **學費**：約 €11,800 / 年。
-    * **就業機率 (中高)**：當地科技業對資安人才需求大。
-* **7. 德國 | IU (線上) - M.Sc. in Cyber Security**
-    * **錄取策略**：德國最大的私立線上大學，錄取標準極度靈活，專為在職人士設計。
-    * **學費**：約 €12,000 - €16,000 (總學費)。
-    * **就業機率 (中高)**：畢業後可申請德國18個月找工作簽證。
+| 排名 | 學校 | 課程 | 錄取策略 | 學費 | 就業機率 | 備註 |
+|:---|:---|:---|:---|:---|:---|:---|
+| **4** | **🇮🇪 愛爾蘭 利默里克大學** | M.Eng. in Cyber Security | 有為「多年實務經驗者」專設的錄取條款 | €28,000 (總學費) | 高 | 兼顧錄取率與未來發展的最佳平衡點 |
+| **5** | **🇮🇪 愛爾蘭 國立愛爾蘭大學戈爾韋分校** | M.Sc. in Software Design and Development | 「轉專業」碩士，您的開發經驗在此是「降維打擊」 | €27,000 (總學費) | 高 | 2年畢業工簽，歐洲科技業中心 |
+| **6** | **🇫🇮 芬蘭 TAMK** | Master's in Cyber Security | 「應用科學大學」，明確要求工作經驗 | €11,800/年 | 中高 | 您的5年資歷遠超標準 |
+| **7** | **🇩🇪 德國 IU (線上)** | M.Sc. in Cyber Security | 德國最大的私立線上大學，錄取標準極度靈活 | €12,000-€16,000 (總學費) | 中高 | 專為在職人士設計 |
 
-### 中高機率錄取區 (錄取難易度：中低)
+### 🎯 中高機率錄取區 (錄取難易度：中低)
 
-* **8. 荷蘭 | 特文特大學 (University of Twente) - M.Sc. in Cyber Security**
-    * **錄取策略**：荷蘭頂尖大學中較為「全面評估」的學校，會認真考量您的SOP與CV。
-    * **學費**：約 €17,750 / 年。
-    * **就業機率 (高)**：1年畢業工簽，科技就業市場活躍。
-* **9. 瑞典 | 林雪平大學 (Linköping University) - M.Sc. in Computer Science**
-    * **錄取策略**：瑞典名校，但國際競爭激烈度稍低於KTH，您的碩士高GPA會加分。
-    * **學費**：約 €12,500 / 年。
-    * **就業機率 (高)**：瑞典是科技新創的故鄉。
-* **10. 比利時 | 魯汶大學 (KU Leuven) - Master of Artificial Intelligence**
-    * **錄取策略**：「進階碩士」，更看重專業匹配度而非單一GPA，您的AI專案是重點。
-    * **學費**：約 €6,600 / 年。
-    * **就業機率 (中高)**：地處歐盟中心，就業機會多元。
+| 排名 | 學校 | 課程 | 錄取策略 | 學費 | 就業機率 | 備註 |
+|:---|:---|:---|:---|:---|:---|:---|
+| **8** | **🇳🇱 荷蘭 特文特大學** | M.Sc. in Cyber Security | 荷蘭頂尖大學中較為「全面評估」的學校 | €17,750/年 | 高 | 會認真考量您的SOP與CV |
+| **9** | **🇸🇪 瑞典 林雪平大學** | M.Sc. in Computer Science | 瑞典名校，但國際競爭激烈度稍低於KTH | €12,500/年 | 高 | 您的碩士高GPA會加分 |
+| **10** | **🇧🇪 比利時 魯汶大學** | Master of Artificial Intelligence | 「進階碩士」，更看重專業匹配度而非單一GPA | €6,600/年 | 中高 | 您的AI專案是重點 |
 
-### 挑戰區 (錄取難易度：中高)
+### ⚔️ 挑戰區 (錄取難易度：中高)
 
-* **11. 德國 | 薩爾蘭大學 (Saarland University) - M.Sc. in Cybersecurity**
-    * **錄取策略**：歐洲網路安全研究重鎮，學術性強，看重碩士GPA與研究方向匹配度。
-    * **學費**：免學費。
-    * **就業機率 (高)**：18個月找工作簽證，就業市場強勁。
-* **12. 丹麥 | 丹麥技術大學 (DTU) - M.Sc. in Computer Science and Engineering**
-    * **錄取策略**：北歐頂尖工科大學，需要極具說服力的SOP來解釋大學GPA的劣勢。
-    * **學費**：約 €15,000 / 年。
-    * **就業機率 (高)**：哥本哈根科技產業發達。
+| 排名 | 學校 | 課程 | 錄取策略 | 學費 | 就業機率 | 備註 |
+|:---|:---|:---|:---|:---|:---|:---|
+| **11** | **🇩🇪 德國 薩爾蘭大學** | M.Sc. in Cybersecurity | 歐洲網路安全研究重鎮，學術性強 | 免學費 | 高 | 看重碩士GPA與研究方向匹配度 |
+| **12** | **🇩🇰 丹麥 DTU** | M.Sc. in Computer Science and Engineering | 北歐頂尖工科大學，需要極具說服力的SOP | €15,000/年 | 高 | 需要解釋大學GPA的劣勢 |
 
 ---
 
 
 ---
 
-#### 強力推薦 (Strong Options)
+### 🤖 方向一：AI 安全專家 / 研究員 (AI Security Specialist / Researcher)
 
-* **丹麥 | 丹麥技術大學 (DTU) - M.Sc. in Computer Science and Engineering**
-    * **為何適合您**：其 `Safe and Secure by Design` 方向專注於建構本質安全的 AI 系統，與您背景高度契合。
-    * **考量點**：學費較高 (約 €15,000/年)。
-* **芬蘭 | 阿爾託大學 (Aalto University) - M.Sc. in CCIS - Security and Cloud Computing**
-    * **為何適合您**：直接結合安全與雲端，並提供大量 AI 選修。與業界連結緊密。
-    * **考量點**：生活成本較高。
-* **英國 | 雪菲爾大學 (University of Sheffield) - MSc Cybersecurity and Artificial Intelligence**
-    * **為何適合您**：學程名稱與您的目標完全一致，課程設計專注於 AI 在資安的應用。
-    * **考量點**：英國學費及生活費昂貴。
+**🎯 目標**：尋找將「人工智慧/機器學習」與「網路安全」深度結合的頂尖學程
 
-#### 潛力之選 (High Potential & Affordable)
+#### 🏆 頂級推薦 (Top Tier)
 
-* **愛沙尼亞 | 塔爾圖大學 (University of Tartu) - M.Sc. in Cybersecurity**
-    * **為何適合您**：愛沙尼亞是全球網路安全重鎮，該學程結合技術、策略與法律，CP值極高。
-    * **考量點**：綜合排名不高，但在資安領域是頂級專家。
+| 學校 | 課程 | 適合原因 | 考量點 | 錄取機率 |
+|:---|:---|:---|:---|:---|
+| **🇨🇭 ETH Zurich** | M.Sc. in Computer Science | 全球CS聖殿，可主修 `Information Security` 或 `Machine Intelligence` | 競爭極度激烈，生活費昂貴 | 5-15% |
+| **🇨🇭 EPFL** | M.Sc. in Computer Science | 提供極大選課彈性，可主修 `Information Security` 並大量選修 AI 課程 | 同 ETH，競爭激烈且生活費高 | 5-15% |
 
-### 方向二：量子密碼學家 / 前瞻技術研究員 (Quantum Security Specialist)
+#### 💪 強力推薦 (Strong Options)
 
-**目標**：您最獨特的優勢領域，專注於量子計算安全與後量子密碼學。
+| 學校 | 課程 | 適合原因 | 考量點 | 錄取機率 |
+|:---|:---|:---|:---|:---|
+| **🇩🇰 DTU** | M.Sc. in Computer Science and Engineering | `Safe and Secure by Design` 方向專注於建構本質安全的 AI 系統 | 學費較高 (約 €15,000/年) | 25-40% |
+| **🇫🇮 Aalto University** | M.Sc. in CCIS - Security and Cloud Computing | ⚠️ **注意**：實為 Erasmus Mundus SECCLO 聯合碩士 | 需向 SECCLO 項目中心申請 | 25-40% |
+| **🇬🇧 Sheffield** | MSc Cybersecurity and Artificial Intelligence | 學程名稱與目標完全一致，課程設計專注於 AI 在資安的應用 | 英國學費及生活費昂貴 | 40-60% |
 
-#### 頂級推薦 (Top Tier)
+#### 🌟 潛力之選 (High Potential & Affordable)
 
-* **荷蘭 | 台夫特理工大學 (TU Delft) - M.Sc. in Computer Science - Quantum Computing Track**
-    * **為何適合您**：全球頂尖量子研究中心 QuTech 所在地，提供量子通訊與密碼學課程，是您的最佳選擇。
-    * **考量點**：申請難度極高，對數理背景要求嚴格。
-* **德國 | 慕尼黑工業大學 (TUM) & 慕尼黑大學 (LMU) - M.Sc. in Quantum Science & Technology**
-    * **為何適合您**：兩所頂尖大學合辦的精英學程，地處歐洲「量子谷」，產業連結緊密。
-    * **考量點**：對跨學科的數理基礎要求高。
+| 學校 | 課程 | 適合原因 | 考量點 | 錄取機率 |
+|:---|:---|:---|:---|:---|
+| **🇪🇪 University of Tartu** | M.Sc. in Cybersecurity | 愛沙尼亞是全球網路安全重鎮，課程結合技術、策略與法律 | 綜合排名不高，但在資安領域是頂級專家 | 60-85% |
 
-#### 強力推薦 (Strong Options)
+### ⚛️ 方向二：量子密碼學家 / 前瞻技術研究員 (Quantum Security Specialist)
 
-* **法國 | 巴黎文理研究大學 (Université PSL) - Master in Quantum Engineering**
-    * **為何適合您**：頂級研究型大學聯盟，提供博士預備學程，您的實務經驗會是亮點。
-    * **考量點**：課程偏重研究，需要強烈的學術導向。
-* **義大利 | 杜林理工大學 (Politecnico di Torino) - M.Sc. in Quantum Engineering**
-    * **為何適合您**：少數以「工程」為導向的量子碩士，明確包含安全(Security)應用。
-    * **考量點**：在量子領域的聲譽積累不及前述學校。
+**🎯 目標**：您最獨特的優勢領域，專注於量子計算安全與後量子密碼學
 
-### 方向三：頂級雲端安全架構師 (Advanced Cloud Security Architect)
+> **⚠️ 重要提醒**：選擇量子計算課程是對一條**高度學術化、以研究為導向的職涯路徑的承諾**
 
-**目標**：結合您的實務經驗與架構思維，偏向應用與領導。
+#### 🏆 頂級推薦 (Top Tier)
 
-#### 頂級推薦 (Top Tier)
+| 學校 | 課程 | 適合原因 | 考量點 | 錄取機率 |
+|:---|:---|:---|:---|:---|
+| **🇳🇱 TU Delft** | M.Sc. in QIST (Quantum Information Science & Technology) | 全球頂尖量子研究中心 QuTech 所在地，提供量子通訊與密碼學課程 | 申請難度極高，對數理背景要求嚴格 | 5-15% |
+| **🇩🇪 TUM & LMU** | M.Sc. in Quantum Science & Technology | 兩所頂尖大學合辦的精英學程，地處歐洲「量子谷」 | 對跨學科的數理基礎要求高 | 5-15% |
 
-* **EIT Digital Master School - M.Sc. in Cyber Security (CSE)**
-    * **為何適合您**：專為您設計的學程。兩年兩國雙學位，結合深度技術與「創新創業」副修，完美培養架構師思維。
-    * **考量點**：學費偏高，需適應兩國生活。
+#### 💪 強力推薦 (Strong Options)
 
-#### 強力推薦 (Strong Options)
+| 學校 | 課程 | 適合原因 | 考量點 | 錄取機率 |
+|:---|:---|:---|:---|:---|
+| **🇫🇷 Université PSL** | Master in Quantum Engineering | 頂級研究型大學聯盟，提供博士預備學程 | 課程偏重研究，需要強烈的學術導向 | 25-40% |
+| **🇮🇹 Politecnico di Torino** | M.Sc. in Quantum Engineering | 少數以「工程」為導向的量子碩士，明確包含安全應用 | 在量子領域的聲譽積累不及前述學校 | 40-60% |
 
-* **瑞典 | 皇家理工學院 (KTH) - M.Sc. in Computer Science - Security and Privacy Track**
-    * **為何適合您**：瑞典頂尖工大，資安方向扎實，地處科技新創之都斯德哥爾摩。
-    * **考量點**：北歐生活成本高昂。
-* **法國 | EURECOM - Master in Cyber Security**
-    * **為何適合您**：位於法國科技園區的精英研究生院，`Mobile and Cloud Security` 方向與您完美契合，就業率極高。
-    * **考量點**：綜合大學排名不高。
+### ☁️ 方向三：頂級雲端安全架構師 (Advanced Cloud Security Architect)
 
-#### 潛力之選 (High Potential & Affordable)
+**🎯 目標**：結合您的實務經驗與架構思維，偏向應用與領導
 
-* **捷克 | 布拉格捷克理工大學 (CTU) - M.Sc. in Computer Security**
-    * **為何適合您**：中歐科技強國的頂尖理工大學，資安產業鏈完整，CP值極高。
-    * **考量點**：在當地生活可能需要學習一些捷克語。
+#### 🏆 頂級推薦 (Top Tier)
+
+| 學校 | 課程 | 適合原因 | 考量點 | 錄取機率 |
+|:---|:---|:---|:---|:---|
+| **🇪🇺 EIT Digital** | M.Sc. in Cyber Security (CSE) | 專為您設計的學程。兩年兩國雙學位，結合深度技術與「創新創業」副修 | 學費偏高，需適應兩國生活 | 25-40% |
+
+#### 💪 強力推薦 (Strong Options)
+
+| 學校 | 課程 | 適合原因 | 考量點 | 錄取機率 |
+|:---|:---|:---|:---|:---|
+| **🇸🇪 KTH** | M.Sc. in Computer Science - Security and Privacy Track | 瑞典頂尖工大，資安方向扎實，地處科技新創之都斯德哥爾摩 | 北歐生活成本高昂 | 25-40% |
+| **🇫🇷 EURECOM** | Master in Cyber Security | 位於法國科技園區的精英研究生院，`Mobile and Cloud Security` 方向與您完美契合 | 綜合大學排名不高 | 40-60% |
+
+#### 🌟 潛力之選 (High Potential & Affordable)
+
+| 學校 | 課程 | 適合原因 | 考量點 | 錄取機率 |
+|:---|:---|:---|:---|:---|
+| **🇨🇿 CTU Prague** | M.Sc. in Computer Security | 中歐科技強國的頂尖理工大學，資安產業鏈完整 | 在當地生活可能需要學習一些捷克語 | 60-85% |
 
 ---
 ## 最終申請策略總結
