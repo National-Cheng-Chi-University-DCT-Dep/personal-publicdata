@@ -17,3 +17,7 @@ https://shipeng-dev.dennisleehappy.org
 
 https://web3.dennisleehappy.org
 (eth web 3 smart contract info search and smart contract game)
+
+
+https://essentia.dennisleehappy.org/
+(r3f and quantum 傅立葉轉傳 visualize )
