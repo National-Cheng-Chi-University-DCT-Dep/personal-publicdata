@@ -37,6 +37,130 @@
     * **為何適合您**：提供極大選課彈性，可主修 `Information Security` 並大量選修 AI 課程。
     * **考量點**：同 ETH，競爭激烈且生活費高。
 
+
+    ___
+
+
+    依「錄取難易度」排序的雅思要求總表
+極限保底區 (錄取難易度：極低)
+波蘭 | UITM (Rzeszów) - M.Sc. in Cybersecurity Management
+
+IELTS 要求: 通常要求 B2 等級，約為 Overall 5.5 - 6.0。
+
+符合程度: ✔️ (符合)
+
+立陶宛 | Mykolas Romeris University - M.Sc. in Cybersecurity Management
+
+IELTS 要求: Overall 5.5 - 6.5。
+
+符合程度: ✔️ (符合)
+
+羅馬尼亞 | 布加勒斯特理工大學 - M.Sc. in Information Security
+
+IELTS 要求: 通常要求 B2 等級，約為 Overall 6.0。
+
+符合程度: ✔️ (符合)
+
+德國 | IU (線上) - M.Sc. in Cyber Security
+
+IELTS 要求: Overall 6.0。
+
+符合程度: ✔️ (符合)
+
+英國 | Arden University (線上) - M.Sc. Cyber Security
+
+IELTS 要求: Overall 6.0。
+
+符合程度: ✔️ (符合)
+
+高機率錄取區 (錄取難易度：低)
+愛爾蘭 | 利默里克大學 (University of Limerick) - M.Eng. in Cyber Security
+
+IELTS 要求: Overall 6.5，單項不低於 6.0。
+
+符合程度: ✔️ (符合)
+
+愛爾蘭 | 國立愛爾蘭大學戈爾韋分校 - M.Sc. in Software Design and Development
+
+IELTS 要求: Overall 6.5，寫作不低於 6.5，其他單項不低於 6.0。
+
+符合程度: ⚠️ (部分符合/需注意) - 您的寫作預估成績正好在 6.5 的門檻上。
+
+芬蘭 | Tampere University of Applied Sciences (TAMK) - Master's in Cyber Security
+
+IELTS 要求: Overall 6.0。
+
+符合程度: ✔️ (符合)
+
+愛沙尼亞 | Tallinn University of Technology (TalTech) - M.Sc. in Cybersecurity
+
+IELTS 要求: Overall 6.0，單項不低於 5.5。
+
+符合程度: ✔️ (符合)
+
+中高機率錄取區 (錄取難易度：中低)
+荷蘭 | 特文特大學 (University of Twente) - M.Sc. in Cyber Security
+
+IELTS 要求: Overall 6.5，寫作不低於 6.0。
+
+符合程度: ✔️ (符合)
+
+瑞典 | 林雪平大學 (Linköping University) - M.Sc. in Computer Science
+
+IELTS 要求: Overall 6.5，單項不低於 5.5。
+
+符合程度: ✔️ (符合)
+
+比利時 | 魯汶大學 (KU Leuven) - Master of Artificial Intelligence
+
+IELTS 要求: Overall 7.0，單項不低於 6.5。
+
+符合程度: ⚠️ (部分符合/需注意) - 您的總分和單項預估成績都正好在門檻上。
+
+挑戰區 (錄取難易度：中高)
+德國 | 薩爾蘭大學 (Saarland University) - M.Sc. in Cybersecurity
+
+IELTS 要求: 通常要求 B2-C1 等級，約為 Overall 6.5 - 7.0。
+
+符合程度: ✔️ (符合)
+
+丹麥 | 丹麥技術大學 (DTU) - M.Sc. in Computer Science and Engineering
+
+IELTS 要求: Overall 6.5。
+
+符合程度: ✔️ (符合)
+
+芬蘭 | 阿爾託大學 (Aalto University) - M.Sc. in CCIS - Security and Cloud Computing
+
+IELTS 要求: Overall 6.5，寫作不低於 5.5。
+
+符合程度: ✔️ (符合)
+
+頂級夢想區 (錄取難易度：高)
+瑞士 | 蘇黎世聯邦理工學院 (ETH Zurich) - M.Sc. in Computer Science
+
+IELTS 要求: Overall 7.0。
+
+符合程度: ⚠️ (部分符合/需注意) - 您的總分預估在 7.0-7.5 之間，需要確保最終成績穩定在 7.0 或以上。
+
+瑞士 | 洛桑聯邦理工學院 (EPFL) - M.Sc. in Computer Science
+
+IELTS 要求: 雖然有時會列出較低的門檻如 5.5，但對於資工碩士這類競爭激烈的學程，強烈建議達到 Overall 7.0。
+
+符合程度: ✔️ (符合)
+
+荷蘭 | 台夫特理工大學 (TU Delft) - M.Sc. in Computer Science
+
+IELTS 要求: Overall 6.5，單項不低於 6.0。
+
+符合程度: ✔️ (符合)
+
+瑞典 | 皇家理工學院 (KTH) - M.Sc. in Computer Science
+
+IELTS 要求: Overall 6.5，單項不低於 5.5。
+
+符合程度: ✔️ (符合)
+
 #### 強力推薦 (Strong Options)
 
 * **丹麥 | 丹麥技術大學 (DTU) - M.Sc. in Computer Science and Engineering**
