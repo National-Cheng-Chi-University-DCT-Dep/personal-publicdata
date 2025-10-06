@@ -1,0 +1,168 @@
+# Notification System Configuration
+# University Application Alert System v2.0
+
+# Deadline monitoring settings
+deadline_alerts:
+  enabled: true
+  urgent_threshold_days: 7      # Alert when deadline ≤ 7 days
+  warning_threshold_days: 30    # Alert when deadline ≤ 30 days
+  check_frequency_hours: 24     # How often to check (for scheduled runs)
+
+# GitHub Issues integration
+github_integration:
+  enabled: true
+  auto_create_issues: true
+  labels:
+    - "university-application"
+    - "auto-generated"
+    - "action-required"
+  assignees: []  # GitHub usernames to auto-assign
+  milestone: ""  # Optional milestone name
+  
+# Email notifications (requires SMTP setup)
+email_notifications:
+  enabled: false  # Set to true and configure SMTP to enable
+  smtp_server: ""  # e.g., smtp.gmail.com
+  smtp_port: 587
+  use_tls: true
+  sender_email: ""  # Your email address
+  sender_password: ""  # App password (use environment variable: EMAIL_PASSWORD)
+  recipient_email: "admin@dennisleehappy.org"
+  
+  # Email templates
+  templates:
+    urgent_deadline: "🚨 URGENT: {school_name} application due in {days} days"
+    ielts_retake: "📚 IELTS Retake Recommended for {school_count} schools"
+    validation_issues: "⚠️ Application Validation Issues Found"
+
+# Slack integration (optional)
+slack_integration:
+  enabled: false
+  webhook_url: ""  # Slack webhook URL
+  channel: "#university-applications"
+  username: "Application Bot"
+  icon_emoji: ":mortar_board:"
+
+# Discord integration (optional) 
+discord_integration:
+  enabled: false
+  webhook_url: ""  # Discord webhook URL
+  username: "University Assistant"
+
+# Risk monitoring settings
+risk_alerts:
+  enabled: true
+  monitor_ielts_gaps: true
+  monitor_budget_overruns: true
+  monitor_missing_documents: true
+  monitor_deadline_conflicts: true  # Alert if multiple deadlines close together
+  
+  # Risk thresholds
+  thresholds:
+    ielts_writing_critical: 0.0   # Gap between required and actual
+    budget_warning_multiplier: 1.5  # Alert if tuition > budget * multiplier
+    low_confidence_threshold: 0.3   # Alert if scraped data confidence < threshold
+
+# Academic monitoring (for research tracking)
+academic_monitoring:
+  enabled: true
+  check_frequency_days: 7  # How often to check for new papers/conferences
+  monitor_professor_publications: true
+  monitor_conference_deadlines: true
+  monitor_github_activity: true
+  
+  # Academic alert settings
+  alert_new_publications: true
+  alert_conference_opportunities: true
+  alert_research_collaborations: true
+
+# Data quality monitoring
+data_quality_alerts:
+  enabled: true
+  alert_scraping_failures: true
+  alert_dom_structure_changes: true
+  alert_data_inconsistencies: true
+  
+# Application progress tracking
+progress_tracking:
+  enabled: true
+  track_document_completion: true
+  track_submission_status: true
+  track_interview_schedules: true
+  track_decision_dates: true
+  
+  # Milestone alerts
+  milestone_alerts:
+    sop_draft_due: 14  # Alert X days before internal deadlines
+    recommendation_request_due: 21
+    final_review_due: 7
+
+# Integration with external services
+external_integrations:
+  google_calendar:
+    enabled: false
+    calendar_id: ""  # Google Calendar ID for deadline sync
+    
+  notion:
+    enabled: false
+    token: ""  # Notion integration token
+    database_id: ""  # Notion database for application tracking
+    
+  airtable:
+    enabled: false
+    api_key: ""
+    base_id: ""
+    table_name: "Applications"
+
+# Notification preferences by type
+notification_preferences:
+  deadline_alerts:
+    email: true
+    github: true
+    slack: false
+    discord: false
+    
+  validation_issues:
+    email: true
+    github: true
+    slack: false
+    discord: false
+    
+  academic_updates:
+    email: false
+    github: true
+    slack: false
+    discord: false
+    
+  progress_milestones:
+    email: true
+    github: false
+    slack: false
+    discord: false
+
+# Quiet hours (suppress non-critical alerts)
+quiet_hours:
+  enabled: true
+  start_hour: 22  # 10 PM
+  end_hour: 8     # 8 AM
+  timezone: "UTC"
+  
+  # What to suppress during quiet hours
+  suppress_low_priority: true
+  suppress_medium_priority: false
+  suppress_high_priority: false
+  suppress_critical: false
+
+# Rate limiting (prevent spam)
+rate_limiting:
+  enabled: true
+  max_issues_per_hour: 5
+  max_emails_per_day: 10
+  duplicate_suppression_hours: 24  # Don't create duplicate alerts within X hours
+
+# Debugging and logging
+debug:
+  enabled: false
+  log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  log_file: "logs/notification_system.log"
+  save_alert_history: true
