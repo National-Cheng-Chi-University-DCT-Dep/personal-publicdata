@@ -1,0 +1,111 @@
+# School Information Database for Application Generation
+# Last Updated: October 2025
+
+schools:
+  - school_id: "taltech"
+    school: "TalTech"
+    full_name: "Tallinn University of Technology"
+    program: "MSc in Cybersecurity"
+    country: "Estonia"
+    location: "Tallinn, Estonia"
+    sop_bridge_file: "sop_bridge_taltech.md"
+    ielts_requirement:
+      overall: 6.0
+      minimum_band: 5.5
+    tuition_fee: "€6,000/year"
+    application_deadline: "March 1, 2025"
+    website: "https://taltech.ee/en/cybersecurity-msc"
+    key_features:
+      - "World's largest cyber exercise (Locked Shields)"
+      - "Estonian Centre of Excellence in AI (EXAI)"
+      - "Hardware security research"
+      - "Post-quantum cryptography"
+      - "NATO-rooted legacy"
+    priority_level: "high"
+    status: "active"
+
+  - school_id: "aalto"
+    school: "Aalto University"
+    full_name: "Aalto University"
+    program: "SECCLO Erasmus Mundus Joint Master"
+    country: "Finland"
+    location: "Espoo, Finland"
+    sop_bridge_file: "sop_bridge_aalto.md"
+    ielts_requirement:
+      overall: 6.5
+      writing_minimum: 5.5
+    tuition_fee: "Erasmus Mundus (with scholarship opportunities)"
+    application_deadline: "January 15, 2025"
+    website: "https://secclo.eu/"
+    key_features:
+      - "Two-year dual degree program"
+      - "Mobility across Europe (KTH, DTU, etc.)"
+      - "AI and quantum research focus"
+      - "Full scholarship opportunities"
+      - "International research network"
+    priority_level: "high"
+    status: "active"
+
+  - school_id: "linkoping"
+    school: "Linköping University"
+    full_name: "Linköping University"
+    program: "MSc in Computer Science"
+    country: "Sweden"
+    location: "Linköping, Sweden"
+    sop_bridge_file: "sop_bridge_generic.md"
+    ielts_requirement:
+      overall: 6.5
+      minimum_band: 5.5
+    tuition_fee: "SEK 140,000/year (€12,500)"
+    application_deadline: "January 16, 2025"
+    website: "https://liu.se/en/education/program/6cddd"
+    key_features:
+      - "Strong CS foundation"
+      - "Swedish tech ecosystem"
+      - "Research opportunities"
+      - "Lower competition than KTH"
+    priority_level: "medium"
+    status: "active"
+
+  - school_id: "darmstadt"
+    school: "Hochschule Darmstadt"
+    full_name: "Hochschule Darmstadt University of Applied Sciences"
+    program: "MSc in Computer Science"
+    country: "Germany"
+    location: "Darmstadt, Germany"
+    sop_bridge_file: "sop_bridge_generic.md"
+    ielts_requirement:
+      overall: 6.5
+      flexible_bands: true
+    tuition_fee: "Free (€300-400/semester fees)"
+    application_deadline: "March 15, 2025"
+    website: "https://h-da.com"
+    key_features:
+      - "Free tuition"
+      - "Frankfurt metropolitan area"
+      - "Industry connections"
+      - "18-month work visa after graduation"
+    priority_level: "high"
+    status: "active"
+
+# Template schools for future expansion
+template_schools:
+  - school_id: "template_eu"
+    school: "Template EU University"
+    full_name: "Template European University"
+    program: "MSc in Cybersecurity/Computer Science"
+    country: "EU Country"
+    location: "City, Country"
+    sop_bridge_file: "sop_bridge_generic.md"
+    ielts_requirement:
+      overall: 6.5
+      minimum_band: 5.5
+    tuition_fee: "€X,XXX/year"
+    application_deadline: "TBD"
+    website: "https://university.edu"
+    key_features:
+      - "Feature 1"
+      - "Feature 2" 
+      - "Feature 3"
+    priority_level: "medium"
+    status: "template"
