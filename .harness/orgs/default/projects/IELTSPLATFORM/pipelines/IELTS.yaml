@@ -1,5 +1,5 @@
 pipeline:
-  name: University Application Intelligence System v2.0 - Harness
+  name: University Application Intelligence System v2.0 - Harness.
   identifier: university_application_intelligence
   projectIdentifier: IELTSPLATFORM
   orgIdentifier: default
