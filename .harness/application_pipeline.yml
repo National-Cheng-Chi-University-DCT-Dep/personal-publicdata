@@ -1,5 +1,5 @@
 pipeline:
-  name: University Application Intelligence System v2.0
+  name: University Application Intelligence System v2.0 - Harness
   identifier: university_application_intelligence
   projectIdentifier: personal_publicdata
   orgIdentifier: default
@@ -16,7 +16,7 @@ pipeline:
 
   stages:
     - stage:
-        name: Environment Setup & Dependencies
+        name: Environment Setup and Dependencies
         identifier: setup
         description: Setup Python environment and install dependencies
         type: CI
@@ -78,7 +78,7 @@ pipeline:
                       pip3 list | grep -E "(PyYAML|requests|beautifulsoup4|pandas|nltk|PyGithub)"
 
     - stage:
-        name: Data Collection & Validation
+        name: Data Collection and Validation
         identifier: data_pipeline
         description: Automated data collection and validation
         type: CI
@@ -123,7 +123,7 @@ pipeline:
                       
               - step:
                   type: Run
-                  name: Data Collection (Web Scraping)
+                  name: Data Collection - Web Scraping
                   identifier: data_collection
                   spec:
                     shell: Bash
@@ -162,7 +162,7 @@ pipeline:
                       
               - step:
                   type: Run
-                  name: Data Validation & Eligibility Check
+                  name: Data Validation and Eligibility Check
                   identifier: validation
                   spec:
                     shell: Bash
@@ -206,7 +206,7 @@ pipeline:
                       fi
 
     - stage:
-        name: Intelligence & Analysis
+        name: Intelligence and Analysis
         identifier: intelligence
         description: Academic intelligence and opportunity analysis
         type: CI
@@ -366,7 +366,7 @@ pipeline:
                       find ../final_applications -name "*.md" -path "*/SOP_*" | wc -l | xargs echo "  SOP documents generated:"
 
     - stage:
-        name: Notifications & Task Management
+        name: Notifications and Task Management
         identifier: notifications
         description: Process alerts and create GitHub issues
         type: CI
@@ -463,7 +463,7 @@ pipeline:
                       fi
 
     - stage:
-        name: Artifact Management & Deployment
+        name: Artifact Management and Deployment
         identifier: artifacts
         description: Save and deploy generated artifacts
         type: CI
