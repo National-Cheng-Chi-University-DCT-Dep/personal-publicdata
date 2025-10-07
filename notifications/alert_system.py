@@ -110,9 +110,14 @@ class NotificationCenter:
     """Central notification management system"""
     
     def __init__(self):
-        self.base_dir = Path(__file__).parent.parent
+        # Get the script directory and navigate to project root
+        script_dir = Path(__file__).parent
+        self.base_dir = script_dir.parent
         self.source_data_dir = self.base_dir / "source_data"
         self.output_dir = self.base_dir / "final_applications"
+        
+        # Ensure output directory exists
+        self.output_dir.mkdir(parents=True, exist_ok=True)
         
         # Load configuration
         self.load_config()
