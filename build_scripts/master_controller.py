@@ -322,7 +322,7 @@ class ApplicationIntelligenceSystem:
     
     def run_quick_update(self) -> Dict[str, bool]:
         """Execute quick update pipeline (no scraping, focus on analysis)"""
-        self.log("⚡ Running quick update pipeline...")
+        self.log("[QUICK] Running quick update pipeline...")
         
         results = {}
         
