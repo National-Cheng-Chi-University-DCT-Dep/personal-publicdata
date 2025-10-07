@@ -493,12 +493,36 @@ class NotificationCenter:
             summary['alerts_by_severity'][severity] = summary['alerts_by_severity'].get(severity, 0) + 1
             summary['alerts_by_type'][alert_type] = summary['alerts_by_type'].get(alert_type, 0) + 1
         
-        # Save summary
+        # Save summary with detailed error handling
         summary_file = self.output_dir / "alert_summary.json"
-        with open(summary_file, 'w', encoding='utf-8') as f:
-            json.dump(summary, f, indent=2)
         
-        print(f"[SUMMARY] Alert summary saved to {summary_file}")
+        try:
+            print(f"[DEBUG] Attempting to save alert summary to: {summary_file}")
+            print(f"[DEBUG] Output directory exists: {self.output_dir.exists()}")
+            print(f"[DEBUG] Output directory is writable: {os.access(self.output_dir, os.W_OK)}")
+            
+            # Ensure the directory exists and is writable
+            self.output_dir.mkdir(parents=True, exist_ok=True)
+            
+            with open(summary_file, 'w', encoding='utf-8') as f:
+                json.dump(summary, f, indent=2)
+            
+            print(f"[SUMMARY] Alert summary saved to {summary_file}")
+            print(f"[DEBUG] File size: {summary_file.stat().st_size} bytes")
+            
+        except PermissionError as e:
+            print(f"[ERROR] Permission denied saving alert summary: {e}")
+            print(f"[DEBUG] Directory permissions: {oct(self.output_dir.stat().st_mode)}")
+            raise
+        except OSError as e:
+            print(f"[ERROR] OS error saving alert summary: {e}")
+            print(f"[DEBUG] Available disk space: {os.statvfs(self.output_dir).f_bavail if hasattr(os, 'statvfs') else 'Unknown'}")
+            raise
+        except Exception as e:
+            print(f"[ERROR] Unexpected error saving alert summary: {e}")
+            print(f"[DEBUG] Summary data type: {type(summary)}")
+            print(f"[DEBUG] Summary keys: {list(summary.keys()) if isinstance(summary, dict) else 'Not a dict'}")
+            raise
         
         return summary
     
