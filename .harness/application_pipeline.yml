@@ -68,13 +68,13 @@
                       echo "[SUCCESS] Core dependencies installed"
                       
                       # Try to install optional dependencies
-                      echo "📦 Installing optional dependencies..."
-                      pip3 install selenium webdriver-manager || echo "⚠️ Selenium dependencies failed"
-                      pip3 install lxml html5lib || echo "⚠️ HTML parsing libraries failed"
-                      pip3 install pillow opencv-python || echo "⚠️ Image processing libraries failed"
-                      pip3 install markdown || echo "⚠️ Markdown processing failed"
+                      echo "[INSTALL] Installing optional dependencies..."
+                      pip3 install selenium webdriver-manager || echo "[WARNING] Selenium dependencies failed"
+                      pip3 install lxml html5lib || echo "[WARNING] HTML parsing libraries failed"
+                      pip3 install pillow opencv-python || echo "[WARNING] Image processing libraries failed"
+                      pip3 install markdown || echo "[WARNING] Markdown processing failed"
                       
-                      echo "📋 Installed packages:"
+                      echo "[LIST] Installed packages:"
                       pip3 list | grep -E "(PyYAML|requests|beautifulsoup4|pandas|nltk|PyGithub)"
 
     - stage:
@@ -99,25 +99,25 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "🔍 Validating system configuration..."
+                      echo "[VALIDATE] Validating system configuration..."
                       
                       # Check if required files exist
                       if [ ! -f "source_data/schools.yml" ]; then
-                        echo "❌ schools.yml not found"
+                        echo "[ERROR] schools.yml not found"
                         exit 1
                       fi
                       
                       # Validate YAML syntax
                       python3 -c "import yaml; yaml.safe_load(open('source_data/schools.yml'))"
-                      echo "✅ schools.yml is valid"
+                      echo "[SUCCESS] schools.yml is valid"
                       
                       if [ -f "source_data/recommenders.yml" ]; then
                         python3 -c "import yaml; yaml.safe_load(open('source_data/recommenders.yml'))"
-                        echo "✅ recommenders.yml is valid"
+                        echo "[SUCCESS] recommenders.yml is valid"
                       fi
                       
                       # List available schools
-                      echo "📋 Available schools:"
+                      echo "[LIST] Available schools:"
                       cd build_scripts
                       python3 generate_docs.py --list
                       
@@ -128,7 +128,7 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "🔍 Starting automated data collection..."
+                      echo "[VALIDATE] Starting automated data collection..."
                       
                       # Set up environment variables for web scraping
                       export DISPLAY=:99
@@ -137,15 +137,15 @@
                       # Run data collection with error handling
                       cd data_collection
                       
-                      echo "🕷️ Running university data scraper..."
+                      echo "[SCRAPER] Running university data scraper..."
                       timeout 300 python3 scraper.py || {
                         echo "⚠️ Scraper timeout or error, continuing with existing data..."
                       }
                       
                       # Check if live data was created
                       if [ -f "../source_data/schools_live_data.yml" ]; then
-                        echo "✅ Live data collection successful"
-                        echo "📊 Live data summary:"
+                        echo "[SUCCESS] Live data collection successful"
+                        echo "[SUMMARY] Live data summary:"
                         python3 -c "
                         import yaml
                         with open('../source_data/schools_live_data.yml') as f:
@@ -167,23 +167,23 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "✅ Starting comprehensive data validation..."
+                      echo "[SUCCESS] Starting comprehensive data validation..."
                       
                       cd data_collection
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
                       
-                      echo "🔍 Running application eligibility validator..."
+                      echo "[VALIDATE] Running application eligibility validator..."
                       python3 validator.py
                       
                       # Check validation results
                       if [ -f "../final_applications/validation_report.md" ]; then
-                        echo "✅ Validation completed successfully"
-                        echo "📊 Validation summary:"
+                        echo "[SUCCESS] Validation completed successfully"
+                        echo "[SUMMARY] Validation summary:"
                         
                         # Use the safe validation summary script to avoid indentation errors
                         python3 validation_summary.py
                       else
-                        echo "❌ Validation failed"
+                        echo "[ERROR] Validation failed"
                         exit 1
                       fi
 
@@ -215,14 +215,14 @@
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
                       
                       # Run academic radar with timeout
-                      echo "🎯 Analyzing research opportunities and professor networks..."
+                      echo "[ANALYZE] Analyzing research opportunities and professor networks..."
                       timeout 180 python3 academic_radar.py || {
                         echo "⚠️ Academic radar timeout, continuing with basic analysis..."
                       }
                       
                       # Check results
                       if [ -f "../final_applications/academic_intelligence_report.md" ]; then
-                        echo "✅ Academic intelligence completed"
+                        echo "[SUCCESS] Academic intelligence completed"
                         
                         # Use the safe academic summary script to avoid indentation errors
                         python3 ../data_collection/academic_summary.py
@@ -237,7 +237,7 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "📊 Generating application monitoring dashboard..."
+                      echo "[SUMMARY] Generating application monitoring dashboard..."
                       
                       cd monitoring
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
@@ -245,12 +245,12 @@
                       python3 dashboard.py
                       
                       if [ -f "../final_applications/application_dashboard.md" ]; then
-                        echo "✅ Dashboard generation successful"
+                        echo "[SUCCESS] Dashboard generation successful"
                         
                         # Show dashboard summary
                         head -20 ../final_applications/application_dashboard.md
                       else
-                        echo "❌ Dashboard generation failed"
+                        echo "[ERROR] Dashboard generation failed"
                         exit 1
                       fi
 
@@ -276,13 +276,13 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "📝 Generating customized application documents..."
+                      echo "[DOCUMENTS] Generating customized application documents..."
                       
                       cd build_scripts
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
                       
                       # Determine which schools to generate based on validation results
-                      echo "📋 Determining priority schools for document generation..."
+                      echo "[LIST] Determining priority schools for document generation..."
                       
                       if [ -f "../final_applications/validation_results.json" ]; then
                         # Extract eligible and warning schools using safe methods
@@ -324,22 +324,22 @@
                       if [ -f "priority_schools.txt" ]; then
                         SCHOOLS=$(cat priority_schools.txt)
                         if [ "$SCHOOLS" = "all" ]; then
-                          echo "📝 Generating documents for all active schools..."
+                          echo "[DOCUMENTS] Generating documents for all active schools..."
                           python3 generate_docs.py --all
                         else
-                          echo "📝 Generating documents for priority schools..."
+                          echo "[DOCUMENTS] Generating documents for priority schools..."
                           for school in $SCHOOLS; do
                             echo "  Generating for $school..."
                             python3 generate_docs.py --school "$school"
                           done
                         fi
                       else
-                        echo "📝 Generating documents for all active schools..."
+                        echo "[DOCUMENTS] Generating documents for all active schools..."
                         python3 generate_docs.py --all
                       fi
                       
                       # Document generation summary
-                      echo "📊 Document Generation Summary:"
+                      echo "[SUMMARY] Document Generation Summary:"
                       find ../final_applications -name "*.md" -path "*/CV_*" | wc -l | xargs echo "  CV documents generated:"
                       find ../final_applications -name "*.md" -path "*/SOP_*" | wc -l | xargs echo "  SOP documents generated:"
 
@@ -412,16 +412,16 @@
                       python3 master_controller.py --save-report --quick
                       
                       if [ -f "../final_applications/execution_report.md" ]; then
-                        echo "✅ Master execution report generated"
+                        echo "[SUCCESS] Master execution report generated"
                         
-                        echo "📊 Final System Status:"
+                        echo "[SUMMARY] Final System Status:"
                         echo "========================================"
                         
                         # Show key sections of the execution report
                         grep -A 10 "## 📊 Pipeline Results" ../final_applications/execution_report.md || echo "Report sections not found"
                         
                         echo ""
-                        echo "📁 Generated Files:"
+                        echo "[FILES] Generated Files:"
                         ls -la ../final_applications/*.md ../final_applications/*.json 2>/dev/null || echo "No files generated"
                         
                       else
@@ -456,11 +456,11 @@
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
                       
                       echo "🏆 Updating achievements and progress tracking..."
-                      python3 advanced_controller.py --gamification || echo "⚠️ Gamification system failed"
+                      python3 advanced_controller.py --gamification || echo "[WARNING] Gamification system failed"
                       
                       if [ -f "../final_applications/gamification_dashboard.md" ]; then
-                        echo "✅ Gamification system completed"
-                        echo "📊 Achievements summary:"
+                        echo "[SUCCESS] Gamification system completed"
+                        echo "[SUMMARY] Achievements summary:"
                         grep -A 5 "## 🏆 Achievement Progress" ../final_applications/gamification_dashboard.md || echo "Achievements section not found"
                       fi
                       
@@ -476,12 +476,12 @@
                       cd build_scripts
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
                       
-                      echo "🔍 Analyzing document consistency and narrative flow..."
-                      python3 advanced_controller.py --narrative || echo "⚠️ Narrative analysis failed"
+                      echo "[VALIDATE] Analyzing document consistency and narrative flow..."
+                      python3 advanced_controller.py --narrative || echo "[WARNING] Narrative analysis failed"
                       
                       if [ -f "../final_applications/narrative_consistency_report.md" ]; then
-                        echo "✅ Narrative analysis completed"
-                        echo "📊 Consistency summary:"
+                        echo "[SUCCESS] Narrative analysis completed"
+                        echo "[SUMMARY] Consistency summary:"
                         grep -A 3 "## 📊 Overall Consistency Score" ../final_applications/narrative_consistency_report.md || echo "Consistency summary not found"
                       fi
                       
@@ -492,17 +492,17 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "📊 Running risk portfolio analysis..."
+                      echo "[SUMMARY] Running risk portfolio analysis..."
                       
                       cd build_scripts
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
                       
-                      echo "🎯 Optimizing school portfolio using financial theory..."
-                      python3 advanced_controller.py --portfolio || echo "⚠️ Portfolio analysis failed"
+                      echo "[ANALYZE] Optimizing school portfolio using financial theory..."
+                      python3 advanced_controller.py --portfolio || echo "[WARNING] Portfolio analysis failed"
                       
                       if [ -f "../final_applications/risk_portfolio_analysis.md" ]; then
-                        echo "✅ Portfolio analysis completed"
-                        echo "📊 Portfolio recommendations:"
+                        echo "[SUCCESS] Portfolio analysis completed"
+                        echo "[SUMMARY] Portfolio recommendations:"
                         grep -A 5 "## 🎯 Recommended Portfolio" ../final_applications/risk_portfolio_analysis.md || echo "Portfolio recommendations not found"
                       fi
                       
@@ -519,11 +519,11 @@
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
                       
                       echo "🎲 Testing strategic scenarios and optimization..."
-                      python3 advanced_controller.py --whatif || echo "⚠️ What-If simulator failed"
+                      python3 advanced_controller.py --whatif || echo "[WARNING] What-If simulator failed"
                       
                       if [ -f "../final_applications/whatif_optimization_report.md" ]; then
-                        echo "✅ What-If simulation completed"
-                        echo "📊 Scenario results:"
+                        echo "[SUCCESS] What-If simulation completed"
+                        echo "[SUMMARY] Scenario results:"
                         grep -A 3 "## 🎯 Best Scenario" ../final_applications/whatif_optimization_report.md || echo "Scenario results not found"
                       fi
 
@@ -549,7 +549,7 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "📁 Organizing generated artifacts..."
+                      echo "[FILES] Organizing generated artifacts..."
                       
                       # Create artifacts directory
                       mkdir -p artifacts/reports artifacts/documents artifacts/data
@@ -557,43 +557,43 @@
                       # Copy reports
                       if [ -f "final_applications/validation_report.md" ]; then
                         cp final_applications/validation_report.md artifacts/reports/
-                        echo "✅ Validation report archived"
+                        echo "[SUCCESS] Validation report archived"
                       fi
                       
                       if [ -f "final_applications/application_dashboard.md" ]; then
                         cp final_applications/application_dashboard.md artifacts/reports/
-                        echo "✅ Dashboard archived"
+                        echo "[SUCCESS] Dashboard archived"
                       fi
                       
                       if [ -f "final_applications/academic_intelligence_report.md" ]; then
                         cp final_applications/academic_intelligence_report.md artifacts/reports/
-                        echo "✅ Academic intelligence report archived"
+                        echo "[SUCCESS] Academic intelligence report archived"
                       fi
                       
                       if [ -f "final_applications/execution_report.md" ]; then
                         cp final_applications/execution_report.md artifacts/reports/
-                        echo "✅ Execution report archived"
+                        echo "[SUCCESS] Execution report archived"
                       fi
                       
                       # Archive advanced features reports
                       if [ -f "final_applications/gamification_dashboard.md" ]; then
                         cp final_applications/gamification_dashboard.md artifacts/reports/
-                        echo "✅ Gamification dashboard archived"
+                        echo "[SUCCESS] Gamification dashboard archived"
                       fi
                       
                       if [ -f "final_applications/narrative_consistency_report.md" ]; then
                         cp final_applications/narrative_consistency_report.md artifacts/reports/
-                        echo "✅ Narrative analysis report archived"
+                        echo "[SUCCESS] Narrative analysis report archived"
                       fi
                       
                       if [ -f "final_applications/risk_portfolio_analysis.md" ]; then
                         cp final_applications/risk_portfolio_analysis.md artifacts/reports/
-                        echo "✅ Portfolio analysis report archived"
+                        echo "[SUCCESS] Portfolio analysis report archived"
                       fi
                       
                       if [ -f "final_applications/whatif_optimization_report.md" ]; then
                         cp final_applications/whatif_optimization_report.md artifacts/reports/
-                        echo "✅ What-If simulation report archived"
+                        echo "[SUCCESS] What-If simulation report archived"
                       fi
                       
                       # Copy structured data
@@ -625,7 +625,7 @@
                       
                       find artifacts -type f | sort >> artifacts/MANIFEST.txt
                       
-                      echo "📊 Artifact Summary:"
+                      echo "[SUMMARY] Artifact Summary:"
                       echo "  Reports: $(ls artifacts/reports/*.md 2>/dev/null | wc -l)"
                       echo "  Documents: $(ls artifacts/documents/*.md 2>/dev/null | wc -l)"
                       echo "  Data Files: $(ls artifacts/data/*.json 2>/dev/null | wc -l)"
