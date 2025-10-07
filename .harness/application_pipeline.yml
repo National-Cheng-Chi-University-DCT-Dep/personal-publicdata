@@ -224,21 +224,8 @@ pipeline:
                       if [ -f "../final_applications/academic_intelligence_report.md" ]; then
                         echo "✅ Academic intelligence completed"
                         
-                        # Show summary
-                        python3 -c "
-                        import json
-                        try:
-                            with open('../final_applications/academic_intelligence.json') as f:
-                                data = json.load(f)
-                                summary = data.get('summary', {})
-                                print(f'📊 Academic Intelligence Summary:')
-                                print(f'  Schools: {summary.get(\"total_schools\", 0)}')
-                                print(f'  Professors: {summary.get(\"total_professors\", 0)}')
-                                print(f'  Publications: {summary.get(\"total_publications\", 0)}')
-                                print(f'  GitHub Repos: {summary.get(\"total_repositories\", 0)}')
-                        except:
-                            print('Academic intelligence data not available')
-                        "
+                        # Use the safe academic summary script to avoid indentation errors
+                        python3 ../data_collection/academic_summary.py
                       else
                         echo "⚠️ Academic intelligence not completed, continuing..."
                       fi
@@ -295,34 +282,46 @@ pipeline:
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
                       
                       # Determine which schools to generate based on validation results
-                      python3 -c "
-                      import json
-                      import sys
+                      echo "📋 Determining priority schools for document generation..."
                       
-                      try:
-                          with open('../final_applications/validation_results.json') as f:
-                              data = json.load(f)
-                              results = data.get('results', {})
-                              
-                          # Get eligible and warning schools
-                          priority_schools = [
-                              school_id for school_id, result in results.items()
-                              if result.get('overall_status') in ['ELIGIBLE', 'WARNING']
-                          ]
-                          
-                          print('Priority schools for document generation:')
-                          for school in priority_schools:
-                              print(f'  - {school}')
-                              
-                          # Save school list for next step
-                          with open('priority_schools.txt', 'w') as f:
-                              f.write(' '.join(priority_schools))
-                              
-                      except Exception as e:
-                          print(f'Using all active schools: {e}')
-                          with open('priority_schools.txt', 'w') as f:
-                              f.write('all')
-                      "
+                      if [ -f "../final_applications/validation_results.json" ]; then
+                        # Extract eligible and warning schools using safe methods
+                        echo "Priority schools for document generation:"
+                        
+                        # Create a simple Python script to avoid indentation issues
+                        cat > extract_priority_schools.py << 'EOF'
+import json
+import sys
+
+try:
+    with open('../final_applications/validation_results.json') as f:
+        data = json.load(f)
+        results = data.get('results', {})
+        
+    priority_schools = [
+        school_id for school_id, result in results.items()
+        if result.get('overall_status') in ['ELIGIBLE', 'WARNING']
+    ]
+    
+    print('Priority schools for document generation:')
+    for school in priority_schools:
+        print(f'  - {school}')
+        
+    with open('priority_schools.txt', 'w') as f:
+        f.write(' '.join(priority_schools))
+        
+except Exception as e:
+    print(f'Using all active schools: {e}')
+    with open('priority_schools.txt', 'w') as f:
+        f.write('all')
+EOF
+                        
+                        python3 extract_priority_schools.py
+                        rm extract_priority_schools.py
+                      else
+                        echo "Validation results not found, using all active schools"
+                        echo "all" > priority_schools.txt
+                      fi
                       
                       # Generate documents
                       if [ -f "priority_schools.txt" ]; then
@@ -389,24 +388,15 @@ pipeline:
                       if [ -f "../final_applications/alert_summary.json" ]; then
                         echo "✅ Alert processing completed"
                         
-                        # Show alert summary
-                        python3 -c "
-                        import json
-                        try:
-                            with open('../final_applications/alert_summary.json') as f:
-                                data = json.load(f)
-                                
-                            print('📊 Alert Summary:')
-                            print(f'  Total alerts: {data.get(\"total_alerts\", 0)}')
-                            print(f'  GitHub issues created: {data.get(\"created_github_issues\", 0)}')
-                            
-                            by_severity = data.get('alerts_by_severity', {})
-                            for severity, count in by_severity.items():
-                                print(f'  {severity}: {count}')
-                                
-                        except Exception as e:
-                            print(f'Could not parse alert summary: {e}')
-                        "
+                        # Show alert summary using safe method
+                        echo "📊 Alert Summary:"
+                        if [ -f "../final_applications/alert_summary.json" ]; then
+                          echo "  Total alerts: $(grep -o '"total_alerts":[0-9]*' ../final_applications/alert_summary.json | cut -d: -f2 || echo '0')"
+                          echo "  GitHub issues created: $(grep -o '"created_github_issues":[0-9]*' ../final_applications/alert_summary.json | cut -d: -f2 || echo '0')"
+                          echo "  Alert details available in alert_summary.json"
+                        else
+                          echo "  Alert summary data not available"
+                        fi
                       else
                         echo "⚠️ Alert processing completed with no summary"
                       fi
