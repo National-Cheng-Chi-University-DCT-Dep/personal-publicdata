@@ -209,7 +209,7 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "🔬 Starting academic intelligence gathering..."
+                      echo "[ACADEMIC] Starting academic intelligence gathering..."
                       
                       cd analysis
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
@@ -418,7 +418,7 @@
                         echo "========================================"
                         
                         # Show key sections of the execution report
-                        grep -A 10 "## 📊 Pipeline Results" ../final_applications/execution_report.md || echo "Report sections not found"
+                        grep -A 10 "## \[RESULTS\] Pipeline Results" ../final_applications/execution_report.md || echo "Report sections not found"
                         
                         echo ""
                         echo "[FILES] Generated Files:"
@@ -455,13 +455,13 @@
                       cd build_scripts
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
                       
-                      echo "🏆 Updating achievements and progress tracking..."
+                      echo "[ACHIEVEMENTS] Updating achievements and progress tracking..."
                       python3 advanced_controller.py --gamification || echo "[WARNING] Gamification system failed"
                       
                       if [ -f "../final_applications/gamification_dashboard.md" ]; then
                         echo "[SUCCESS] Gamification system completed"
                         echo "[SUMMARY] Achievements summary:"
-                        grep -A 5 "## 🏆 Achievement Progress" ../final_applications/gamification_dashboard.md || echo "Achievements section not found"
+                        grep -A 5 "## \[ACHIEVEMENTS\] Achievement Progress" ../final_applications/gamification_dashboard.md || echo "Achievements section not found"
                       fi
                       
               - step:
@@ -471,7 +471,7 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "📖 Running narrative consistency analysis..."
+                      echo "[NARRATIVE] Running narrative consistency analysis..."
                       
                       cd build_scripts
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
@@ -513,12 +513,12 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "🔮 Running What-If scenario simulator..."
+                      echo "[WHATIF] Running What-If scenario simulator..."
                       
                       cd build_scripts
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
                       
-                      echo "🎲 Testing strategic scenarios and optimization..."
+                      echo "[SCENARIO] Testing strategic scenarios and optimization..."
                       python3 advanced_controller.py --whatif || echo "[WARNING] What-If simulator failed"
                       
                       if [ -f "../final_applications/whatif_optimization_report.md" ]; then
