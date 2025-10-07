@@ -696,6 +696,53 @@ class ApplicationValidator:
             json.dump(structured_data, f, indent=2)
         
         print(f"📊 Structured results saved to {json_file}")
+        
+        # Print validation summary
+        self.print_validation_summary(results)
+
+    def print_validation_summary(self, results: Dict[str, ValidationResult]):
+        """Print validation summary to console"""
+        try:
+            # Count statuses
+            status_counts = {}
+            for result in results.values():
+                status = result.overall_status
+                status_counts[status] = status_counts.get(status, 0) + 1
+            
+            print(f"\n📊 Validation Summary:")
+            print(f"   IELTS Overall: {self.profile.ielts_overall}")
+            print(f"   IELTS Writing: {self.profile.ielts_writing}")
+            print(f"   Budget: €{self.profile.target_budget_eur:,}")
+            print()
+            
+            print("📈 School Status Distribution:")
+            status_icons = {
+                "ELIGIBLE": "✅",
+                "WARNING": "⚠️",
+                "INELIGIBLE": "❌",
+                "NEEDS_REVIEW": "🔍"
+            }
+            
+            for status, count in status_counts.items():
+                icon = status_icons.get(status, "❓")
+                print(f"   {icon} {status}: {count}")
+            
+            print(f"\n📊 Total Schools: {len(results)}")
+            
+            # Show top recommendations
+            eligible_schools = [school_id for school_id, result in results.items() 
+                              if result.overall_status == "ELIGIBLE"]
+            
+            if eligible_schools:
+                print(f"\n🎯 Recommended Schools ({len(eligible_schools)}):")
+                for school_id in eligible_schools[:3]:  # Show top 3
+                    school_name = self.schools[school_id]['school']
+                    print(f"   • {school_name} ({school_id})")
+                if len(eligible_schools) > 3:
+                    print(f"   • ... and {len(eligible_schools) - 3} more")
+            
+        except Exception as e:
+            print(f"⚠️  Summary generation failed: {e}")
 
 def main():
     """Main validator execution"""

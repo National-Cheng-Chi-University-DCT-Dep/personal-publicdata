@@ -187,6 +187,39 @@ class ApplicationIntelligenceSystem:
             self.log(f"Notification processing failed: {str(e)}", "ERROR")
             return False
     
+    def run_validation_summary(self) -> bool:
+        """Execute validation summary safely"""
+        self.log("📊 Generating validation summary...")
+        
+        try:
+            # Import the validation summary module
+            import sys
+            validation_summary_path = self.base_dir / "data_collection" / "validation_summary.py"
+            
+            if validation_summary_path.exists():
+                # Run the validation summary script
+                import subprocess
+                result = subprocess.run([
+                    sys.executable, str(validation_summary_path)
+                ], capture_output=True, text=True, cwd=str(self.base_dir))
+                
+                if result.returncode == 0:
+                    # Print the summary output
+                    if result.stdout:
+                        print(result.stdout)
+                    self.log("Validation summary completed successfully")
+                    return True
+                else:
+                    self.log(f"Validation summary failed: {result.stderr}", "ERROR")
+                    return False
+            else:
+                self.log("Validation summary script not found", "WARNING")
+                return False
+                
+        except Exception as e:
+            self.log(f"Validation summary failed: {str(e)}", "ERROR")
+            return False
+    
     def run_full_pipeline(self, skip_scraping: bool = False, 
                          target_schools: Optional[List[str]] = None) -> Dict[str, bool]:
         """Execute the complete intelligence pipeline"""
@@ -203,6 +236,10 @@ class ApplicationIntelligenceSystem:
         
         # Stage 2: Data Validation
         pipeline_results['data_validation'] = self.run_data_validation()
+        
+        # Run validation summary if validation was successful
+        if pipeline_results['data_validation']:
+            self.run_validation_summary()
         
         # Stage 3: Academic Intelligence
         pipeline_results['academic_intelligence'] = self.run_academic_intelligence()
@@ -235,6 +272,10 @@ class ApplicationIntelligenceSystem:
         
         # Quick validation with existing data
         results['validation'] = self.run_data_validation()
+        
+        # Run validation summary if validation was successful
+        if results['validation']:
+            self.run_validation_summary()
         
         # Generate documents
         results['documents'] = self.run_document_generation()
