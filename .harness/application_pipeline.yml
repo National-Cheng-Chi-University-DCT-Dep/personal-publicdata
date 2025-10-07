@@ -37,7 +37,7 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "🔧 System Setup - Application Intelligence System v2.0"
+                      echo "[SETUP] System Setup - Application Intelligence System v2.0"
                       echo "Date: $(date)"
                       echo "Python version: $(python3 --version)"
                       echo "Pip version: $(pip3 --version)"
@@ -50,7 +50,7 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "📦 Installing Python dependencies..."
+                      echo "[INSTALL] Installing Python dependencies..."
                       cd build_scripts
                       
                       # Install core dependencies
@@ -65,7 +65,7 @@
                       pip3 install jsonschema
                       pip3 install GitPython
                       
-                      echo "✅ Core dependencies installed"
+                      echo "[SUCCESS] Core dependencies installed"
                       
                       # Try to install optional dependencies
                       echo "📦 Installing optional dependencies..."
@@ -365,7 +365,7 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "🔔 Processing alerts and notifications..."
+                      echo "[NOTIFICATIONS] Processing alerts and notifications..."
                       
                       cd notifications
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
@@ -373,9 +373,9 @@
                       # Set GitHub token if available
                       if [ -n "$GITHUB_TOKEN" ]; then
                         export GITHUB_TOKEN="$GITHUB_TOKEN"
-                        echo "✅ GitHub token configured for issue creation"
+                        echo "[SUCCESS] GitHub token configured for issue creation"
                       else
-                        echo "⚠️ No GitHub token - issues will be logged but not created"
+                        echo "[WARNING] No GitHub token - issues will be logged but not created"
                       fi
                       
                       # Run notification system
@@ -383,12 +383,12 @@
                       
                       # Check results
                       if [ -f "../final_applications/alert_summary.json" ]; then
-                        echo "✅ Alert processing completed"
+                        echo "[SUCCESS] Alert processing completed"
                         
                         # Use the safe alert summary script to avoid indentation errors
                         python3 ../data_collection/alert_summary.py
                       else
-                        echo "⚠️ Alert processing completed with no summary"
+                        echo "[WARNING] Alert processing completed with no summary"
                       fi
                       
               - step:
@@ -398,17 +398,17 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "🎯 Running master controller for final summary..."
+                      echo "[CONTROLLER] Running master controller for final summary..."
                       
                       # Ensure required dependencies are available
-                      echo "📦 Checking and installing required dependencies..."
-                      pip3 install --quiet beautifulsoup4 selenium requests PyYAML || echo "⚠️ Some dependencies may have failed to install"
+                      echo "[DEPENDENCIES] Checking and installing required dependencies..."
+                      pip3 install --quiet beautifulsoup4 selenium requests PyYAML || echo "[WARNING] Some dependencies may have failed to install"
                       
                       cd build_scripts
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
                       
                       # Run master controller in report mode
-                      echo "📋 Generating comprehensive execution report..."
+                      echo "[REPORT] Generating comprehensive execution report..."
                       python3 master_controller.py --save-report --quick
                       
                       if [ -f "../final_applications/execution_report.md" ]; then
@@ -631,17 +631,75 @@
                       echo "  Data Files: $(ls artifacts/data/*.json 2>/dev/null | wc -l)"
                       
               - step:
-                  type: SaveCacheS3
-                  name: Archive Artifacts
-                  identifier: save_artifacts
+                  type: Run
+                  name: Commit Artifacts to Repository
+                  identifier: commit_artifacts
                   spec:
-                    connectorRef: aws_connector
-                    region: us-east-1
-                    bucket: university-application-artifacts
-                    key: intelligence-system/<+pipeline.sequenceId>-<+codebase.commitSha>
-                    sourcePaths:
-                      - artifacts/
-                    archiveFormat: Tar
+                    shell: Bash
+                    command: |
+                      echo "[ARTIFACTS] Committing generated artifacts to repository..."
+                      
+                      # Configure git
+                      git config user.name "Application Intelligence Bot"
+                      git config user.email "bot@dennisleehappy.org"
+                      
+                      # Create archive directory with timestamp
+                      TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+                      ARCHIVE_DIR="archived_reports/${TIMESTAMP}_pipeline_<+pipeline.sequenceId>"
+                      
+                      # Copy artifacts to archive directory
+                      mkdir -p "${ARCHIVE_DIR}"
+                      cp -r artifacts/* "${ARCHIVE_DIR}/" 2>/dev/null || echo "[INFO] No artifacts to archive"
+                      
+                      # Also update latest reports in final_applications
+                      cp -r final_applications/*.md final_applications/*.json artifacts/reports/ 2>/dev/null || echo "[INFO] No reports to update"
+                      
+                      # Check if there are changes
+                      if [ -n "$(git status --porcelain)" ]; then
+                        echo "[COMMIT] Changes detected, committing..."
+                        
+                        # Add files
+                        git add final_applications/*.md final_applications/*.json 2>/dev/null || true
+                        git add "${ARCHIVE_DIR}/" 2>/dev/null || true
+                        
+                        # Create commit message
+                        cat > /tmp/commit_msg.txt << EOF
+                      [CI] Application Intelligence Report - $(date +%Y-%m-%d)
+                      
+                      Pipeline: <+pipeline.sequenceId>
+                      Commit: <+codebase.commitSha>
+                      Branch: <+codebase.branch>
+                      
+                      Generated Files:
+                      - Validation reports
+                      - Application documents
+                      - Dashboard updates
+                      - Alert summaries
+                      
+                      Archived in: ${ARCHIVE_DIR}
+                      EOF
+                        
+                        # Commit
+                        git commit -F /tmp/commit_msg.txt
+                        
+                        # Push (will be handled by git credentials in Harness)
+                        git push origin HEAD:<+codebase.branch> || {
+                          echo "[WARNING] Git push failed. Artifacts available in pipeline workspace."
+                          echo "[INFO] You can download artifacts from Harness UI"
+                        }
+                        
+                        echo "[SUCCESS] Artifacts committed and pushed to repository"
+                      else
+                        echo "[INFO] No changes to commit"
+                      fi
+                      
+                      # Display summary
+                      echo ""
+                      echo "[SUMMARY] Artifact Management Complete"
+                      echo "  Archived to: ${ARCHIVE_DIR}"
+                      echo "  Reports: $(ls artifacts/reports/*.md 2>/dev/null | wc -l)"
+                      echo "  Documents: $(ls artifacts/documents/*.md 2>/dev/null | wc -l)"
+                      echo "  Data: $(ls artifacts/data/*.json 2>/dev/null | wc -l)"
                   when:
                     stageStatus: Success
                   failureStrategies:
