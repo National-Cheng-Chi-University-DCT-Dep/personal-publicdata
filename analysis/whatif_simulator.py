@@ -38,7 +38,7 @@ class ProfileScenario:
     certifications: int = 0
     recommendation_quality: float = 0.8  # 0.0-1.0 scale
     sop_quality: float = 0.8  # 0.0-1.0 scale
-    budget_eur: int = 15000
+    budget_eur: int = 25000 # 2 years
     
 @dataclass
 class ScenarioImpact:
