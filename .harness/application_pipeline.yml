@@ -881,7 +881,7 @@
         spec:
           webhookUrl: <+secrets.getValue("slack_webhook_url")>
           message: |
-            🎓 *Application Intelligence Update*
+            [UPDATE] *Application Intelligence Update*
             
             Pipeline completed with new high-priority alerts detected.
             Check GitHub Issues for action items.
