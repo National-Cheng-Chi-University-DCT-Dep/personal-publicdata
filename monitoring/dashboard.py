@@ -58,7 +58,7 @@ class ApplicationDashboard:
             with open(validation_file, 'r', encoding='utf-8') as f:
                 self.validation_data = json.load(f)
         else:
-            print("⚠️  No validation results found. Run validator first.")
+            print("[WARNING] No validation results found. Run validator first.")
             self.validation_data = {}
     
     def get_school_status(self, school_id: str) -> SchoolStatus:
@@ -160,7 +160,7 @@ class ApplicationDashboard:
             "",
             f"**Last Updated**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
             "",
-            "## 📊 Quick Overview",
+            "## [OVERVIEW] Quick Overview",
             ""
         ]
         
@@ -193,8 +193,8 @@ class ApplicationDashboard:
             'DRAFTING': '🟡', 
             'SUBMITTED': '🟢',
             'DECISION_PENDING': '🔵',
-            'ACCEPTED': '✅',
-            'REJECTED': '❌'
+            'ACCEPTED': '[ACCEPTED]',
+            'REJECTED': '[REJECTED]'
         }
         
         for app_status in status_order:
@@ -219,12 +219,12 @@ class ApplicationDashboard:
         if urgent_deadlines:
             dashboard_lines.extend([
                 "",
-                "## 🚨 URGENT DEADLINES (≤7 days)",
+                "## [URGENT] URGENT DEADLINES (≤7 days)",
                 ""
             ])
             
             for status in sorted(urgent_deadlines, key=lambda x: x.days_until_deadline):
-                urgency_icon = "🔥" if status.days_until_deadline <= 3 else "⚠️"
+                urgency_icon = "[CRITICAL]" if status.days_until_deadline <= 3 else "[URGENT]"
                 dashboard_lines.append(f"- {urgency_icon} **{status.school_name}**: {status.days_until_deadline} days remaining")
         
         if upcoming_deadlines:
@@ -240,7 +240,7 @@ class ApplicationDashboard:
         # Detailed school table
         dashboard_lines.extend([
             "",
-            "## 🎯 Detailed School Status",
+            "## [STATUS] Detailed School Status",
             "",
             "| School | Country | Status | Deadline | IELTS | Budget | Priority | Confidence |",
             "|--------|---------|--------|----------|-------|--------|----------|------------|"
@@ -261,22 +261,22 @@ class ApplicationDashboard:
             # Deadline display
             if status.days_until_deadline is not None:
                 if status.days_until_deadline < 0:
-                    deadline_display = f"❌ Passed"
+                    deadline_display = f"[PASSED] Passed"
                 elif status.days_until_deadline <= 7:
-                    deadline_display = f"🚨 {status.days_until_deadline}d"
+                    deadline_display = f"[URGENT] {status.days_until_deadline}d"
                 elif status.days_until_deadline <= 30:
-                    deadline_display = f"⚠️ {status.days_until_deadline}d"
+                    deadline_display = f"[WARNING] {status.days_until_deadline}d"
                 else:
-                    deadline_display = f"✅ {status.days_until_deadline}d"
+                    deadline_display = f"[OK] {status.days_until_deadline}d"
             else:
                 deadline_display = "❓ Unknown"
             
             # IELTS status
-            ielts_icons = {'MEETS': '✅', 'WARNING': '⚠️', 'INSUFFICIENT': '❌'}
+            ielts_icons = {'MEETS': '[MEETS]', 'WARNING': '[WARNING]', 'INSUFFICIENT': '[INSUFFICIENT]'}
             ielts_display = f"{ielts_icons.get(status.ielts_status, '❓')} {status.ielts_status}"
             
             # Budget status  
-            budget_icons = {'AFFORDABLE': '✅', 'STRETCH': '⚠️', 'EXPENSIVE': '❌'}
+            budget_icons = {'AFFORDABLE': '[AFFORDABLE]', 'STRETCH': '[STRETCH]', 'EXPENSIVE': '[EXPENSIVE]'}
             budget_display = f"{budget_icons.get(status.budget_status, '❓')} {status.budget_status}"
             
             # Priority
@@ -326,11 +326,11 @@ class ApplicationDashboard:
         
         # Check for urgent actions
         if urgent_deadlines:
-            action_items.append("🚨 **URGENT**: Complete applications with deadlines ≤7 days")
+            action_items.append("[URGENT] **URGENT**: Complete applications with deadlines ≤7 days")
         
         not_started_count = app_status_counts.get('NOT_STARTED', 0)
         if not_started_count > 0:
-            action_items.append(f"📝 Start work on {not_started_count} applications not yet begun")
+            action_items.append(f"[TODO] Start work on {not_started_count} applications not yet begun")
         
         drafting_count = app_status_counts.get('DRAFTING', 0)
         if drafting_count > 0:
@@ -342,7 +342,7 @@ class ApplicationDashboard:
         
         if action_items:
             dashboard_lines.extend([
-                "## 🎯 Recommended Actions",
+                "## [ACTIONS] Recommended Actions",
                 ""
             ])
             for item in action_items:
@@ -353,7 +353,7 @@ class ApplicationDashboard:
         dashboard_lines.extend([
             "---",
             "",
-            "### 📝 How to Update This Dashboard",
+            "### [UPDATE] How to Update This Dashboard",
             "",
             "To update application status, modify the `application_status` field in `source_data/schools.yml`:",
             "",
@@ -385,7 +385,7 @@ class ApplicationDashboard:
         with open(dashboard_file, 'w', encoding='utf-8') as f:
             f.write(dashboard_content)
         
-        print(f"📊 Dashboard saved to {dashboard_file}")
+        print(f"[DASHBOARD] Dashboard saved to {dashboard_file}")
         
         # Also save as HTML for better visualization (optional)
         try:
@@ -395,7 +395,7 @@ class ApplicationDashboard:
                 f.write(html_content)
             print(f"🌐 HTML dashboard saved to {html_file}")
         except Exception as e:
-            print(f"⚠️  HTML generation skipped: {e}")
+            print(f"[WARNING] HTML generation skipped: {e}")
     
     def generate_html_dashboard(self, markdown_content: str) -> str:
         """Generate HTML version of dashboard (basic conversion)"""
@@ -434,11 +434,11 @@ class ApplicationDashboard:
         const rows = document.querySelectorAll('tr');
         rows.forEach(row => {{
             const text = row.textContent.toLowerCase();
-            if (text.includes('🚨') || text.includes('urgent')) {{
+            if (text.includes('[urgent]') || text.includes('urgent')) {{
                 row.classList.add('urgent');
-            }} else if (text.includes('⚠️') || text.includes('warning')) {{
+            }} else if (text.includes('[warning]') || text.includes('warning')) {{
                 row.classList.add('warning');
-            }} else if (text.includes('✅')) {{
+            }} else if (text.includes('[ok]') || text.includes('[meets]') || text.includes('[affordable]')) {{
                 row.classList.add('success');
             }}
         }});
@@ -450,7 +450,7 @@ class ApplicationDashboard:
             return html_template
             
         except ImportError:
-            print("⚠️  Install 'markdown' package for HTML generation: pip install markdown")
+            print("[WARNING] Install 'markdown' package for HTML generation: pip install markdown")
             return ""
 
 def main():
@@ -461,11 +461,11 @@ def main():
         # Generate and save dashboard
         dashboard.save_dashboard()
         
-        print("✅ Dashboard generation completed successfully!")
+        print("[SUCCESS] Dashboard generation completed successfully!")
         return 0
         
     except Exception as e:
-        print(f"❌ Dashboard generation failed: {str(e)}")
+        print(f"[ERROR] Dashboard generation failed: {str(e)}")
         return 1
 
 if __name__ == "__main__":
