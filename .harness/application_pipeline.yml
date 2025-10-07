@@ -284,41 +284,8 @@
                       # Determine which schools to generate based on validation results
                       echo "[LIST] Determining priority schools for document generation..."
                       
-                      if [ -f "../final_applications/validation_results.json" ]; then
-                        # Extract eligible and warning schools using safe methods
-                        echo "Priority schools for document generation:"
-                        
-                        # Create a simple Python script to avoid indentation issues
-                        python3 -c "
-                        import json
-                        import sys
-                        
-                        try:
-                            with open('../final_applications/validation_results.json') as f:
-                                data = json.load(f)
-                                results = data.get('results', {})
-                                
-                            priority_schools = [
-                                school_id for school_id, result in results.items()
-                                if result.get('overall_status') in ['ELIGIBLE', 'WARNING']
-                            ]
-                            
-                            print('Priority schools for document generation:')
-                            for school in priority_schools:
-                                print(f'  - {school}')
-                                
-                            with open('priority_schools.txt', 'w') as f:
-                                f.write(' '.join(priority_schools))
-                                
-                        except Exception as e:
-                            print(f'Using all active schools: {e}')
-                            with open('priority_schools.txt', 'w') as f:
-                                f.write('all')
-                        "
-                      else
-                        echo "Validation results not found, using all active schools"
-                        echo "all" > priority_schools.txt
-                      fi
+                      # Use dedicated Python script to extract priority schools
+                      python3 extract_priority_schools.py
                       
                       # Generate documents
                       if [ -f "priority_schools.txt" ]; then
