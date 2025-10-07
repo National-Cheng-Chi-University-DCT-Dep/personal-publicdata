@@ -388,15 +388,8 @@ EOF
                       if [ -f "../final_applications/alert_summary.json" ]; then
                         echo "✅ Alert processing completed"
                         
-                        # Show alert summary using safe method
-                        echo "📊 Alert Summary:"
-                        if [ -f "../final_applications/alert_summary.json" ]; then
-                          echo "  Total alerts: $(grep -o '"total_alerts":[0-9]*' ../final_applications/alert_summary.json | cut -d: -f2 || echo '0')"
-                          echo "  GitHub issues created: $(grep -o '"created_github_issues":[0-9]*' ../final_applications/alert_summary.json | cut -d: -f2 || echo '0')"
-                          echo "  Alert details available in alert_summary.json"
-                        else
-                          echo "  Alert summary data not available"
-                        fi
+                        # Use the safe alert summary script to avoid indentation errors
+                        python3 ../data_collection/alert_summary.py
                       else
                         echo "⚠️ Alert processing completed with no summary"
                       fi
