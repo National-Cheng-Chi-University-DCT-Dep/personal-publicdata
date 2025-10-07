@@ -180,26 +180,8 @@ pipeline:
                         echo "✅ Validation completed successfully"
                         echo "📊 Validation summary:"
                         
-                        # Extract key metrics from validation report
-                        cd ../final_applications
-                        python3 -c "
-                        import json
-                        try:
-                            with open('validation_results.json') as f:
-                                data = json.load(f)
-                                results = data.get('results', {})
-                                
-                                eligible = sum(1 for r in results.values() if r.get('overall_status') == 'ELIGIBLE')
-                                warning = sum(1 for r in results.values() if r.get('overall_status') == 'WARNING')
-                                ineligible = sum(1 for r in results.values() if r.get('overall_status') == 'INELIGIBLE')
-                                total = len(results)
-                                
-                                print(f'  ✅ Eligible: {eligible}/{total} ({eligible/total:.1%})')
-                                print(f'  ⚠️  Warning: {warning}/{total}')
-                                print(f'  ❌ Ineligible: {ineligible}/{total}')
-                        except Exception as e:
-                            print(f'Could not parse validation results: {e}')
-                        "
+                        # Use the safe validation summary script to avoid indentation errors
+                        python3 validation_summary.py
                       else
                         echo "❌ Validation failed"
                         exit 1
