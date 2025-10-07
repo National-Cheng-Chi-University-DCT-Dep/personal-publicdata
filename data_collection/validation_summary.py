@@ -29,7 +29,7 @@ def print_validation_summary():
         profile = data.get('profile_summary', {})
         
         # Print summary
-        print("📊 Validation Summary:")
+        print("[SUMMARY] Validation Summary:")
         print(f"   IELTS Overall: {profile.get('ielts_overall', 'N/A')}")
         print(f"   IELTS Writing: {profile.get('ielts_writing', 'N/A')}")
         print(f"   Budget: €{profile.get('budget_eur', 'N/A'):,}")
@@ -41,26 +41,26 @@ def print_validation_summary():
             status = result.get('overall_status', 'UNKNOWN')
             status_counts[status] = status_counts.get(status, 0) + 1
         
-        print("📈 School Status Distribution:")
+        print("[STATUS] School Status Distribution:")
         for status, count in status_counts.items():
             icon = {
-                'ELIGIBLE': '✅',
-                'WARNING': '⚠️',
-                'INELIGIBLE': '❌',
-                'NEEDS_REVIEW': '🔍'
-            }.get(status, '❓')
+                'ELIGIBLE': '[ELIGIBLE]',
+                'WARNING': '[WARNING]',
+                'INELIGIBLE': '[INELIGIBLE]',
+                'NEEDS_REVIEW': '[REVIEW]'
+            }.get(status, '[UNKNOWN]')
             print(f"   {icon} {status}: {count}")
         
-        print(f"\n📊 Total Schools: {len(results)}")
-        print(f"🕐 Generated: {data.get('generated_at', 'N/A')}")
+        print(f"\n[TOTAL] Total Schools: {len(results)}")
+        print(f"[TIME] Generated: {data.get('generated_at', 'N/A')}")
         
         return 0
         
     except json.JSONDecodeError as e:
-        print(f"❌ JSON parsing error: {e}")
+        print(f"[ERROR] JSON parsing error: {e}")
         return 1
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"[ERROR] Error: {e}")
         return 1
 
 if __name__ == "__main__":

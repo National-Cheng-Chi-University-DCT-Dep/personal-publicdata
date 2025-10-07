@@ -44,7 +44,7 @@ class PersonalProfile:
         self.work_experience_years = 5
         self.has_cybersecurity_background = True
         self.has_awards = True
-        self.target_budget_eur = 15000  # per year
+        self.target_budget_eur = 12500  # per year
         self.risk_tolerance = "medium"  # low, medium, high
         
         if profile_file and profile_file.exists():
@@ -88,7 +88,7 @@ class ApplicationValidator:
                 self.live_data = {item['school_id']: item for item in data.get('schools_live_data', [])}
                 self.scrape_metadata = data.get('metadata', {})
         else:
-            print("⚠️  No live data found. Run scraper first.")
+            print("WARNING: No live data found. Run scraper first.")
             self.live_data = {}
             self.scrape_metadata = {}
     
@@ -381,7 +381,7 @@ class ApplicationValidator:
     
     def validate_school(self, school_id: str) -> ValidationResult:
         """Perform comprehensive validation for a school"""
-        print(f"🔍 Validating {school_id}...")
+        print(f"[VALIDATING] Validating {school_id}...")
         
         # Schema validation
         schema_valid, schema_issues = self.validate_schema(school_id)
@@ -461,7 +461,7 @@ class ApplicationValidator:
         active_schools = [school_id for school_id, school in self.schools.items() 
                          if school.get('status') == 'active']
         
-        print(f"🔍 Validating {len(active_schools)} active schools...")
+        print(f"[VALIDATING] Validating {len(active_schools)} active schools...")
         
         for school_id in active_schools:
             results[school_id] = self.validate_school(school_id)
@@ -476,7 +476,7 @@ class ApplicationValidator:
             f"**Generated**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
             f"**Profile**: IELTS {self.profile.ielts_overall} (W:{self.profile.ielts_writing}), Budget: €{self.profile.target_budget_eur:,}",
             "",
-            "## 📊 Executive Summary",
+            "## [SUMMARY] Executive Summary",
             ""
         ]
         
@@ -493,10 +493,10 @@ class ApplicationValidator:
         ])
         
         status_icons = {
-            "ELIGIBLE": "✅",
-            "WARNING": "⚠️",
-            "NEEDS_REVIEW": "🔍", 
-            "INELIGIBLE": "❌"
+            "ELIGIBLE": "[ELIGIBLE]",
+            "WARNING": "[WARNING]",
+            "NEEDS_REVIEW": "[REVIEW]", 
+            "INELIGIBLE": "[INELIGIBLE]"
         }
         
         for status, count in status_counts.items():
@@ -506,7 +506,7 @@ class ApplicationValidator:
         
         report_lines.extend([
             "",
-            "## 🎯 School-by-School Analysis",
+            "## [ANALYSIS] School-by-School Analysis",
             ""
         ])
         
@@ -532,7 +532,7 @@ class ApplicationValidator:
             
             if result.advantages:
                 report_lines.extend([
-                    "**✅ Advantages:**",
+                    "**[ADVANTAGES] Advantages:**",
                     ""
                 ])
                 for advantage in result.advantages:
@@ -541,7 +541,7 @@ class ApplicationValidator:
             
             if result.risk_factors:
                 report_lines.extend([
-                    "**⚠️ Risk Factors:**",
+                    "**[RISKS] Risk Factors:**",
                     ""
                 ])
                 for risk in result.risk_factors:
@@ -550,7 +550,7 @@ class ApplicationValidator:
             
             if result.action_items:
                 report_lines.extend([
-                    "**📋 Action Items:**",
+                    "**[ACTIONS] Action Items:**",
                     ""
                 ])
                 for action in result.action_items:
@@ -567,13 +567,13 @@ class ApplicationValidator:
                          if result.overall_status == "WARNING"]
         
         report_lines.extend([
-            "## 💡 Strategic Recommendations",
+            "## [STRATEGY] Strategic Recommendations",
             "",
         ])
         
         if eligible_schools:
             report_lines.extend([
-                f"### 🎯 Priority Applications ({len(eligible_schools)} schools)",
+                f"### [PRIORITY] Priority Applications ({len(eligible_schools)} schools)",
                 "These schools meet all basic requirements and should be your primary focus:",
                 ""
             ])
@@ -584,7 +584,7 @@ class ApplicationValidator:
         
         if warning_schools:
             report_lines.extend([
-                f"### ⚠️ Conditional Applications ({len(warning_schools)} schools)", 
+                f"### [CONDITIONAL] Conditional Applications ({len(warning_schools)} schools)", 
                 "These schools have some risk factors but may still be viable:",
                 ""
             ])
@@ -610,7 +610,7 @@ class ApplicationValidator:
         
         if urgent_deadlines or ielts_issues or budget_concerns:
             report_lines.extend([
-                "## 🚨 Immediate Action Required",
+                "## [URGENT] Immediate Action Required",
                 ""
             ])
             
@@ -626,7 +626,7 @@ class ApplicationValidator:
             
             if ielts_issues:
                 report_lines.extend([
-                    "### 📝 IELTS Retake Needed",
+                    "### [IELTS] IELTS Retake Needed",
                     ""
                 ])
                 for school_id, issue in ielts_issues:
@@ -669,7 +669,7 @@ class ApplicationValidator:
         with open(report_file, 'w', encoding='utf-8') as f:
             f.write(report_content)
         
-        print(f"📋 Validation report saved to {report_file}")
+        print(f"[REPORT] Validation report saved to {report_file}")
         
         # Also save structured data for programmatic use
         structured_data = {
@@ -695,7 +695,7 @@ class ApplicationValidator:
         with open(json_file, 'w', encoding='utf-8') as f:
             json.dump(structured_data, f, indent=2)
         
-        print(f"📊 Structured results saved to {json_file}")
+        print(f"[DATA] Structured results saved to {json_file}")
         
         # Print validation summary
         self.print_validation_summary(results)
@@ -709,7 +709,7 @@ class ApplicationValidator:
                 status = result.overall_status
                 status_counts[status] = status_counts.get(status, 0) + 1
             
-            print(f"\n📊 Validation Summary:")
+            print(f"\n[SUMMARY] Validation Summary:")
             print(f"   IELTS Overall: {self.profile.ielts_overall}")
             print(f"   IELTS Writing: {self.profile.ielts_writing}")
             print(f"   Budget: €{self.profile.target_budget_eur:,}")
@@ -717,9 +717,9 @@ class ApplicationValidator:
             
             print("📈 School Status Distribution:")
             status_icons = {
-                "ELIGIBLE": "✅",
-                "WARNING": "⚠️",
-                "INELIGIBLE": "❌",
+                "ELIGIBLE": "[ELIGIBLE]",
+                "WARNING": "[WARNING]",
+                "INELIGIBLE": "[INELIGIBLE]",
                 "NEEDS_REVIEW": "🔍"
             }
             
@@ -727,14 +727,14 @@ class ApplicationValidator:
                 icon = status_icons.get(status, "❓")
                 print(f"   {icon} {status}: {count}")
             
-            print(f"\n📊 Total Schools: {len(results)}")
+            print(f"\n[TOTAL] Total Schools: {len(results)}")
             
             # Show top recommendations
             eligible_schools = [school_id for school_id, result in results.items() 
                               if result.overall_status == "ELIGIBLE"]
             
             if eligible_schools:
-                print(f"\n🎯 Recommended Schools ({len(eligible_schools)}):")
+                print(f"\n[RECOMMENDED] Recommended Schools ({len(eligible_schools)}):")
                 for school_id in eligible_schools[:3]:  # Show top 3
                     school_name = self.schools[school_id]['school']
                     print(f"   • {school_name} ({school_id})")
@@ -742,7 +742,7 @@ class ApplicationValidator:
                     print(f"   • ... and {len(eligible_schools) - 3} more")
             
         except Exception as e:
-            print(f"⚠️  Summary generation failed: {e}")
+            print(f"[ERROR] Summary generation failed: {e}")
 
 def main():
     """Main validator execution"""
@@ -760,16 +760,16 @@ def main():
         warning_count = sum(1 for r in results.values() if r.overall_status == "WARNING")
         ineligible_count = sum(1 for r in results.values() if r.overall_status == "INELIGIBLE")
         
-        print(f"\n📊 Validation Summary:")
-        print(f"   ✅ Eligible: {eligible_count}")
-        print(f"   ⚠️  Warning: {warning_count}")
-        print(f"   ❌ Ineligible: {ineligible_count}")
-        print(f"   📊 Total: {len(results)}")
+        print(f"\n[SUMMARY] Validation Summary:")
+        print(f"   [ELIGIBLE] Eligible: {eligible_count}")
+        print(f"   [WARNING] Warning: {warning_count}")
+        print(f"   [INELIGIBLE] Ineligible: {ineligible_count}")
+        print(f"   [TOTAL] Total: {len(results)}")
         
         return 0
         
     except Exception as e:
-        print(f"❌ Validation failed: {str(e)}")
+        print(f"[ERROR] Validation failed: {str(e)}")
         return 1
 
 if __name__ == "__main__":

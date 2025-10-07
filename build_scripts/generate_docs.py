@@ -124,7 +124,7 @@ class DocumentGenerator:
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(content)
         
-        print(f"✅ Generated: {file_path}")
+        print(f"[GENERATED] Generated: {file_path}")
         return file_path
 
     def convert_to_pdf(self, markdown_path: Path):
@@ -139,14 +139,18 @@ class DocumentGenerator:
         """Generate all documents for a specific school"""
         school = self.get_school_by_id(school_id)
         if not school:
-            print(f"❌ Error: School '{school_id}' not found")
+            print(f"[ERROR] Error: School '{school_id}' not found")
             return
         
         if school['status'] != 'active':
-            print(f"⚠️  Warning: School '{school_id}' status is '{school['status']}', skipping...")
+            print(f"[WARNING] Warning: School '{school_id}' status is '{school['status']}', skipping...")
             return
         
-        print(f"\n🎯 Generating documents for {school['full_name']} ({school['school']})...")
+        try:
+            school_display = f"{school['full_name']} ({school['school']})"
+            print(f"\n[GENERATING] Generating documents for {school_display}...")
+        except UnicodeEncodeError:
+            print(f"\n[GENERATING] Generating documents for {school_id}...")
         
         try:
             # Generate SOP
@@ -161,27 +165,33 @@ class DocumentGenerator:
             # self.convert_to_pdf(sop_path)
             # self.convert_to_pdf(cv_path)
             
-            print(f"✅ Successfully generated documents for {school['school']}")
+            try:
+                print(f"[SUCCESS] Successfully generated documents for {school['school']}")
+            except UnicodeEncodeError:
+                print(f"[SUCCESS] Successfully generated documents for {school_id}")
             
         except Exception as e:
-            print(f"❌ Error generating documents for {school['school']}: {str(e)}")
+            try:
+                print(f"[ERROR] Error generating documents for {school['school']}: {str(e)}")
+            except UnicodeEncodeError:
+                print(f"[ERROR] Error generating documents for {school_id}: {str(e)}")
 
     def generate_all_active_schools(self):
         """Generate documents for all active schools"""
         active_schools = [school for school in self.schools_data['schools'] 
                          if school['status'] == 'active']
         
-        print(f"🚀 Generating documents for {len(active_schools)} active schools...")
+        print(f"[BATCH] Generating documents for {len(active_schools)} active schools...")
         
         for school in active_schools:
             self.generate_for_school(school['school_id'])
 
     def list_schools(self):
         """List all available schools"""
-        print("\n📋 Available Schools:")
+        print("\n[SCHOOLS] Available Schools:")
         print("=" * 60)
         for school in self.schools_data['schools']:
-            status_icon = "✅" if school['status'] == 'active' else "⏸️"
+            status_icon = "[ACTIVE]" if school['status'] == 'active' else "[INACTIVE]"
             priority_icon = {"high": "🔥", "medium": "⚡", "low": "💫"}.get(school.get('priority_level'), "❓")
             
             print(f"{status_icon} {priority_icon} {school['school_id']:<15} | {school['full_name']}")
