@@ -195,7 +195,7 @@ function Show-SystemStatus {
     
     if (Test-Path "source_data/schools.yml") {
         try {
-            python -c "import yaml; data = yaml.safe_load(open('source_data/schools.yml')); print(f'Schools configured: {len(data[\"schools\"])}')" 2>$null
+            python -c "import yaml; data = yaml.safe_load(open('source_data/schools.yml')); print('Schools configured: ' + str(len(data['schools'])))" 2>$null
             if ($LASTEXITCODE -eq 0) {
                 Write-StatusMessage "   ✅ Schools configuration: Valid" "Success"
             }
@@ -232,7 +232,7 @@ function Show-Help {
 ═══════════════════════════════════════════════════
 
 USAGE:
-  .\intelligence.ps1 <action> [options]
+  .\intelligence.ps1 action [options]
 
 ACTIONS:
   Basic Intelligence:
@@ -248,7 +248,7 @@ ACTIONS:
   Advanced Intelligence (NEW!):
   advanced-full   🚀 Complete advanced pipeline (all cutting-edge features)
   advanced-quick  ⚡ Advanced analysis without data collection (recommended)
-  gamification    🎮 Gamification system (achievements, progress, motivation)
+  gamification    [Gamification system (achievements, progress, motivation)]
   narrative       📖 Narrative consistency analysis (LLM-powered)
   portfolio       📊 Risk portfolio balancing (financial optimization)
   whatif          🔮 Interactive What-If scenario simulator
@@ -259,7 +259,7 @@ ACTIONS:
   help          Show this help message
 
 OPTIONS:
-  -Schools    Target specific schools (e.g., -Schools "taltech", "aalto")
+  -Schools    Target specific schools (e.g., -Schools taltech aalto)
   -Verbose    Enable verbose output and detailed logging
   -SaveReport Save detailed execution report to file
   -SkipScraping  Skip web scraping in full pipeline (use cached data)
@@ -298,7 +298,7 @@ INTELLIGENCE FEATURES:
 
 PIPELINE STAGES:
   1. Data Collection    - Web scraping university requirements
-  2. Data Validation    - Eligibility checking and risk assessment
+  2. Data Validation    - Eligibility checking and risk assessment  
   3. Academic Intelligence - Professor research and GitHub monitoring
   4. Document Generation - Customized CV and SOP creation
   5. Monitoring Dashboard - Real-time status and metrics
