@@ -26,8 +26,37 @@ def resolve_project_paths():
     if (base_dir / "source_data").exists():
         print(f"[PATH_RESOLVER] Found standard structure at: {base_dir}")
         output_dir = base_dir / "final_applications"
-        output_dir.mkdir(parents=True, exist_ok=True)
-        print(f"[PATH_RESOLVER] Created/verified output directory: {output_dir}")
+        
+        try:
+            print(f"[PATH_RESOLVER] Attempting to create output directory: {output_dir}")
+            output_dir.mkdir(parents=True, exist_ok=True)
+            print(f"[PATH_RESOLVER] Created/verified output directory: {output_dir}")
+            print(f"[PATH_RESOLVER] Directory exists: {output_dir.exists()}")
+            print(f"[PATH_RESOLVER] Directory is writable: {os.access(output_dir, os.W_OK)}")
+            
+            # If directory is not writable, try alternative location
+            if not os.access(output_dir, os.W_OK):
+                print(f"[PATH_RESOLVER] Directory not writable, trying alternative location")
+                alt_output_dir = current_dir / "final_applications"
+                alt_output_dir.mkdir(parents=True, exist_ok=True)
+                print(f"[PATH_RESOLVER] Alternative output directory: {alt_output_dir}")
+                print(f"[PATH_RESOLVER] Alternative directory is writable: {os.access(alt_output_dir, os.W_OK)}")
+                if os.access(alt_output_dir, os.W_OK):
+                    output_dir = alt_output_dir
+                    print(f"[PATH_RESOLVER] Using alternative output directory: {output_dir}")
+                
+        except Exception as e:
+            print(f"[PATH_RESOLVER] ERROR creating directory: {e}")
+            print(f"[PATH_RESOLVER] Trying alternative location in current directory")
+            try:
+                alt_output_dir = current_dir / "final_applications"
+                alt_output_dir.mkdir(parents=True, exist_ok=True)
+                output_dir = alt_output_dir
+                print(f"[PATH_RESOLVER] Using alternative output directory: {output_dir}")
+            except Exception as e2:
+                print(f"[PATH_RESOLVER] Alternative location also failed: {e2}")
+                print(f"[PATH_RESOLVER] Continuing with original path...")
+        
         return base_dir, base_dir / "source_data", output_dir
     
     # Strategy 2: Check current working directory
