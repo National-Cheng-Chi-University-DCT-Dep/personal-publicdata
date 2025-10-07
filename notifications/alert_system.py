@@ -111,13 +111,44 @@ class NotificationCenter:
     
     def __init__(self):
         # Get the script directory and navigate to project root
-        script_dir = Path(__file__).parent
+        script_dir = Path(__file__).parent.absolute()
         self.base_dir = script_dir.parent
+        
+        # Handle different execution environments
+        if not (self.base_dir / "source_data").exists():
+            # Try alternative path resolution for CI/CD environments
+            current_dir = Path.cwd()
+            if (current_dir / "source_data").exists():
+                self.base_dir = current_dir
+            elif (current_dir.parent / "source_data").exists():
+                self.base_dir = current_dir.parent
+            else:
+                # Check if we're in a CI/CD environment like /harness
+                if str(current_dir).startswith('/harness'):
+                    # In Harness CI/CD, try to find the project root
+                    potential_roots = [
+                        Path('/harness'),
+                        Path('/harness/workspace'),
+                        current_dir,
+                        current_dir.parent
+                    ]
+                    for root in potential_roots:
+                        if (root / "source_data").exists():
+                            self.base_dir = root
+                            break
+                    else:
+                        # Fallback: create directories relative to current location
+                        self.base_dir = current_dir
+                else:
+                    # Fallback to relative path from notifications directory
+                    self.base_dir = Path("..").absolute()
+        
         self.source_data_dir = self.base_dir / "source_data"
         self.output_dir = self.base_dir / "final_applications"
         
         # Ensure output directory exists
         self.output_dir.mkdir(parents=True, exist_ok=True)
+        
         
         # Load configuration
         self.load_config()
