@@ -110,44 +110,20 @@ class NotificationCenter:
     """Central notification management system"""
     
     def __init__(self):
-        # Get the script directory and navigate to project root
-        script_dir = Path(__file__).parent.absolute()
-        self.base_dir = script_dir.parent
-        
-        # Handle different execution environments
-        if not (self.base_dir / "source_data").exists():
-            # Try alternative path resolution for CI/CD environments
-            current_dir = Path.cwd()
-            if (current_dir / "source_data").exists():
-                self.base_dir = current_dir
-            elif (current_dir.parent / "source_data").exists():
-                self.base_dir = current_dir.parent
-            else:
-                # Check if we're in a CI/CD environment like /harness
-                if str(current_dir).startswith('/harness'):
-                    # In Harness CI/CD, try to find the project root
-                    potential_roots = [
-                        Path('/harness'),
-                        Path('/harness/workspace'),
-                        current_dir,
-                        current_dir.parent
-                    ]
-                    for root in potential_roots:
-                        if (root / "source_data").exists():
-                            self.base_dir = root
-                            break
-                    else:
-                        # Fallback: create directories relative to current location
-                        self.base_dir = current_dir
-                else:
-                    # Fallback to relative path from notifications directory
-                    self.base_dir = Path("..").absolute()
-        
-        self.source_data_dir = self.base_dir / "source_data"
-        self.output_dir = self.base_dir / "final_applications"
-        
-        # Ensure output directory exists
-        self.output_dir.mkdir(parents=True, exist_ok=True)
+        # Use the dedicated path resolver for robust path handling
+        try:
+            import sys
+            sys.path.insert(0, str(Path(__file__).parent))
+            from path_resolver import resolve_project_paths
+            self.base_dir, self.source_data_dir, self.output_dir = resolve_project_paths()
+        except (ImportError, Exception) as e:
+            # Fallback if path_resolver is not available or fails
+            print(f"[WARNING] Path resolver failed ({e}), using fallback")
+            script_dir = Path(__file__).parent.absolute()
+            self.base_dir = script_dir.parent
+            self.source_data_dir = self.base_dir / "source_data"
+            self.output_dir = self.base_dir / "final_applications"
+            self.output_dir.mkdir(parents=True, exist_ok=True)
         
         
         # Load configuration
