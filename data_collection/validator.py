@@ -44,7 +44,7 @@ class PersonalProfile:
         self.work_experience_years = 5
         self.has_cybersecurity_background = True
         self.has_awards = True
-        self.target_budget_eur = 15000  # per year
+        self.target_budget_eur = 12500  # per year
         self.risk_tolerance = "medium"  # low, medium, high
         
         if profile_file and profile_file.exists():
@@ -88,7 +88,7 @@ class ApplicationValidator:
                 self.live_data = {item['school_id']: item for item in data.get('schools_live_data', [])}
                 self.scrape_metadata = data.get('metadata', {})
         else:
-            print("⚠️  No live data found. Run scraper first.")
+            print("WARNING: No live data found. Run scraper first.")
             self.live_data = {}
             self.scrape_metadata = {}
     

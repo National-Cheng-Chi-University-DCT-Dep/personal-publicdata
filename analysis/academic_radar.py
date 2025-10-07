@@ -99,7 +99,7 @@ class AcademicRadar:
             }
         else:
             self.github_headers = {}
-            print("⚠️  No GitHub token found. API rate limits will be lower.")
+            print("WARNING: No GitHub token found. API rate limits will be lower.")
     
     def load_target_professors(self):
         """Load target professors from school configuration"""
@@ -302,7 +302,7 @@ class AcademicRadar:
                             repos.append(repo)
                 
             except Exception as e:
-                print(f"⚠️  GitHub search error: {str(e)}")
+                print(f"WARNING: GitHub search error: {str(e)}")
                 continue
         
         return repos[:10]  # Limit results
@@ -381,7 +381,7 @@ class AcademicRadar:
         }
         
         if school_id not in self.target_professors:
-            print(f"⚠️  No professor data for {school_id}")
+            print(f"WARNING: No professor data for {school_id}")
             return opportunities
         
         professors = self.target_professors[school_id]
@@ -432,7 +432,7 @@ class AcademicRadar:
             if publications:
                 latest_pub = publications[0]  # Most recent
                 recommendations.append(
-                    f"📖 Reference recent paper: '{latest_pub.title}' in your SOP"
+                    f"[REFERENCE] Reference recent paper: '{latest_pub.title}' in your SOP"
                 )
             
             if repos:
@@ -519,7 +519,7 @@ class AcademicRadar:
             f"**Generated**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
             f"**Schools Analyzed**: {len(school_analyses)}",
             "",
-            "## 📊 Executive Summary",
+            "## [SUMMARY] Executive Summary",
             ""
         ]
         
@@ -560,7 +560,7 @@ class AcademicRadar:
                 # Recent publications
                 if prof['recent_publications']:
                     report_lines.extend([
-                        "**📖 Recent Publications:**",
+                        "**[PUBLICATIONS] Recent Publications:**",
                         ""
                     ])
                     for pub in prof['recent_publications'][:3]:  # Top 3
@@ -580,7 +580,7 @@ class AcademicRadar:
                 # Recommendations
                 if prof['recommendations']:
                     report_lines.extend([
-                        "**🎯 Action Recommendations:**",
+                        "**[ACTIONS] Action Recommendations:**",
                         ""
                     ])
                     for rec in prof['recommendations']:
@@ -606,7 +606,7 @@ class AcademicRadar:
                 for conf in conferences[:5]:  # Top 5
                     deadline = datetime.fromisoformat(conf['submission_deadline']).strftime('%Y-%m-%d')
                     days = conf['days_until_deadline']
-                    urgency = "🚨" if days <= 30 else "⚠️" if days <= 60 else "📅"
+                    urgency = "[URGENT]" if days <= 30 else "[WARNING]" if days <= 60 else "[SCHEDULED]"
                     
                     report_lines.append(
                         f"| {urgency} {conf['name']} | {deadline} ({days}d) | "
@@ -617,7 +617,7 @@ class AcademicRadar:
         
         # Overall recommendations
         report_lines.extend([
-            "## 💡 Strategic Recommendations",
+            "## [STRATEGY] Strategic Recommendations",
             "",
             "### 📚 SOP Enhancement Opportunities",
             ""
@@ -630,7 +630,7 @@ class AcademicRadar:
                 all_recommendations.extend(prof['recommendations'])
         
         # Group similar recommendations
-        citation_recs = [r for r in all_recommendations if '📖' in r]
+        citation_recs = [r for r in all_recommendations if '[REFERENCE]' in r]
         contribution_recs = [r for r in all_recommendations if '💻' in r]
         alignment_recs = [r for r in all_recommendations if '🔗' in r]
         
@@ -696,7 +696,7 @@ class AcademicRadar:
         with open(json_file, 'w', encoding='utf-8') as f:
             json.dump(intelligence_data, f, indent=2)
         
-        print(f"📊 Academic intelligence data saved to {json_file}")
+        print(f"[SUMMARY] Academic intelligence data saved to {json_file}")
         
         # Generate and save report
         report_content = self.generate_academic_report(school_analyses)
@@ -740,7 +740,7 @@ def main():
         return 0
         
     except Exception as e:
-        print(f"❌ Academic radar failed: {str(e)}")
+        print(f"[ERROR] Academic radar failed: {str(e)}")
         return 1
 
 if __name__ == "__main__":
