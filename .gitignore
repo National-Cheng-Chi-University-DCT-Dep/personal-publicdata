@@ -1,6 +1,6 @@
 # University Application Document Generator
-# Ignore generated final application documents
-final_applications/
+# Note: final_applications/ is now committed for CI/CD artifact storage
+# Keeping generated documents in repository for version control and free storage
 
 # Python
 __pycache__/
