@@ -186,6 +186,7 @@ An accomplished **Software Engineer** with **5 years of experience** specializin
 | **IBM Quantum Computing & Qiskit** | IBM | 2023 | ✅ Completed |
 
 ---
+
 ## 🎵 Personal Interests & Activities
 
 ### **🎸 Lead Guitarist | UN AVEC DEUX** | *2015-09 ~ 2024-01*

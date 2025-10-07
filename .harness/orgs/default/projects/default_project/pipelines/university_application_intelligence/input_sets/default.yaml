@@ -1,0 +1,14 @@
+inputSet:
+  pipeline:
+    identifier: university_application_intelligence
+    properties:
+      ci:
+        codebase:
+          build:
+            spec:
+              branch: main
+            type: branch
+  name: default
+  identifier: default
+  orgIdentifier: default
+  projectIdentifier: default_project

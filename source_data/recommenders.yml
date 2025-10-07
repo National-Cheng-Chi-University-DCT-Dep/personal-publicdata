@@ -1,0 +1,83 @@
+# Recommender Information Database
+# Last Updated: October 2025
+
+recommenders:
+  - recommender_id: "prof_wang"
+    name: "Dr. Wei-Ming Wang"
+    title: "Professor"
+    department: "Department of Computer Science"
+    institution: "National Chengchi University"
+    email: "wmwang@nccu.edu.tw"
+    phone: "+886-2-2939-3091"
+    address: |
+      Department of Computer Science
+      National Chengchi University
+      64, Sec. 2, ZhiNan Rd., Wenshan District
+      Taipei City 11605, Taiwan (R.O.C.)
+    relationship: "Academic Supervisor"
+    years_known: "3 years (2021-2024)"
+    context: "Graduate coursework supervisor and thesis advisor"
+    strengths:
+      - "Academic performance and research potential"
+      - "Technical skills in cybersecurity and AI"
+      - "Leadership in research projects"
+    recommendation_type: "academic"
+    status: "confirmed"
+
+  - recommender_id: "manager_chen"
+    name: "Jennifer Chen"
+    title: "Chief Technology Officer"
+    department: "Technology Division"
+    institution: "Twister5 Co., Ltd."
+    email: "jennifer.chen@twister5.com"
+    phone: "+886-2-2722-1111"
+    address: |
+      Twister5 Co., Ltd.
+      8F., No. 207, Sec. 3, Beixin Rd.
+      Xindian District, New Taipei City 231, Taiwan
+    relationship: "Direct Supervisor"
+    years_known: "2 years (2022-2024)"
+    context: "Cybersecurity consultant and project leader"
+    strengths:
+      - "Professional cybersecurity expertise"
+      - "Leadership in critical infrastructure projects"
+      - "Client relationship management"
+      - "Innovation in quantum computing integration"
+    recommendation_type: "professional"
+    status: "confirmed"
+
+  - recommender_id: "client_director"
+    name: "David Liu"
+    title: "Director of Information Security"
+    department: "IT Security Division"
+    institution: "Taiwan Stock Exchange (TWSE)"
+    email: "david.liu@twse.com.tw"
+    phone: "+886-2-8101-3101"
+    address: |
+      Taiwan Stock Exchange Corporation
+      7F, No. 85, Sec. 2, Yanping S. Rd.
+      Zhongzheng District, Taipei City 100, Taiwan
+    relationship: "Client and Project Collaborator"
+    years_known: "2 years (2022-2024)"
+    context: "DDoS attack mitigation and infrastructure security projects"
+    strengths:
+      - "Real-world cybersecurity impact"
+      - "Crisis management and rapid response"
+      - "Technical innovation under pressure"
+      - "Cross-functional collaboration"
+    recommendation_type: "professional"
+    status: "pending"
+
+# Backup recommenders (if needed)
+backup_recommenders:
+  - recommender_id: "research_advisor"
+    name: "Dr. Ming-Huang Chen"
+    title: "Associate Professor"
+    department: "Innovation Incubation Center"
+    institution: "National Chengchi University"
+    email: "mhchen@nccu.edu.tw"
+    relationship: "Research Supervisor"
+    years_known: "2 years (2021-2023)"
+    context: "Unity game development and mobile app research projects"
+    recommendation_type: "academic"
+    status: "backup"
