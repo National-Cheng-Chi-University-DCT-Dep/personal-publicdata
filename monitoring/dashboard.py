@@ -393,7 +393,7 @@ class ApplicationDashboard:
             html_file = self.output_dir / "application_dashboard.html"
             with open(html_file, 'w', encoding='utf-8') as f:
                 f.write(html_content)
-            print(f"🌐 HTML dashboard saved to {html_file}")
+            print(f"[HTML] HTML dashboard saved to {html_file}")
         except Exception as e:
             print(f"[WARNING] HTML generation skipped: {e}")
     
