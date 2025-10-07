@@ -289,7 +289,7 @@
                         echo "Priority schools for document generation:"
                         
                         # Create a simple Python script to avoid indentation issues
-                        cat > extract_priority_schools.py << 'EOF'
+                        python3 -c "
                         import json
                         import sys
                         
@@ -314,10 +314,7 @@
                             print(f'Using all active schools: {e}')
                             with open('priority_schools.txt', 'w') as f:
                                 f.write('all')
-                        EOF
-                        
-                        python3 extract_priority_schools.py
-                        rm extract_priority_schools.py
+                        "
                       else
                         echo "Validation results not found, using all active schools"
                         echo "all" > priority_schools.txt
