@@ -25,17 +25,26 @@ def resolve_project_paths():
     base_dir = script_dir.parent
     if (base_dir / "source_data").exists():
         print(f"[PATH_RESOLVER] Found standard structure at: {base_dir}")
-        return base_dir, base_dir / "source_data", base_dir / "final_applications"
+        output_dir = base_dir / "final_applications"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        print(f"[PATH_RESOLVER] Created/verified output directory: {output_dir}")
+        return base_dir, base_dir / "source_data", output_dir
     
     # Strategy 2: Check current working directory
     if (current_dir / "source_data").exists():
         print(f"[PATH_RESOLVER] Found project in current dir: {current_dir}")
-        return current_dir, current_dir / "source_data", current_dir / "final_applications"
+        output_dir = current_dir / "final_applications"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        print(f"[PATH_RESOLVER] Created/verified output directory: {output_dir}")
+        return current_dir, current_dir / "source_data", output_dir
     
     # Strategy 3: Check parent of current directory
     if (current_dir.parent / "source_data").exists():
         print(f"[PATH_RESOLVER] Found project in parent dir: {current_dir.parent}")
-        return current_dir.parent, current_dir.parent / "source_data", current_dir.parent / "final_applications"
+        output_dir = current_dir.parent / "final_applications"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        print(f"[PATH_RESOLVER] Created/verified output directory: {output_dir}")
+        return current_dir.parent, current_dir.parent / "source_data", output_dir
     
     # Strategy 4: CI/CD environment handling
     if str(current_dir).startswith('/harness') or os.environ.get('HARNESS_BUILD_ID'):
@@ -54,7 +63,10 @@ def resolve_project_paths():
             print(f"[PATH_RESOLVER] Checking CI/CD base: {base}")
             if base.exists() and (base / "source_data").exists():
                 print(f"[PATH_RESOLVER] Found CI/CD project at: {base}")
-                return base, base / "source_data", base / "final_applications"
+                output_dir = base / "final_applications"
+                output_dir.mkdir(parents=True, exist_ok=True)
+                print(f"[PATH_RESOLVER] Created/verified output directory: {output_dir}")
+                return base, base / "source_data", output_dir
         
         # If no source_data found in CI/CD, use current directory as base
         # and create necessary structure
