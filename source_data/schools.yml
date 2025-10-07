@@ -13,7 +13,7 @@ schools:
       overall: 6.0
       minimum_band: 5.5
     tuition_fee: "€6,000/year"
-    application_deadline: "March 1, 2025"
+    application_deadline: "March 1, 2026"
     website: "https://taltech.ee/en/cybersecurity-msc"
     key_features:
       - "World's largest cyber exercise (Locked Shields)"
@@ -35,7 +35,7 @@ schools:
       overall: 6.5
       writing_minimum: 5.5
     tuition_fee: "Erasmus Mundus (with scholarship opportunities)"
-    application_deadline: "January 15, 2025"
+    application_deadline: "January 15, 2026"
     website: "https://secclo.eu/"
     key_features:
       - "Two-year dual degree program"
@@ -57,7 +57,7 @@ schools:
       overall: 6.5
       minimum_band: 5.5
     tuition_fee: "SEK 140,000/year (€12,500)"
-    application_deadline: "January 16, 2025"
+    application_deadline: "January 16, 2026"
     website: "https://liu.se/en/education/program/6cddd"
     key_features:
       - "Strong CS foundation"
@@ -78,7 +78,7 @@ schools:
       overall: 6.5
       flexible_bands: true
     tuition_fee: "Free (€300-400/semester fees)"
-    application_deadline: "March 15, 2025"
+    application_deadline: "March 15, 2026"
     website: "https://h-da.com"
     key_features:
       - "Free tuition"
