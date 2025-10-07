@@ -389,6 +389,10 @@ pipeline:
                     command: |
                       echo "🎯 Running master controller for final summary..."
 
+                      # Ensure required dependencies are available
+                      echo "📦 Checking and installing required dependencies..."
+                      pip3 install --quiet beautifulsoup4 selenium requests PyYAML || echo "⚠️ Some dependencies may have failed to install"
+
                       cd build_scripts
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
 
