@@ -211,7 +211,7 @@ class RiskPortfolioBalancer:
                     continue
         
         # Default high cost for unknown
-        return 15000.0
+        return 125000.0 #per year
     
     def calculate_roi_score(self, school_id: str, cost: float) -> float:
         """Calculate Return on Investment score"""
@@ -255,9 +255,9 @@ class RiskPortfolioBalancer:
             cost_factor = 1.5
         elif cost <= 10000:
             cost_factor = 1.2
-        elif cost <= 15000:
-            cost_factor = 1.0
         elif cost <= 25000:
+            cost_factor = 1.0
+        elif cost <= 12500:
             cost_factor = 0.8
         else:
             cost_factor = 0.6
