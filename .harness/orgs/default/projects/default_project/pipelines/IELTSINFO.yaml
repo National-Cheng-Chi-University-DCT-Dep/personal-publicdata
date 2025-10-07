@@ -1,5 +1,5 @@
 pipeline:
-  name: University Application Intelligence System v2.0 - Harness.
+  name: University Application Intelligence System v2.0 - Harness
   identifier: university_application_intelligence
   projectIdentifier: default_project
   orgIdentifier: default
@@ -174,26 +174,8 @@ pipeline:
                         echo "✅ Validation completed successfully"
                         echo "📊 Validation summary:"
                         
-                        # Extract key metrics from validation report
-                        cd ../final_applications
-                        python3 -c "
-                        import json
-                        try:
-                            with open('validation_results.json') as f:
-                                data = json.load(f)
-                                results = data.get('results', {})
-                                
-                                eligible = sum(1 for r in results.values() if r.get('overall_status') == 'ELIGIBLE')
-                                warning = sum(1 for r in results.values() if r.get('overall_status') == 'WARNING')
-                                ineligible = sum(1 for r in results.values() if r.get('overall_status') == 'INELIGIBLE')
-                                total = len(results)
-                                
-                                print(f'  ✅ Eligible: {eligible}/{total} ({eligible/total:.1%})')
-                                print(f'  ⚠️  Warning: {warning}/{total}')
-                                print(f'  ❌ Ineligible: {ineligible}/{total}')
-                        except Exception as e:
-                            print(f'Could not parse validation results: {e}')
-                        "
+                        # Use the safe validation summary script to avoid indentation errors
+                        python3 validation_summary.py
                       else
                         echo "❌ Validation failed"
                         exit 1
@@ -451,6 +433,101 @@ pipeline:
                         echo "⚠️ Master execution report not generated"
                       fi
     - stage:
+        name: Advanced Intelligence Features
+        identifier: advanced_features
+        description: Run advanced AI-powered analysis features
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Gamification System
+                  identifier: gamification
+                  spec:
+                    shell: Bash
+                    command: |
+                      echo "🎮 Running gamification system..."
+
+                      cd build_scripts
+                      export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
+
+                      echo "🏆 Updating achievements and progress tracking..."
+                      python3 advanced_controller.py --gamification || echo "⚠️ Gamification system failed"
+
+                      if [ -f "../final_applications/gamification_dashboard.md" ]; then
+                        echo "✅ Gamification system completed"
+                        echo "📊 Achievements summary:"
+                        grep -A 5 "## 🏆 Achievement Progress" ../final_applications/gamification_dashboard.md || echo "Achievements section not found"
+                      fi
+              - step:
+                  type: Run
+                  name: Narrative Consistency Analysis
+                  identifier: narrative_analysis
+                  spec:
+                    shell: Bash
+                    command: |
+                      echo "📖 Running narrative consistency analysis..."
+
+                      cd build_scripts
+                      export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
+
+                      echo "🔍 Analyzing document consistency and narrative flow..."
+                      python3 advanced_controller.py --narrative || echo "⚠️ Narrative analysis failed"
+
+                      if [ -f "../final_applications/narrative_consistency_report.md" ]; then
+                        echo "✅ Narrative analysis completed"
+                        echo "📊 Consistency summary:"
+                        grep -A 3 "## 📊 Overall Consistency Score" ../final_applications/narrative_consistency_report.md || echo "Consistency summary not found"
+                      fi
+              - step:
+                  type: Run
+                  name: Risk Portfolio Analysis
+                  identifier: portfolio_analysis
+                  spec:
+                    shell: Bash
+                    command: |
+                      echo "📊 Running risk portfolio analysis..."
+
+                      cd build_scripts
+                      export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
+
+                      echo "🎯 Optimizing school portfolio using financial theory..."
+                      python3 advanced_controller.py --portfolio || echo "⚠️ Portfolio analysis failed"
+
+                      if [ -f "../final_applications/risk_portfolio_analysis.md" ]; then
+                        echo "✅ Portfolio analysis completed"
+                        echo "📊 Portfolio recommendations:"
+                        grep -A 5 "## 🎯 Recommended Portfolio" ../final_applications/risk_portfolio_analysis.md || echo "Portfolio recommendations not found"
+                      fi
+              - step:
+                  type: Run
+                  name: What-If Scenario Simulator
+                  identifier: whatif_simulator
+                  spec:
+                    shell: Bash
+                    command: |
+                      echo "🔮 Running What-If scenario simulator..."
+
+                      cd build_scripts
+                      export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
+
+                      echo "🎲 Testing strategic scenarios and optimization..."
+                      python3 advanced_controller.py --whatif || echo "⚠️ What-If simulator failed"
+
+                      if [ -f "../final_applications/whatif_optimization_report.md" ]; then
+                        echo "✅ What-If simulation completed"
+                        echo "📊 Scenario results:"
+                        grep -A 3 "## 🎯 Best Scenario" ../final_applications/whatif_optimization_report.md || echo "Scenario results not found"
+                      fi
+    - stage:
         name: Artifact Management and Deployment
         identifier: artifacts
         description: Save and deploy generated artifacts
@@ -496,6 +573,27 @@ pipeline:
                       if [ -f "final_applications/execution_report.md" ]; then
                         cp final_applications/execution_report.md artifacts/reports/
                         echo "✅ Execution report archived"
+                      fi
+
+                      # Archive advanced features reports
+                      if [ -f "final_applications/gamification_dashboard.md" ]; then
+                        cp final_applications/gamification_dashboard.md artifacts/reports/
+                        echo "✅ Gamification dashboard archived"
+                      fi
+
+                      if [ -f "final_applications/narrative_consistency_report.md" ]; then
+                        cp final_applications/narrative_consistency_report.md artifacts/reports/
+                        echo "✅ Narrative analysis report archived"
+                      fi
+
+                      if [ -f "final_applications/risk_portfolio_analysis.md" ]; then
+                        cp final_applications/risk_portfolio_analysis.md artifacts/reports/
+                        echo "✅ Portfolio analysis report archived"
+                      fi
+
+                      if [ -f "final_applications/whatif_optimization_report.md" ]; then
+                        cp final_applications/whatif_optimization_report.md artifacts/reports/
+                        echo "✅ What-If simulation report archived"
                       fi
 
                       # Copy structured data
@@ -565,6 +663,17 @@ pipeline:
             inputYaml: |
               pipeline_mode: "full"
               skip_scraping: false
+              run_advanced_features: true
+    - trigger:
+        name: Advanced Features Only
+        identifier: advanced_only
+        enabled: true
+        description: Run only advanced intelligence features
+        type: Manual
+        spec:
+          inputYaml: |
+            pipeline_mode: "advanced_only"
+            skip_scraping: true
     - trigger:
         name: Source Data Changes
         identifier: source_data_changes
@@ -637,6 +746,14 @@ pipeline:
       type: String
       description: Notification verbosity level
       value: normal
+    - name: run_advanced_features
+      type: String
+      description: Run advanced AI-powered features (gamification, narrative, portfolio, whatif)
+      value: "false"
+    - name: advanced_features_timeout
+      type: String
+      description: Timeout for advanced features in seconds
+      value: "300"
   notificationRules:
     - name: Pipeline Success Notification
       identifier: success_notification
