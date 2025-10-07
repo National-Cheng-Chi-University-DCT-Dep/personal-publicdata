@@ -20,8 +20,8 @@ import requests
 from datetime import datetime, date, timedelta
 from typing import Dict, List, Optional, Any
 from pathlib import Path
-from email.mime.text import MimeText
-from email.mime.multipart import MimeMultipart
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 class GitHubIntegration:
     """GitHub Issues integration for task management"""
@@ -33,12 +33,12 @@ class GitHubIntegration:
         self.base_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}"
         
         if not self.token:
-            print("⚠️  GitHub token not found. Set GITHUB_TOKEN environment variable for issue creation.")
+            print("WARNING: GitHub token not found. Set GITHUB_TOKEN environment variable for issue creation.")
     
     def create_issue(self, title: str, body: str, labels: List[str] = None) -> Optional[str]:
         """Create a GitHub issue"""
         if not self.token:
-            print(f"💡 Would create GitHub issue: {title}")
+            print(f"[INFO] Would create GitHub issue: {title}")
             return None
         
         headers = {
@@ -64,14 +64,14 @@ class GitHubIntegration:
             if response.status_code == 201:
                 issue_data = response.json()
                 issue_url = issue_data['html_url']
-                print(f"✅ Created GitHub issue: {issue_url}")
+                print(f"[SUCCESS] Created GitHub issue: {issue_url}")
                 return issue_url
             else:
-                print(f"❌ Failed to create issue: {response.status_code} - {response.text}")
+                print(f"[ERROR] Failed to create issue: {response.status_code} - {response.text}")
                 return None
                 
         except Exception as e:
-            print(f"❌ GitHub API error: {str(e)}")
+            print(f"[ERROR] GitHub API error: {str(e)}")
             return None
     
     def list_issues(self, state: str = 'open', labels: List[str] = None) -> List[Dict]:
@@ -416,12 +416,12 @@ class NotificationCenter:
         
         try:
             # Create message
-            msg = MimeMultipart()
+            msg = MIMEMultipart()
             msg['From'] = email_config['sender_email']
             msg['To'] = email_config['recipient_email']
             msg['Subject'] = subject
             
-            msg.attach(MimeText(body, 'plain'))
+            msg.attach(MIMEText(body, 'plain'))
             
             # Send email
             with smtplib.SMTP(email_config['smtp_server'], email_config['smtp_port']) as server:
@@ -441,7 +441,7 @@ class NotificationCenter:
     
     def process_all_alerts(self) -> Dict[str, Any]:
         """Process all types of alerts and notifications"""
-        print("🔔 Processing alerts and notifications...")
+        print("[NOTIFY] Processing alerts and notifications...")
         
         # Collect all alerts
         deadline_alerts = self.check_deadline_alerts()
@@ -486,7 +486,7 @@ class NotificationCenter:
         with open(summary_file, 'w', encoding='utf-8') as f:
             json.dump(summary, f, indent=2)
         
-        print(f"📊 Alert summary saved to {summary_file}")
+        print(f"[SUMMARY] Alert summary saved to {summary_file}")
         
         return summary
     
@@ -537,7 +537,7 @@ def main():
         summary = notification_center.process_all_alerts()
         
         # Print summary
-        print(f"\n📊 Alert Processing Summary:")
+        print(f"\n[SUMMARY] Alert Processing Summary:")
         print(f"   Total alerts: {summary['total_alerts']}")
         print(f"   GitHub issues created: {summary['created_github_issues']}")
         
@@ -547,7 +547,7 @@ def main():
         return 0
         
     except Exception as e:
-        print(f"❌ Alert processing failed: {str(e)}")
+        print(f"[ERROR] Alert processing failed: {str(e)}")
         return 1
 
 if __name__ == "__main__":
