@@ -88,6 +88,126 @@ schools:
     priority_level: "high"
     status: "active"
 
+  - school_id: "tartu"
+    school: "University of Tartu"
+    full_name: "University of Tartu"
+    program: "MSc EACH - Excellence in Analytical Chemistry"
+    country: "Estonia"
+    location: "Tartu, Estonia"
+    sop_bridge_file: "sop_bridge_generic.md"
+    ielts_requirement:
+      overall: 6.5
+      minimum_band: 5.5
+    tuition_fee: "€4,500/year (estimated)"
+    application_deadline: "January 5, 2026"
+    application_start: "November 5, 2025"
+    website: "https://ut.ee/en/admissions"
+    key_features:
+      - "Excellence in Analytical Chemistry program"
+      - "Top university in Estonia"
+      - "EU-funded research opportunities"
+      - "Lower cost of living"
+      - "English-taught program"
+    priority_level: "medium"
+    status: "active"
+    notes: "Application opens Nov 5, 2025. Chemistry focus but excellent university."
+
+  - school_id: "aalto_masters"
+    school: "Aalto University (Regular Masters)"
+    full_name: "Aalto University"
+    program: "MSc in Computer, Communication and Information Sciences"
+    country: "Finland"
+    location: "Espoo, Finland"
+    sop_bridge_file: "sop_bridge_aalto.md"
+    ielts_requirement:
+      overall: 6.5
+      minimum_band: 5.5
+    tuition_fee: "€15,000/year"
+    application_deadline: "January 2, 2026"
+    application_start: "December 1, 2025"
+    document_deadline: "January 9, 2026"
+    website: "https://www.aalto.fi/en/study-at-aalto/apply-to-masters-programmes"
+    key_features:
+      - "World-class technology university"
+      - "Strong industry connections (Nokia, etc.)"
+      - "Cybersecurity and AI specializations"
+      - "Nordic tech ecosystem"
+      - "Two-year program"
+    priority_level: "high"
+    status: "active"
+    notes: "Application period: Dec 1, 2025 - Jan 2, 2026. Document deadline: Jan 9, 2026."
+
+  - school_id: "lulea"
+    school: "Luleå University of Technology"
+    full_name: "Luleå University of Technology"
+    program: "MSc in Cybersecurity"
+    country: "Sweden"
+    location: "Luleå, Sweden"
+    sop_bridge_file: "sop_bridge_generic.md"
+    ielts_requirement:
+      overall: 6.5
+      minimum_band: 5.5
+    tuition_fee: "SEK 120,000/year (€10,700)"
+    application_deadline: "January 15, 2026"
+    application_start: "October 16, 2025"
+    website: "https://www.ltu.se/edu/program/TCYSE/TCYSE-Cybersecurity-master-s-programme"
+    key_features:
+      - "Dedicated Cybersecurity MSc program"
+      - "Distance learning option available"
+      - "Strong technical foundation"
+      - "Lower tuition than southern Sweden"
+      - "Swedish tech ecosystem access"
+    priority_level: "high"
+    status: "active"
+    notes: "Application opens Oct 16, 2025 via universityadmissions.se. Distance learning available."
+
+  - school_id: "portsmouth"
+    school: "University of Portsmouth"
+    full_name: "University of Portsmouth"
+    program: "MSc Computer Science"
+    country: "United Kingdom"
+    location: "Portsmouth, UK"
+    sop_bridge_file: "sop_bridge_generic.md"
+    ielts_requirement:
+      overall: 6.0
+      minimum_band: 5.5
+    tuition_fee: "£17,900/year (€21,000)"
+    application_deadline: "Rolling admissions"
+    website: "https://www.port.ac.uk/study/courses/msc-computer-science"
+    key_features:
+      - "Rolling admissions - apply now!"
+      - "2-year post-study work visa (UK)"
+      - "Flexible specialization options"
+      - "Cybersecurity pathway available"
+      - "Practical industry focus"
+    priority_level: "high"
+    status: "active"
+    notes: "Rolling admissions for 2026 entry - can apply immediately! Perfect IELTS match."
+
+  - school_id: "saarland"
+    school: "Saarland University"
+    full_name: "Saarland University"
+    program: "MSc in Cybersecurity / Computer Science"
+    country: "Germany"
+    location: "Saarbrücken, Germany"
+    sop_bridge_file: "sop_bridge_generic.md"
+    ielts_requirement:
+      overall: 6.5
+      minimum_band: 5.5
+    tuition_fee: "Free (€300/semester fees)"
+    application_deadline: "November 15, 2025"
+    semester: "Summer 2026"
+    website: "https://www.uni-saarland.de/en/study/programmes/master/cybersecurity.html"
+    key_features:
+      - "Top European cybersecurity research center"
+      - "Free tuition"
+      - "CISPA Helmholtz Center affiliation"
+      - "Summer 2026 intake (early start)"
+      - "World-class research opportunities"
+    priority_level: "very_high"
+    status: "active"
+    notes: "URGENT: Summer 2026 semester deadline Nov 15, 2025! Top-tier research institution."
+
 # Template schools for future expansion
 template_schools:
   - school_id: "template_eu"
