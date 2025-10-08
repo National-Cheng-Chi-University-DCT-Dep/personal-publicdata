@@ -1,0 +1,14 @@
+inputSet:
+  pipeline:
+    identifier: university_application_intelligence
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: main
+  name: 2nd_master
+  identifier: nd_master
+  orgIdentifier: default
+  projectIdentifier: default_project
