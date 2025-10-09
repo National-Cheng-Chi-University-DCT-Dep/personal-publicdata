@@ -51,11 +51,16 @@ class DatabaseUpdater:
     def load_qualified_schools(self) -> List[Dict[str, Any]]:
         """載入篩選後的合格課程"""
         try:
+            # 確保 discovery 目錄存在
+            self.discovery_dir.mkdir(exist_ok=True)
+            
             # 找到最新的 qualified_schools 檔案
             yml_files = sorted(self.discovery_dir.glob('qualified_schools_*.yml'), reverse=True)
             
             if not yml_files:
                 self.logger.warning("沒有找到 qualified_schools 檔案")
+                self.logger.info(f"檢查目錄: {self.discovery_dir.absolute()}")
+                self.logger.info(f"目錄內容: {list(self.discovery_dir.glob('*'))}")
                 return []
             
             latest_file = yml_files[0]

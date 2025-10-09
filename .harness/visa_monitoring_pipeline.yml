@@ -44,6 +44,9 @@ pipeline:
                       pip install -r requirements.txt
                       playwright install chromium
                       
+                      echo "=== Creating Required Directories ==="
+                      mkdir -p logs
+                      
                       echo "=== Running Visa Monitor ==="
                       python monitoring/visa_monitor.py
                     envVariables:

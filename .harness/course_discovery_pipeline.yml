@@ -16,9 +16,9 @@ pipeline:
   
   stages:
     - stage:
-        name: Discover Courses
-        identifier: discover_courses
-        description: Scrape courses from various platforms
+        name: Course Discovery Complete Flow
+        identifier: course_discovery_flow
+        description: Complete course discovery, filter, and update pipeline
         type: CI
         spec:
           cloneCodebase: true
@@ -43,6 +43,10 @@ pipeline:
                       echo "=== Installing Dependencies ==="
                       pip install -r requirements.txt
                       playwright install chromium
+                      
+                      echo "=== Creating Required Directories ==="
+                      mkdir -p discovery/raw_data
+                      mkdir -p logs
                   timeout: 15m
               
               - step:
@@ -65,7 +69,7 @@ pipeline:
                       from discovery.scrape_mastersportal import MastersPortalScraper
                       scraper = MastersPortalScraper(keywords[:3], countries[:4])
                       courses = scraper.run()
-                      print(f'Found {len(courses)} courses')
+                      print(f'Found {len(courses)} courses from Mastersportal')
                       "
                   timeout: 30m
               
@@ -88,30 +92,14 @@ pipeline:
                       from discovery.scrape_studyeu import StudyEuScraper
                       scraper = StudyEuScraper(keywords[:3])
                       courses = scraper.run()
-                      print(f'Found {len(courses)} courses')
+                      print(f'Found {len(courses)} courses from Study.eu')
                       "
                   timeout: 20m
-        tags: {}
-    
-    - stage:
-        name: Filter and Validate
-        identifier: filter_validate
-        description: Filter courses based on profile criteria
-        type: CI
-        spec:
-          cloneCodebase: true
-          platform:
-            os: Linux
-            arch: Amd64
-          runtime:
-            type: Cloud
-            spec: {}
-          execution:
-            steps:
+              
               - step:
                   type: Run
-                  name: Run Filter Engine
-                  identifier: run_filter
+                  name: Filter and Validate
+                  identifier: filter_validate
                   spec:
                     shell: Bash
                     command: |
@@ -120,27 +108,14 @@ pipeline:
                       
                       echo "=== Filtering courses ==="
                       python discovery/filter_and_validate.py
+                      
+                      echo "=== Checking generated files ==="
+                      ls -lh discovery/
                   timeout: 10m
-        tags: {}
-    
-    - stage:
-        name: Update and Report
-        identifier: update_report
-        description: Update database and create PR
-        type: CI
-        spec:
-          cloneCodebase: true
-          platform:
-            os: Linux
-            arch: Amd64
-          runtime:
-            type: Cloud
-            spec: {}
-          execution:
-            steps:
+              
               - step:
                   type: Run
-                  name: Update Database
+                  name: Update Database and Create PR
                   identifier: update_db
                   spec:
                     shell: Bash
@@ -164,8 +139,11 @@ pipeline:
                       #!/bin/bash
                       
                       if [ -f "discovery/discovery_report.md" ]; then
-                        echo "Discovery report available"
+                        echo "✅ Discovery report available"
+                        cat discovery/discovery_report.md
                         # 可以在這裡加入通知邏輯
+                      else
+                        echo "⚠️ No discovery report found"
                       fi
                     envVariables:
                       NOTIFICATION_WEBHOOK: <+secrets.getValue("notification_webhook")>

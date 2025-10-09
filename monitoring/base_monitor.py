@@ -12,6 +12,9 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 from abc import ABC, abstractmethod
 
+# 確保 logs 目錄存在
+Path('logs').mkdir(exist_ok=True)
+
 # 設定日誌
 logging.basicConfig(
     level=logging.INFO,
