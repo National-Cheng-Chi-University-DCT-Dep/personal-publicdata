@@ -1,0 +1,90 @@
+pipeline:
+  name: Visa Information Monitoring
+  identifier: visa_monitoring
+  projectIdentifier: master_application
+  orgIdentifier: default
+  tags:
+    visa: "true"
+    monitoring: "true"
+  
+  stages:
+    - stage:
+        name: Visa Monitor
+        identifier: visa_monitor
+        description: Monitor visa information pages for changes
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: Run Visa Monitor
+                  identifier: run_visa_monitor
+                  spec:
+                    shell: Python
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+                          set -e
+                          
+                          echo "=== Installing Dependencies ==="
+                          pip install -r requirements.txt
+                          playwright install chromium
+                          
+                          echo "=== Running Visa Monitor ==="
+                          python monitoring/visa_monitor.py
+                    environmentVariables:
+                      - name: NOTIFICATION_WEBHOOK
+                        type: String
+                        value: <+secrets.getValue("notification_webhook")>
+                    outputVariables: []
+                  timeout: 30m
+              
+              - step:
+                  type: ShellScript
+                  name: Commit Changes
+                  identifier: commit_changes
+                  spec:
+                    shell: Bash
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+                          
+                          git config --local user.email "harness@automation.com"
+                          git config --local user.name "Harness Automation"
+                          
+                          git add reports/status_history/visa_hashes/
+                          git add reports/monitoring_reports/
+                          git add source_data/visa_requirements.yml
+                          
+                          if git diff --staged --quiet; then
+                            echo "No changes to commit"
+                          else
+                            git commit -m "🛂 Update visa monitoring [Harness automated]"
+                            git push origin main
+                          fi
+                    environmentVariables: []
+                  timeout: 10m
+        tags: {}
+  
+  triggers:
+    - trigger:
+        name: Weekly Schedule
+        identifier: weekly_schedule
+        enabled: true
+        description: Run every Monday and Thursday
+        type: Cron
+        spec:
+          type: Cron
+          spec:
+            expression: "0 0 * * 1,4"  # Monday and Thursday at midnight UTC
+            inputYaml: |
+              pipeline:
+                identifier: visa_monitoring
+

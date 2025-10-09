@@ -1,0 +1,64 @@
+name: Visa Information Monitor
+
+on:
+  schedule:
+    # 每週一和週四 UTC 0:00 執行 (台北時間 8:00)
+    - cron: '0 0 * * 1,4'
+  workflow_dispatch:  # 允許手動觸發
+  push:
+    branches:
+      - main
+    paths:
+      - 'monitoring/visa_monitor.py'
+      - 'source_data/visa_requirements.yml'
+      - '.github/workflows/visa_monitor.yml'
+
+jobs:
+  monitor-visa:
+    runs-on: ubuntu-latest
+    name: Monitor Visa Information
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium
+      
+      - name: Run visa monitor
+        env:
+          NOTIFICATION_WEBHOOK: ${{ secrets.NOTIFICATION_WEBHOOK }}
+        run: |
+          python monitoring/visa_monitor.py
+      
+      - name: Commit hash and report changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add reports/status_history/visa_hashes/
+          git add reports/monitoring_reports/
+          git add source_data/visa_requirements.yml
+          git diff --quiet && git diff --staged --quiet || git commit -m "🛂 Update visa information monitoring [automated]"
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+      
+      - name: Upload monitoring report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: visa-monitor-report-${{ github.run_number }}
+          path: reports/monitoring_reports/visa_monitor_*.json
+          retention-days: 90
+
