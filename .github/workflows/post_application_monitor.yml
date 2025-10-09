@@ -38,7 +38,9 @@ jobs:
           SWEDEN_PASSWORD: ${{ secrets.SWEDEN_PASSWORD }}
           NOTIFICATION_WEBHOOK: ${{ secrets.NOTIFICATION_WEBHOOK }}
         run: |
+          echo "=== Sweden Application Monitoring ==="
           python monitoring/post_application/check_status_sweden.py
+        continue-on-error: true
       
       - name: Commit status changes
         run: |
@@ -79,7 +81,9 @@ jobs:
           DREAMAPPLY_PASSWORD: ${{ secrets.DREAMAPPLY_PASSWORD }}
           NOTIFICATION_WEBHOOK: ${{ secrets.NOTIFICATION_WEBHOOK }}
         run: |
+          echo "=== DreamApply Application Monitoring ==="
           python monitoring/post_application/check_status_dreamapply.py
+        continue-on-error: true
       
       - name: Commit status changes
         run: |
@@ -120,7 +124,9 @@ jobs:
           SAARLAND_PASSWORD: ${{ secrets.SAARLAND_PASSWORD }}
           NOTIFICATION_WEBHOOK: ${{ secrets.NOTIFICATION_WEBHOOK }}
         run: |
+          echo "=== Saarland Application Monitoring ==="
           python monitoring/post_application/check_status_saarland.py
+        continue-on-error: true
       
       - name: Commit status changes
         run: |

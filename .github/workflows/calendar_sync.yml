@@ -39,7 +39,9 @@ jobs:
       
       - name: Sync deadlines to Google Calendar
         run: |
+          echo "=== Syncing to Google Calendar ==="
           python integrations/calendar_integration.py --sync
+        continue-on-error: true
       
       - name: Clean up credentials
         if: always()

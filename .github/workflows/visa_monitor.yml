@@ -37,7 +37,9 @@ jobs:
         env:
           NOTIFICATION_WEBHOOK: ${{ secrets.NOTIFICATION_WEBHOOK }}
         run: |
+          echo "=== Visa Information Monitoring ==="
           python monitoring/visa_monitor.py
+        continue-on-error: true
       
       - name: Commit hash and report changes
         run: |

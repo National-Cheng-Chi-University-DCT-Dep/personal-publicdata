@@ -1,0 +1,153 @@
+# 個人申請條件檔案
+# My Application Profile
+
+personal_info:
+  name: "李培辰"
+  name_english: "Pei-Chen Lee"
+  email: "your.email@example.com"
+  nationality: "Taiwan"
+
+# 語言能力
+language_proficiency:
+  ielts:
+    overall: 7.0      # 您的 IELTS 總分
+    listening: 7.0
+    reading: 7.5
+    writing: 6.5      # 寫作分數
+    speaking: 7.0
+    test_date: "2024-03-15"
+  
+  # 其他英語測驗（如有）
+  toefl:
+    total: null
+  
+  ef_set:
+    score: 74
+    level: "C1 Advanced"
+
+# 學術興趣與專長
+academic_interests:
+  primary:
+    - "Cybersecurity"
+    - "Information Security"
+    - "Network Security"
+    - "Privacy"
+  
+  secondary:
+    - "Artificial Intelligence"
+    - "Machine Learning"
+    - "Applied AI"
+    - "Quantum Computing"
+    - "Quantum Information"
+  
+  keywords:
+    - "Security"
+    - "Cyber"
+    - "Privacy"
+    - "Information Security"
+    - "Network"
+    - "AI"
+    - "Artificial Intelligence"
+    - "Machine Learning"
+    - "Quantum"
+
+# 學術背景
+academic_background:
+  bachelor:
+    institution: "National Chengchi University"
+    major: "Computer Science"
+    gpa: 3.5  # 您的 GPA
+    graduation_year: 2024
+
+# 財務條件
+financial:
+  # 申請費用預算（每所學校）
+  max_application_fee:
+    amount: 1500
+    currency: "SEK"
+  
+  # 學費預算（每年）
+  max_tuition_fee:
+    amount: 50000  # 如果是免學費則可設為 0
+    currency: "EUR"
+  
+  # 生活費預算（每月）
+  max_living_cost:
+    amount: 10000
+    currency: "SEK"
+  
+  # 偏好免學費學校
+  prefer_tuition_free: true
+  
+  # 需要獎學金
+  need_scholarship: true
+
+# 地理偏好
+geographic_preferences:
+  # 偏好國家（按優先順序）
+  preferred_countries:
+    - "Sweden"
+    - "Finland"
+    - "Estonia"
+    - "Germany"
+    - "Norway"
+    - "Netherlands"
+  
+  # 排除國家
+  excluded_countries: []
+  
+  # 偏好城市類型
+  city_preference: "any"  # large, medium, small, any
+
+# 學程偏好
+program_preferences:
+  # 學程類型
+  degree_type: "Master"  # Master, MBA, MPhil
+  
+  # 學程長度（月）
+  preferred_duration:
+    min: 12
+    max: 24
+  
+  # 學分
+  preferred_credits:
+    min: 60
+    max: 120
+  
+  # 授課語言
+  language: "English"
+  
+  # 偏好開學時間
+  preferred_intake: "Fall"  # Fall, Spring, Any
+
+# 申請偏好
+application_preferences:
+  # 最低優先級（只搜尋此優先級以上的課程）
+  min_priority: "medium"  # high, medium, low
+  
+  # 是否考慮博士班
+  consider_phd: false
+  
+  # 工作機會重要性
+  work_opportunities_important: true
+
+# 搜尋設定
+search_settings:
+  # 最大搜尋結果數
+  max_results: 100
+  
+  # 是否包含已在 schools.yml 中的學校
+  include_existing: false
+  
+  # 搜尋範圍（年份）
+  target_year: 2026
+  target_intake: "Fall"
+
+# 篩選規則權重（用於排序）
+filtering_weights:
+  ielts_match: 1.0          # IELTS 符合
+  interest_match: 1.5       # 興趣匹配
+  tuition_free: 2.0         # 免學費
+  scholarship_available: 1.5 # 有獎學金
+  preferred_country: 1.2    # 偏好國家
+

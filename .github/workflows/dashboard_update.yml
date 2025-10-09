@@ -37,11 +37,7 @@ jobs:
       
       - name: Update budget analyzer
         run: |
-          python analysis/budget_analyzer.py
-      
-      - name: Generate dashboard
-        run: |
-          python build_scripts/master_controller.py --update-dashboard
+          python analysis/budget_analyzer.py --live-rates
       
       - name: Commit dashboard changes
         run: |

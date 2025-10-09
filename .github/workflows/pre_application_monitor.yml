@@ -38,7 +38,9 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
         run: |
+          echo "=== Pre-Application Monitoring ==="
           python monitoring/pre_application/check_opening_status.py
+        continue-on-error: true
       
       - name: Commit status changes
         run: |

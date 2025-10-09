@@ -1,0 +1,111 @@
+name: Course Discovery
+
+on:
+  schedule:
+    # 每週一 UTC 0:00 執行 (台北時間週一 8:00)
+    - cron: '0 0 * * 1'
+  workflow_dispatch:  # 允許手動觸發
+  push:
+    branches:
+      - main
+    paths:
+      - 'discovery/**'
+      - 'source_data/my_profile.yml'
+      - '.github/workflows/course_discovery.yml'
+
+jobs:
+  discover-courses:
+    runs-on: ubuntu-latest
+    name: Discover New Courses
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 需要完整歷史以建立分支
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium
+      
+      - name: Load profile
+        run: |
+          echo "Loading my_profile.yml..."
+          python -c "import yaml; profile = yaml.safe_load(open('source_data/my_profile.yml')); print(f'Profile loaded: {profile[\"personal_info\"][\"name_english\"]}')"
+      
+      - name: Stage 1 - Discover (Mastersportal)
+        env:
+          NOTIFICATION_WEBHOOK: ${{ secrets.NOTIFICATION_WEBHOOK }}
+        run: |
+          echo "=== Scraping Mastersportal.com ==="
+          python -c "
+          import yaml
+          profile = yaml.safe_load(open('source_data/my_profile.yml'))
+          keywords = profile['academic_interests']['primary'] + profile['academic_interests']['secondary']
+          countries = profile['geographic_preferences']['preferred_countries']
+          
+          from discovery.scrape_mastersportal import MastersPortalScraper
+          scraper = MastersPortalScraper(keywords[:3], countries[:4])  # 限制搜尋範圍
+          courses = scraper.run()
+          print(f'Found {len(courses)} courses from Mastersportal')
+          "
+      
+      - name: Stage 1 - Discover (Study.eu)
+        env:
+          NOTIFICATION_WEBHOOK: ${{ secrets.NOTIFICATION_WEBHOOK }}
+        run: |
+          echo "=== Scraping Study.eu ==="
+          python -c "
+          import yaml
+          profile = yaml.safe_load(open('source_data/my_profile.yml'))
+          keywords = profile['academic_interests']['primary']
+          
+          from discovery.scrape_studyeu import StudyEuScraper
+          scraper = StudyEuScraper(keywords[:3])
+          courses = scraper.run()
+          print(f'Found {len(courses)} courses from Study.eu')
+          "
+      
+      - name: Stage 2 - Filter and Validate
+        run: |
+          echo "=== Filtering courses based on profile ==="
+          python discovery/filter_and_validate.py
+      
+      - name: Stage 3 - Update Database
+        id: update_db
+        run: |
+          echo "=== Updating database and creating PR ==="
+          python discovery/update_database.py
+        continue-on-error: true
+      
+      - name: Stage 4 - Upload Discovery Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: discovery-report-${{ github.run_number }}
+          path: discovery/discovery_report.md
+          retention-days: 90
+      
+      - name: Stage 4 - Notify
+        if: always()
+        env:
+          NOTIFICATION_WEBHOOK: ${{ secrets.NOTIFICATION_WEBHOOK }}
+        run: |
+          if [ -f "discovery/discovery_report.md" ]; then
+            echo "Discovery report generated"
+            # 可以在這裡加入發送通知的邏輯
+          fi
+      
+      - name: Comment on commit
+        if: success()
+        run: |
+          echo "Course discovery completed successfully"
+          echo "Check the discovery_report.md for details"
+

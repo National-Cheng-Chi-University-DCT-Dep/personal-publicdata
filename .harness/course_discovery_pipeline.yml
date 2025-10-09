@@ -1,0 +1,194 @@
+pipeline:
+  name: Course Discovery Pipeline
+  identifier: course_discovery
+  projectIdentifier: master_application
+  orgIdentifier: default
+  tags:
+    discovery: "true"
+    automation: "true"
+  
+  stages:
+    - stage:
+        name: Discover Courses
+        identifier: discover_courses
+        description: Scrape courses from various platforms
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: Setup Environment
+                  identifier: setup_env
+                  spec:
+                    shell: Bash
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+                          set -e
+                          
+                          echo "=== Installing Dependencies ==="
+                          pip install -r requirements.txt
+                          playwright install chromium
+                    environmentVariables: []
+                  timeout: 15m
+              
+              - parallel:
+                  - step:
+                      type: ShellScript
+                      name: Scrape Mastersportal
+                      identifier: scrape_mastersportal
+                      spec:
+                        shell: Python
+                        onDelegate: true
+                        source:
+                          type: Inline
+                          spec:
+                            script: |
+                              #!/bin/bash
+                              set -e
+                              
+                              echo "=== Scraping Mastersportal.com ==="
+                              python -c "
+                              import yaml
+                              profile = yaml.safe_load(open('source_data/my_profile.yml'))
+                              keywords = profile['academic_interests']['primary'] + profile['academic_interests']['secondary']
+                              countries = profile['geographic_preferences']['preferred_countries']
+                              
+                              from discovery.scrape_mastersportal import MastersPortalScraper
+                              scraper = MastersPortalScraper(keywords[:3], countries[:4])
+                              courses = scraper.run()
+                              print(f'Found {len(courses)} courses')
+                              "
+                        environmentVariables: []
+                      timeout: 30m
+                  
+                  - step:
+                      type: ShellScript
+                      name: Scrape Study.eu
+                      identifier: scrape_studyeu
+                      spec:
+                        shell: Python
+                        onDelegate: true
+                        source:
+                          type: Inline
+                          spec:
+                            script: |
+                              #!/bin/bash
+                              set -e
+                              
+                              echo "=== Scraping Study.eu ==="
+                              python -c "
+                              import yaml
+                              profile = yaml.safe_load(open('source_data/my_profile.yml'))
+                              keywords = profile['academic_interests']['primary']
+                              
+                              from discovery.scrape_studyeu import StudyEuScraper
+                              scraper = StudyEuScraper(keywords[:3])
+                              courses = scraper.run()
+                              print(f'Found {len(courses)} courses')
+                              "
+                        environmentVariables: []
+                      timeout: 20m
+        tags: {}
+    
+    - stage:
+        name: Filter and Validate
+        identifier: filter_validate
+        description: Filter courses based on profile criteria
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: Run Filter Engine
+                  identifier: run_filter
+                  spec:
+                    shell: Python
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+                          set -e
+                          
+                          echo "=== Filtering courses ==="
+                          python discovery/filter_and_validate.py
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 10m
+        tags: {}
+    
+    - stage:
+        name: Update and Report
+        identifier: update_report
+        description: Update database and create PR
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: Update Database
+                  identifier: update_db
+                  spec:
+                    shell: Python
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+                          set -e
+                          
+                          echo "=== Updating database ==="
+                          python discovery/update_database.py
+                          
+                          echo "Discovery report generated at discovery/discovery_report.md"
+                    environmentVariables: []
+                  timeout: 10m
+              
+              - step:
+                  type: ShellScript
+                  name: Notify Results
+                  identifier: notify
+                  spec:
+                    shell: Bash
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+                          
+                          if [ -f "discovery/discovery_report.md" ]; then
+                            echo "Discovery report available"
+                            # 可以在這裡加入通知邏輯
+                          fi
+                    environmentVariables:
+                      - name: NOTIFICATION_WEBHOOK
+                        type: String
+                        value: <+secrets.getValue("notification_webhook")>
+                  timeout: 5m
+        tags: {}
+  
+  triggers:
+    - trigger:
+        name: Weekly Discovery
+        identifier: weekly_discovery
+        enabled: true
+        description: Run every Monday for course discovery
+        type: Cron
+        spec:
+          type: Cron
+          spec:
+            expression: "0 0 * * 1"  # Every Monday at midnight UTC
+            inputYaml: |
+              pipeline:
+                identifier: course_discovery
+

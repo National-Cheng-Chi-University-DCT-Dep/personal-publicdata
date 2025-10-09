@@ -1,0 +1,138 @@
+name: All Monitors (Complete)
+
+on:
+  schedule:
+    # 每天 UTC 2:00 執行 (台北時間 10:00)
+    - cron: '0 2 * * *'
+  workflow_dispatch:  # 允許手動觸發
+  push:
+    branches:
+      - main
+    paths:
+      - 'monitoring/**'
+      - 'analysis/**'
+      - 'integrations/**'
+
+jobs:
+  run-all-monitoring:
+    runs-on: ubuntu-latest
+    name: Execute All Monitoring Systems
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium
+      
+      # ========================================
+      # Pre-Application Monitoring
+      # ========================================
+      - name: Pre-Application Monitor
+        env:
+          NOTIFICATION_WEBHOOK: ${{ secrets.NOTIFICATION_WEBHOOK }}
+        run: |
+          echo "=== Pre-Application Monitoring ==="
+          python monitoring/pre_application/check_opening_status.py
+        continue-on-error: true
+      
+      # ========================================
+      # Post-Application Monitoring (並行)
+      # ========================================
+      - name: Sweden Application Monitor
+        env:
+          SWEDEN_USERNAME: ${{ secrets.SWEDEN_USERNAME }}
+          SWEDEN_PASSWORD: ${{ secrets.SWEDEN_PASSWORD }}
+          NOTIFICATION_WEBHOOK: ${{ secrets.NOTIFICATION_WEBHOOK }}
+        run: |
+          echo "=== Sweden Application Monitoring ==="
+          python monitoring/post_application/check_status_sweden.py
+        continue-on-error: true
+      
+      - name: DreamApply Monitor
+        env:
+          DREAMAPPLY_USERNAME: ${{ secrets.DREAMAPPLY_USERNAME }}
+          DREAMAPPLY_PASSWORD: ${{ secrets.DREAMAPPLY_PASSWORD }}
+          NOTIFICATION_WEBHOOK: ${{ secrets.NOTIFICATION_WEBHOOK }}
+        run: |
+          echo "=== DreamApply Monitoring ==="
+          python monitoring/post_application/check_status_dreamapply.py
+        continue-on-error: true
+      
+      - name: Saarland Monitor
+        env:
+          SAARLAND_USERNAME: ${{ secrets.SAARLAND_USERNAME }}
+          SAARLAND_PASSWORD: ${{ secrets.SAARLAND_PASSWORD }}
+          NOTIFICATION_WEBHOOK: ${{ secrets.NOTIFICATION_WEBHOOK }}
+        run: |
+          echo "=== Saarland Monitoring ==="
+          python monitoring/post_application/check_status_saarland.py
+        continue-on-error: true
+      
+      # ========================================
+      # Analysis & Tracking
+      # ========================================
+      - name: Recommendation Tracker
+        run: |
+          echo "=== Recommendation Letter Tracking ==="
+          python analysis/recommendation_tracker.py
+        continue-on-error: true
+      
+      - name: Budget Analyzer
+        run: |
+          echo "=== Budget Analysis ==="
+          python analysis/budget_analyzer.py --live-rates
+        continue-on-error: true
+      
+      # ========================================
+      # Commit All Changes
+      # ========================================
+      - name: Commit all monitoring changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Add all monitoring outputs
+          git add reports/
+          git add source_data/application_status.yml
+          git add final_applications/application_dashboard.md
+          git add templates/email_templates/
+          
+          # Commit if there are changes
+          git diff --quiet && git diff --staged --quiet || git commit -m "🤖 Daily monitoring update [automated]"
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+      
+      # ========================================
+      # Upload Artifacts
+      # ========================================
+      - name: Upload monitoring reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: monitoring-reports-${{ github.run_number }}
+          path: |
+            reports/monitoring_reports/
+            reports/status_history/
+          retention-days: 30
+      
+      - name: Upload email drafts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: email-drafts-${{ github.run_number }}
+          path: templates/email_templates/
+          retention-days: 30
+
