@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Visa Requirements Schema",
+  "description": "簽證需求資料結構定義",
+  "type": "object",
+  "properties": {
+    "countries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "visa_type", "information_page_url"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "國家名稱"
+          },
+          "visa_type": {
+            "type": "string",
+            "description": "簽證類型"
+          },
+          "embassy_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "在台辦事處網址"
+          },
+          "information_page_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "簽證資訊頁面網址"
+          },
+          "appointment_system_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "預約系統網址"
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "簽證要求清單"
+          },
+          "processing_time": {
+            "type": "string",
+            "description": "處理時間"
+          },
+          "cost": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "minimum": 0
+              },
+              "currency": {
+                "type": "string"
+              }
+            }
+          },
+          "monitor_enabled": {
+            "type": "boolean",
+            "description": "是否啟用監控"
+          },
+          "last_checked": {
+            "type": "string",
+            "format": "date",
+            "description": "上次檢查日期"
+          },
+          "last_updated": {
+            "type": "string",
+            "format": "date",
+            "description": "資訊上次更新日期"
+          }
+        }
+      }
+    }
+  },
+  "required": ["countries"]
+}
+

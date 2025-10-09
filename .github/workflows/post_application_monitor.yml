@@ -1,0 +1,138 @@
+name: Post-Application Monitor
+
+on:
+  schedule:
+    # 每天 UTC 2:00 執行 (台北時間 10:00)
+    - cron: '0 2 * * *'
+  workflow_dispatch:  # 允許手動觸發
+  push:
+    branches:
+      - main
+    paths:
+      - 'monitoring/post_application/**'
+      - '.github/workflows/post_application_monitor.yml'
+
+jobs:
+  monitor-sweden:
+    runs-on: ubuntu-latest
+    name: Monitor Sweden Applications
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium
+      
+      - name: Run Sweden monitor
+        env:
+          SWEDEN_USERNAME: ${{ secrets.SWEDEN_USERNAME }}
+          SWEDEN_PASSWORD: ${{ secrets.SWEDEN_PASSWORD }}
+          NOTIFICATION_WEBHOOK: ${{ secrets.NOTIFICATION_WEBHOOK }}
+        run: |
+          python monitoring/post_application/check_status_sweden.py
+      
+      - name: Commit status changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add reports/status_history/
+          git add source_data/application_status.yml
+          git diff --quiet && git diff --staged --quiet || git commit -m "🔄 Update Sweden application status [automated]"
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+  monitor-dreamapply:
+    runs-on: ubuntu-latest
+    name: Monitor DreamApply Applications
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium
+      
+      - name: Run DreamApply monitor
+        env:
+          DREAMAPPLY_USERNAME: ${{ secrets.DREAMAPPLY_USERNAME }}
+          DREAMAPPLY_PASSWORD: ${{ secrets.DREAMAPPLY_PASSWORD }}
+          NOTIFICATION_WEBHOOK: ${{ secrets.NOTIFICATION_WEBHOOK }}
+        run: |
+          python monitoring/post_application/check_status_dreamapply.py
+      
+      - name: Commit status changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add reports/status_history/
+          git add source_data/application_status.yml
+          git diff --quiet && git diff --staged --quiet || git commit -m "🔄 Update DreamApply application status [automated]"
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+  monitor-saarland:
+    runs-on: ubuntu-latest
+    name: Monitor Saarland Applications
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium
+      
+      - name: Run Saarland monitor
+        env:
+          SAARLAND_USERNAME: ${{ secrets.SAARLAND_USERNAME }}
+          SAARLAND_PASSWORD: ${{ secrets.SAARLAND_PASSWORD }}
+          NOTIFICATION_WEBHOOK: ${{ secrets.NOTIFICATION_WEBHOOK }}
+        run: |
+          python monitoring/post_application/check_status_saarland.py
+      
+      - name: Commit status changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add reports/status_history/
+          git add source_data/application_status.yml
+          git diff --quiet && git diff --staged --quiet || git commit -m "🔄 Update Saarland application status [automated]"
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+

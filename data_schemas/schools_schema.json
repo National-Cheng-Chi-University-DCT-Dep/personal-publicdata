@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Schools Data Schema",
+  "description": "學校資料結構定義",
+  "type": "object",
+  "properties": {
+    "schools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "name_english", "country", "program_name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "學校中文名稱"
+          },
+          "name_english": {
+            "type": "string",
+            "description": "學校英文名稱"
+          },
+          "country": {
+            "type": "string",
+            "description": "國家"
+          },
+          "program_name": {
+            "type": "string",
+            "description": "學程名稱"
+          },
+          "application_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "申請網址"
+          },
+          "application_platform": {
+            "type": "string",
+            "description": "申請平台名稱",
+            "enum": [
+              "universityadmissions.se",
+              "estonia.dreamapply.com",
+              "apply.cs.uni-saarland.de",
+              "uni-assist.de",
+              "studyinfo.fi",
+              "soknadsweb.no",
+              "studielink.nl",
+              "other"
+            ]
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date",
+            "description": "申請截止日期 (YYYY-MM-DD)"
+          },
+          "application_fee": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "minimum": 0
+              },
+              "currency": {
+                "type": "string",
+                "enum": ["EUR", "SEK", "USD", "GBP", "TWD", "NOK", "DKK"]
+              }
+            },
+            "required": ["amount", "currency"]
+          },
+          "tuition_fee": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "minimum": 0
+              },
+              "currency": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": ["amount", "currency"]
+          },
+          "estimated_living_cost": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "minimum": 0
+              },
+              "currency": {
+                "type": "string"
+              },
+              "period": {
+                "type": "string",
+                "enum": ["monthly", "annual"]
+              }
+            },
+            "required": ["amount", "currency", "period"]
+          },
+          "tuition_free": {
+            "type": "boolean",
+            "description": "是否免學費"
+          },
+          "scholarship_available": {
+            "type": "boolean",
+            "description": "是否有獎學金"
+          },
+          "scholarship_details": {
+            "type": "string",
+            "description": "獎學金詳情"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["high", "medium", "low"],
+            "description": "優先順序"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "in_progress", "submitted", "accepted", "rejected", "waitlist"],
+            "description": "申請狀態"
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "申請要求"
+          },
+          "notes": {
+            "type": "string",
+            "description": "備註"
+          }
+        }
+      }
+    }
+  },
+  "required": ["schools"]
+}
+

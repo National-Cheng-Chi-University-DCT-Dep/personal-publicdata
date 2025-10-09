@@ -1,0 +1,79 @@
+# 核心依賴
+pyyaml>=6.0.1
+python-dotenv>=1.0.0
+
+# 網頁爬蟲與自動化
+playwright>=1.40.0
+beautifulsoup4>=4.12.0
+requests>=2.31.0
+lxml>=4.9.0
+
+# Google Calendar API
+google-api-python-client>=2.108.0
+google-auth-httplib2>=0.1.1
+google-auth-oauthlib>=1.1.0
+
+# 資料處理與分析
+pandas>=2.1.0
+numpy>=1.24.0
+
+# 模板引擎
+jinja2>=3.1.2
+
+# 排程與任務管理
+schedule>=1.2.0
+apscheduler>=3.10.4
+
+# 日誌處理
+loguru>=0.7.2
+
+# HTTP 客戶端增強
+httpx>=0.25.0
+aiohttp>=3.9.0
+
+# 資料驗證
+pydantic>=2.5.0
+jsonschema>=4.20.0
+
+# 測試框架
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-playwright>=0.4.3
+pytest-cov>=4.1.0
+pytest-mock>=3.12.0
+
+# 開發工具
+black>=23.11.0
+flake8>=6.1.0
+mypy>=1.7.0
+pre-commit>=3.5.0
+
+# 通知服務
+slack-sdk>=3.23.0
+
+# 匯率轉換
+forex-python>=1.8
+
+# Markdown 處理
+markdown>=3.5.0
+markdown2>=2.4.10
+
+# HTML 處理與生成
+html5lib>=1.1
+mistune>=3.0.2
+
+# 時區處理
+pytz>=2023.3
+python-dateutil>=2.8.2
+
+# 環境管理
+virtualenv>=20.24.0
+
+# 安全性
+cryptography>=41.0.0
+
+# 其他工具
+tqdm>=4.66.0  # 進度條
+rich>=13.7.0  # 美化終端輸出
+typer>=0.9.0  # CLI 工具框架
+

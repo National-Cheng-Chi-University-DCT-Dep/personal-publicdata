@@ -1,0 +1,105 @@
+countries:
+  - name: "瑞典"
+    visa_type: "Student Residence Permit"
+    embassy_url: "https://www.swedenabroad.se/en/embassies/taiwan-taipei/"
+    information_page_url: "https://www.migrationsverket.se/English/Private-individuals/Studying-in-Sweden.html"
+    appointment_system_url: "https://www.swedenabroad.se/en/embassies/taiwan-taipei/contact-us/book-appointment/"
+    requirements:
+      - "Admission letter from Swedish university"
+      - "Proof of financial means (SEK 8,568/month)"
+      - "Valid passport"
+      - "Health insurance"
+      - "Comprehensive insurance"
+    processing_time: "60-90 days"
+    cost:
+      amount: 1500
+      currency: "SEK"
+    monitor_enabled: true
+    last_checked: "2025-10-09"
+    notes: "申請應在收到錄取通知後立即提交"
+
+  - name: "芬蘭"
+    visa_type: "Residence Permit for Studies"
+    embassy_url: "https://finlandabroad.fi/web/twn/frontpage"
+    information_page_url: "https://migri.fi/en/residence-permit-for-studies"
+    requirements:
+      - "Letter of acceptance from Finnish educational institution"
+      - "Proof of financial means (€560/month)"
+      - "Valid passport"
+      - "Health insurance"
+    processing_time: "1-4 months"
+    cost:
+      amount: 350
+      currency: "EUR"
+    monitor_enabled: true
+    last_checked: "2025-10-09"
+
+  - name: "愛沙尼亞"
+    visa_type: "Temporary Residence Permit for Study"
+    embassy_url: "https://taipei.mfa.ee/"
+    information_page_url: "https://www.politsei.ee/en/instructions/temporary-residence-permit-for-study"
+    requirements:
+      - "Letter of acceptance from Estonian educational institution"
+      - "Proof of financial means (€184/month)"
+      - "Valid passport"
+      - "Health insurance"
+      - "Certificate of accommodation"
+    processing_time: "2 months"
+    cost:
+      amount: 160
+      currency: "EUR"
+    monitor_enabled: true
+    last_checked: "2025-10-09"
+
+  - name: "德國"
+    visa_type: "Student Visa (Visum zu Studienzwecken)"
+    embassy_url: "https://taipei.diplo.de/"
+    information_page_url: "https://www.make-it-in-germany.com/en/study-training/studies/getting-started/visa"
+    appointment_system_url: "https://service2.diplo.de/rktermin/extern/choose_realmList.do?locationCode=taip"
+    requirements:
+      - "Letter of admission from German university"
+      - "Proof of financial means (€11,208/year in blocked account)"
+      - "Valid passport"
+      - "Health insurance"
+      - "Proof of accommodation"
+    processing_time: "6-12 weeks"
+    cost:
+      amount: 75
+      currency: "EUR"
+    monitor_enabled: true
+    last_checked: "2025-10-09"
+    notes: "需要提前開設德國封鎖帳戶 (Sperrkonto)"
+
+  - name: "挪威"
+    visa_type: "Student Residence Permit"
+    embassy_url: "https://www.norway.no/en/taiwan/"
+    information_page_url: "https://www.udi.no/en/want-to-apply/studies/"
+    requirements:
+      - "Letter of admission from Norwegian educational institution"
+      - "Proof of financial means (NOK 123,519/year)"
+      - "Valid passport"
+      - "Accommodation confirmation"
+    processing_time: "2-3 months"
+    cost:
+      amount: 6300
+      currency: "NOK"
+    monitor_enabled: false
+    last_checked: "2025-10-09"
+
+  - name: "荷蘭"
+    visa_type: "Study Visa (MVV)"
+    embassy_url: "https://www.netherlandsandyou.nl/your-country-and-the-netherlands/taiwan"
+    information_page_url: "https://www.government.nl/topics/immigration-to-the-netherlands/entry-visa-for-the-netherlands"
+    requirements:
+      - "Letter of admission from Dutch educational institution"
+      - "Proof of financial means"
+      - "Valid passport"
+      - "TB test certificate"
+    processing_time: "2-3 months"
+    cost:
+      amount: 192
+      currency: "EUR"
+    monitor_enabled: false
+    last_checked: "2025-10-09"
+    notes: "通常由學校協助申請 (institutional visa)"
+

@@ -1,0 +1,48 @@
+name: Google Calendar Sync
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'source_data/schools.yml'
+  workflow_dispatch:  # 允許手動觸發
+  schedule:
+    # 每週一 UTC 0:00 執行 (台北時間週一 8:00)
+    - cron: '0 0 * * 1'
+
+jobs:
+  sync-calendar:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Setup Google Calendar credentials
+        env:
+          GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+          GOOGLE_TOKEN_JSON: ${{ secrets.GOOGLE_TOKEN_JSON }}
+        run: |
+          echo "$GOOGLE_CREDENTIALS_JSON" | base64 -d > credentials.json
+          echo "$GOOGLE_TOKEN_JSON" | base64 -d > token.pickle
+      
+      - name: Sync deadlines to Google Calendar
+        run: |
+          python integrations/calendar_integration.py --sync
+      
+      - name: Clean up credentials
+        if: always()
+        run: |
+          rm -f credentials.json token.pickle
+

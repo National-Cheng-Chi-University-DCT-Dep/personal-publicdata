@@ -1,0 +1,60 @@
+name: Update Application Dashboard
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'source_data/schools.yml'
+      - 'source_data/recommenders.yml'
+      - 'source_data/application_status.yml'
+  workflow_dispatch:  # 允許手動觸發
+  schedule:
+    # 每天 UTC 0:00 執行 (台北時間 8:00)
+    - cron: '0 0 * * *'
+
+jobs:
+  update-dashboard:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Update recommendation tracker
+        run: |
+          python analysis/recommendation_tracker.py
+      
+      - name: Update budget analyzer
+        run: |
+          python analysis/budget_analyzer.py
+      
+      - name: Generate dashboard
+        run: |
+          python build_scripts/master_controller.py --update-dashboard
+      
+      - name: Commit dashboard changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add final_applications/application_dashboard.md
+          git add final_applications/application_dashboard.html
+          git add reports/
+          git diff --quiet && git diff --staged --quiet || git commit -m "📊 Update application dashboard [automated]"
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+

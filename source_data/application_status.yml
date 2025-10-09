@@ -1,0 +1,57 @@
+applications:
+  # 此檔案用於追蹤各平台的申請狀態
+  # 由監控系統自動更新
+  
+  - platform: "universityadmissions.se"
+    platform_type: "post_application"
+    monitor_script: "check_status_sweden.py"
+    last_checked: null
+    schools: []
+    # 範例格式:
+    # - name: "延雪平大學"
+    #   program: "M.Sc. in Cybersecurity"
+    #   submitted_date: "2026-01-10"
+    #   status: "Under Review"
+    #   status_updated_at: "2026-01-15"
+    #   status_history:
+    #     - status: "Submitted"
+    #       timestamp: "2026-01-10T10:30:00"
+    #     - status: "Received"
+    #       timestamp: "2026-01-12T14:20:00"
+
+  - platform: "estonia.dreamapply.com"
+    platform_type: "post_application"
+    monitor_script: "check_status_dreamapply.py"
+    last_checked: null
+    schools: []
+
+  - platform: "apply.cs.uni-saarland.de"
+    platform_type: "post_application"
+    monitor_script: "check_status_saarland.py"
+    last_checked: null
+    schools: []
+
+  - platform: "uni-assist.de"
+    platform_type: "post_application"
+    monitor_script: "check_status_uni_assist.py"
+    last_checked: null
+    schools: []
+
+  - platform: "studyinfo.fi"
+    platform_type: "post_application"
+    monitor_script: "check_status_studyinfo.py"
+    last_checked: null
+    schools: []
+
+  - platform: "soknadsweb.no"
+    platform_type: "post_application"
+    monitor_script: "check_status_soknadsweb.py"
+    last_checked: null
+    schools: []
+
+  - platform: "studielink.nl"
+    platform_type: "post_application"
+    monitor_script: "check_status_studielink.py"
+    last_checked: null
+    schools: []
+
