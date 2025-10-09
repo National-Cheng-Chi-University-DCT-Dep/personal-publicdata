@@ -42,7 +42,7 @@ pipeline:
                       name: Scrape Mastersportal
                       identifier: scrape_mastersportal
                       spec:
-                        shell: Python
+                        shell: Bash
                         onDelegate: true
                         source:
                           type: Inline
@@ -71,7 +71,7 @@ pipeline:
                       name: Scrape Study.eu
                       identifier: scrape_studyeu
                       spec:
-                        shell: Python
+                        shell: Bash
                         onDelegate: true
                         source:
                           type: Inline
@@ -108,7 +108,7 @@ pipeline:
                   name: Run Filter Engine
                   identifier: run_filter
                   spec:
-                    shell: Python
+                    shell: Bash
                     onDelegate: true
                     source:
                       type: Inline
@@ -137,7 +137,7 @@ pipeline:
                   name: Update Database
                   identifier: update_db
                   spec:
-                    shell: Python
+                    shell: Bash
                     onDelegate: true
                     source:
                       type: Inline

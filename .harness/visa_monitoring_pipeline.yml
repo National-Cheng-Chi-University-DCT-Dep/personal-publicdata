@@ -21,7 +21,7 @@ pipeline:
                   name: Run Visa Monitor
                   identifier: run_visa_monitor
                   spec:
-                    shell: Python
+                    shell: Bash
                     onDelegate: true
                     source:
                       type: Inline
