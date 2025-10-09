@@ -40,6 +40,9 @@ pipeline:
                       pip install -r requirements.txt
                       playwright install chromium
 
+                      echo "=== Creating Required Directories ==="
+                      mkdir -p logs
+
                       echo "=== Running Pre-Application Monitor ==="
                       python monitoring/pre_application/check_opening_status.py
                     envVariables:
@@ -92,6 +95,14 @@ pipeline:
                     command: |
                       #!/bin/bash
                       set -e
+
+                      echo "=== Installing Dependencies ==="
+                      pip install -r requirements.txt
+                      playwright install chromium
+
+                      echo "=== Creating Required Directories ==="
+                      mkdir -p logs
+
                       echo "=== Monitoring Sweden Applications ==="
                       python monitoring/post_application/check_status_sweden.py
                     envVariables:
@@ -156,6 +167,12 @@ pipeline:
                     command: |
                       #!/bin/bash
                       set -e
+
+                      echo "=== Installing Dependencies ==="
+                      pip install -r requirements.txt
+
+                      echo "=== Creating Required Directories ==="
+                      mkdir -p logs
 
                       echo "=== Setting up Google Calendar credentials ==="
                       echo "$GOOGLE_CREDENTIALS_JSON" | base64 -d > credentials.json
