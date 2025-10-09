@@ -23,6 +23,26 @@ recommenders:
       - "Leadership in research projects"
     recommendation_type: "academic"
     status: "confirmed"
+    # 學校特定狀態追蹤
+    school_specific_status:
+      - school: "Jönköping University"
+        status: "not_requested"
+        requested_date: null
+        submitted_date: null
+        confirmation_received: false
+        notes: ""
+      - school: "University of Skövde"
+        status: "not_requested"
+        requested_date: null
+        submitted_date: null
+        confirmation_received: false
+        notes: ""
+      - school: "University West"
+        status: "not_requested"
+        requested_date: null
+        submitted_date: null
+        confirmation_received: false
+        notes: ""
 
   - recommender_id: "manager_chen"
     name: "Jennifer Chen"
@@ -45,6 +65,20 @@ recommenders:
       - "Innovation in quantum computing integration"
     recommendation_type: "professional"
     status: "confirmed"
+    # 學校特定狀態追蹤
+    school_specific_status:
+      - school: "Jönköping University"
+        status: "not_requested"
+        requested_date: null
+        submitted_date: null
+        confirmation_received: false
+        notes: ""
+      - school: "University of Skövde"
+        status: "not_requested"
+        requested_date: null
+        submitted_date: null
+        confirmation_received: false
+        notes: ""
 
   - recommender_id: "client_director"
     name: "David Liu"
