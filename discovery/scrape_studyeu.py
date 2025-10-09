@@ -74,10 +74,14 @@ class StudyEuScraper:
         courses = []
         
         try:
+            # 基於診斷結果更新（2025-10-09）
             selectors = [
+                '[class*="result"]',     # ← 診斷確認有效（60 個元素）
+                '[class*="card"]',       # ← 診斷確認有效（3 個元素）
                 '.program-card',
                 '.course-card',
                 '[class*="ProgramCard"]',
+                '[class*="course"]',
                 'article'
             ]
             
