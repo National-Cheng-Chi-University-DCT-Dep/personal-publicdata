@@ -660,15 +660,15 @@ pipeline:
                           type: Ignore
   triggers:
     - trigger:
-        name: Scheduled Daily Intelligence Run
-        identifier: daily_intelligence
+        name: Scheduled Every 3 Days Intelligence Run
+        identifier: tri_daily_intelligence
         enabled: true
-        description: Daily automated intelligence gathering and analysis
+        description: Automated intelligence gathering and analysis every 3 days
         type: Cron
         spec:
           type: Cron
           spec:
-            expression: 0 6 * * *
+            expression: 0 6 */3 * *
             inputYaml: |
               pipeline_mode: "full"
               skip_scraping: false
@@ -683,6 +683,54 @@ pipeline:
           inputYaml: |
             pipeline_mode: "advanced_only"
             skip_scraping: true
+    - trigger:
+        name: Main Branch Push
+        identifier: main_push
+        enabled: true
+        description: Trigger when code is pushed to main branch
+        type: Webhook
+        spec:
+          type: Github
+          spec:
+            type: Push
+            spec:
+              connectorRef: github_connector
+              autoAbortPreviousExecutions: false
+              payloadConditions:
+                - key: targetBranch
+                  operator: Equals
+                  value: main
+              headerConditions: []
+            inputYaml: |
+              pipeline_mode: "full"
+              skip_scraping: false
+              run_advanced_features: true
+    - trigger:
+        name: Main Branch Pull Request
+        identifier: main_pr
+        enabled: true
+        description: Trigger when PR is opened/updated to main branch
+        type: Webhook
+        spec:
+          type: Github
+          spec:
+            type: PullRequest
+            spec:
+              connectorRef: github_connector
+              autoAbortPreviousExecutions: false
+              payloadConditions:
+                - key: targetBranch
+                  operator: Equals
+                  value: main
+              headerConditions: []
+              actions:
+                - opened
+                - synchronize
+                - reopened
+            inputYaml: |
+              pipeline_mode: "quick"
+              skip_scraping: true
+              run_advanced_features: false
     - trigger:
         name: Source Data Changes
         identifier: source_data_changes
@@ -741,12 +789,12 @@ pipeline:
   variables:
     - name: pipeline_mode
       type: String
-      description: Pipeline execution mode (full, quick, docs_only)
+      description: Pipeline execution mode (full, quick, docs_only, advanced_only)
       value: quick
     - name: skip_scraping
       type: String
       description: Skip web scraping to speed up execution
-      value: "false"
+      value: "true"
     - name: target_schools
       type: String
       description: Specific schools to process (comma-separated)
@@ -758,7 +806,7 @@ pipeline:
     - name: run_advanced_features
       type: String
       description: Run advanced AI-powered features (gamification, narrative, portfolio, whatif)
-      value: "false"
+      value: "true"
     - name: advanced_features_timeout
       type: String
       description: Timeout for advanced features in seconds
