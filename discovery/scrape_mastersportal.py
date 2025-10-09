@@ -119,13 +119,15 @@ class MastersPortalScraper:
         courses = []
         
         try:
-            # 嘗試多種可能的選擇器
+            # 嘗試多種可能的選擇器（基於診斷結果更新 2025-10-09）
             selectors = [
-                '.StudyCard',
+                '.SearchStudyCard',  # ← 診斷找到的最新 class
+                '[class*="card"]',   # ← 診斷確認有效（20 個元素）
+                'article',           # ← 診斷確認有效（25 個元素）
+                '.StudyCard',        # 保留舊的作為 fallback
                 '.study-card',
                 '[class*="CourseCard"]',
                 '[class*="ProgramCard"]',
-                'article[class*="course"]',
                 '.search-result-item'
             ]
             
@@ -163,9 +165,15 @@ class MastersPortalScraper:
     async def extract_course_details(self, element, page: Page) -> Optional[Dict[str, Any]]:
         """提取單一課程的詳細資訊"""
         try:
-            # 程式名稱
+            # 程式名稱（基於診斷結果更新）
             program_name = await self.extract_text(element, [
-                '.program-name', '.course-name', 'h2', 'h3', '[class*="title"]'
+                '.StudyName',        # ← 診斷找到的課程名稱 class
+                '.program-name', 
+                '.course-name', 
+                'h2', 
+                'h3', 
+                '[class*="title"]',
+                '[class*="StudyName"]'
             ])
             
             # 大學名稱
@@ -188,13 +196,21 @@ class MastersPortalScraper:
                 '.tuition', '.fee', '[class*="tuition"]', '[class*="fee"]'
             ])
             
-            # 課程連結
+            # 課程連結（基於診斷結果更新）
             program_url = None
-            link = await element.query_selector('a[href*="/programmes/"], a[href*="/program/"]')
-            if link:
-                href = await link.get_attribute('href')
+            
+            # 如果元素本身就是連結
+            if await element.evaluate('el => el.tagName.toLowerCase()') == 'a':
+                href = await element.get_attribute('href')
                 if href:
                     program_url = href if href.startswith('http') else f"{self.BASE_URL}{href}"
+            else:
+                # 在元素內查找連結
+                link = await element.query_selector('a[href*="/studies/"], a[href*="/programmes/"], a[href*="/program/"]')
+                if link:
+                    href = await link.get_attribute('href')
+                    if href:
+                        program_url = href if href.startswith('http') else f"{self.BASE_URL}{href}"
             
             # 如果找到基本資訊，回傳課程資料
             if program_name and university:
