@@ -1,0 +1,234 @@
+pipeline:
+  name: Application Monitoring Pipeline
+  identifier: application_monitoring
+  projectIdentifier: default_project
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: Pre-Application Monitoring
+        identifier: pre_application_monitoring
+        description: Monitor application opening status
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: Check Application Opening Status
+                  identifier: check_opening_status
+                  spec:
+                    shell: Bash
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+                          set -e
+
+                          echo "=== Installing Dependencies ==="
+                          pip install -r requirements.txt
+                          playwright install chromium
+
+                          echo "=== Running Pre-Application Monitor ==="
+                          python monitoring/pre_application/check_opening_status.py
+                    environmentVariables:
+                      - name: NOTIFICATION_WEBHOOK
+                        type: String
+                        value: <+secrets.getValue("notification_webhook")>
+                    outputVariables: []
+                  timeout: 30m
+              - step:
+                  type: ShellScript
+                  name: Commit Status Changes
+                  identifier: commit_status
+                  spec:
+                    shell: Bash
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+
+                          git config --local user.email "harness@automation.com"
+                          git config --local user.name "Harness Automation"
+
+                          git add reports/status_history/
+                          git add source_data/application_status.yml
+
+                          if git diff --staged --quiet; then
+                            echo "No changes to commit"
+                          else
+                            git commit -m "🔄 Update application status [Harness automated]"
+                            git push origin main
+                          fi
+                    environmentVariables: []
+                  timeout: 10m
+        tags: {}
+    - stage:
+        name: Post-Application Monitoring
+        identifier: post_application_monitoring
+        description: Monitor application progress across platforms
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - parallel:
+                  - step:
+                      type: ShellScript
+                      name: Monitor Sweden
+                      identifier: monitor_sweden
+                      spec:
+                        shell: Bash
+                        onDelegate: true
+                        source:
+                          type: Inline
+                          spec:
+                            script: |
+                              #!/bin/bash
+                              set -e
+                              echo "=== Monitoring Sweden Applications ==="
+                              python monitoring/post_application/check_status_sweden.py
+                        environmentVariables:
+                          - name: SWEDEN_USERNAME
+                            type: String
+                            value: <+secrets.getValue("sweden_username")>
+                          - name: SWEDEN_PASSWORD
+                            type: String
+                            value: <+secrets.getValue("sweden_password")>
+                          - name: NOTIFICATION_WEBHOOK
+                            type: String
+                            value: <+secrets.getValue("notification_webhook")>
+                      timeout: 20m
+                  - step:
+                      type: ShellScript
+                      name: Monitor DreamApply
+                      identifier: monitor_dreamapply
+                      spec:
+                        shell: Bash
+                        onDelegate: true
+                        source:
+                          type: Inline
+                          spec:
+                            script: |
+                              #!/bin/bash
+                              set -e
+                              echo "=== Monitoring DreamApply Applications ==="
+                              python monitoring/post_application/check_status_dreamapply.py
+                        environmentVariables:
+                          - name: DREAMAPPLY_USERNAME
+                            type: String
+                            value: <+secrets.getValue("dreamapply_username")>
+                          - name: DREAMAPPLY_PASSWORD
+                            type: String
+                            value: <+secrets.getValue("dreamapply_password")>
+                          - name: NOTIFICATION_WEBHOOK
+                            type: String
+                            value: <+secrets.getValue("notification_webhook")>
+                      timeout: 20m
+                  - step:
+                      type: ShellScript
+                      name: Monitor Saarland
+                      identifier: monitor_saarland
+                      spec:
+                        shell: Bash
+                        onDelegate: true
+                        source:
+                          type: Inline
+                          spec:
+                            script: |
+                              #!/bin/bash
+                              set -e
+                              echo "=== Monitoring Saarland Applications ==="
+                              python monitoring/post_application/check_status_saarland.py
+                        environmentVariables:
+                          - name: SAARLAND_USERNAME
+                            type: String
+                            value: <+secrets.getValue("saarland_username")>
+                          - name: SAARLAND_PASSWORD
+                            type: String
+                            value: <+secrets.getValue("saarland_password")>
+                          - name: NOTIFICATION_WEBHOOK
+                            type: String
+                            value: <+secrets.getValue("notification_webhook")>
+                      timeout: 20m
+        tags: {}
+    - stage:
+        name: Integration Services
+        identifier: integration_services
+        description: Run integration services (Calendar, Dashboard)
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: Sync Google Calendar
+                  identifier: sync_calendar
+                  spec:
+                    shell: Bash
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+                          set -e
+
+                          echo "=== Setting up Google Calendar credentials ==="
+                          echo "$GOOGLE_CREDENTIALS_JSON" | base64 -d > credentials.json
+                          echo "$GOOGLE_TOKEN_JSON" | base64 -d > token.pickle
+
+                          echo "=== Syncing Google Calendar ==="
+                          python integrations/calendar_integration.py --sync
+
+                          echo "=== Cleaning up credentials ==="
+                          rm -f credentials.json token.pickle
+                    environmentVariables:
+                      - name: GOOGLE_CREDENTIALS_JSON
+                        type: String
+                        value: <+secrets.getValue("google_credentials_json")>
+                      - name: GOOGLE_TOKEN_JSON
+                        type: String
+                        value: <+secrets.getValue("google_token_json")>
+                  timeout: 15m
+              - step:
+                  type: ShellScript
+                  name: Update Dashboard
+                  identifier: update_dashboard
+                  spec:
+                    shell: Bash
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+                          set -e
+
+                          echo "=== Updating Recommendation Tracker ==="
+                          python analysis/recommendation_tracker.py
+
+                          echo "=== Updating Budget Analyzer ==="
+                          python analysis/budget_analyzer.py --live-rates
+
+                          echo "=== Dashboard Updated ==="
+                    environmentVariables: []
+                  timeout: 10m
+        tags: {}
+  triggers:
+    - trigger:
+        name: Daily Schedule
+        identifier: daily_schedule
+        enabled: true
+        description: Run monitoring daily
+        type: Cron
+        spec:
+          type: Cron
+          spec:
+            expression: 0 2 * * *
+            inputYaml: |
+              pipeline:
+                identifier: application_monitoring
