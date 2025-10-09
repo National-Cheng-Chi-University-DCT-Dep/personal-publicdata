@@ -219,7 +219,7 @@ pipeline:
                           python analysis/recommendation_tracker.py
                           
                           echo "=== Updating Budget Analyzer ==="
-                          python analysis/budget_analyzer.py
+                          python analysis/budget_analyzer.py --live-rates
                           
                           echo "=== Dashboard Updated ==="
                     environmentVariables: []
