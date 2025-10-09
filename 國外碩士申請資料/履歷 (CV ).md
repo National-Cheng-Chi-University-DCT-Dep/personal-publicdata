@@ -64,6 +64,13 @@ An accomplished **Software Engineer** with **5 years of experience** specializin
 - **Refactored CI/CD** to robust on-tag release workflow
 - **Integrated Snyk** for security scanning and built **120-case E2E testing suite**
 
+**Project 3: Payment Card AWS Pipeline & frontend dev **
+- **Conducted PCI-DSS regulated donation platform
+- **Refactored AWS CI/CD** to eliminate invalid aws code build pipelines
+- **Implement AWS bot detection** for preventing DDoS/Bandwidth attack**
+- **Found invalid remaining root domain ssl certification and use CNAME flttening to solve it **
+
+
 **Technologies**: AWS, Nuxt.js, Nest.js, AWS WAF, Zero Trust, Snyk, E2E Testing
 
 ### **🛡️ Cybersecurity Consultant / Development Leader** | Twister5 | *Taipei, Taiwan*
@@ -101,7 +108,7 @@ An accomplished **Software Engineer** with **5 years of experience** specializin
 
 ---
 
-## 🔬 Campus & Research Experience
+## 🔬 Campus / Research & other Experiencs
 
 ### **Research Assistant** | NCCU Innovation Incubation Center | *Taipei, Taiwan*
 *Sept 2021 - June 2023*
@@ -120,6 +127,23 @@ An accomplished **Software Engineer** with **5 years of experience** specializin
 *2022 - 2023*
 * Provided administrative and operational support across various university departments, including the Counseling Center and Chinese Language Education Center.
 
+
+### **HIS Engineer (Remote Consultant) | TaiwanICDF - Somaliland Mission | Taipei & Hargeisa (Remote)**
+*Dates of Co-work, 2024*
+
+**Key Achievements:**
+
+- Provided remote technical leadership for the integration of Microservices, PostgreSQL, IoT, and AI into Somaliland's Health Information Systems (HIS).**
+
+- Acted as a technical mentor, introducing and guiding local engineers on DevSecOps cycles, SAST, and secure Git workflows (branching, IAM, Actions).**
+
+- Identified and resolved a critical, life-threatening bug related to a PostgreSQL UUID hash collision, ensuring data integrity for patient records.**
+
+- Enhanced system security by conducting vulnerability scans (Snyk, Semgrep, GitHub Dependabot) and leading remediation efforts.**
+
+- Facilitated cross-cultural project coordination between Taiwanese and Somaliland teams, managing development goals via GitHub Projects.**
+
+- Technologies: PostgreSQL, Secure Development Lifecycle (SAST, DevSecOps), Snyk, GitHub Actions, International Collaboration
 ---
 
 ## 🛠️ Technical Skills
@@ -216,4 +240,3 @@ An accomplished **Software Engineer** with **5 years of experience** specializin
 
 ---
 
-*This CV demonstrates a unique combination of strong academic performance, extensive professional experience, and cutting-edge technical expertise in cybersecurity and cloud infrastructure. The candidate is well-positioned for advanced studies in AI Security, Quantum Cryptography, or Cloud Security Architecture.*

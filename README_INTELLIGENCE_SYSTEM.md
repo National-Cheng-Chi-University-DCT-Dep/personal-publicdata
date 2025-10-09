@@ -138,7 +138,7 @@ master_gpa: 3.96
 ielts_overall: 7.0
 ielts_writing: 5.5
 work_experience_years: 5
-target_budget_eur: 25000
+target_budget_eur: 12500 #per year
 ```
 
 ### 3. 📊 Real-time Monitoring Dashboard
@@ -322,7 +322,7 @@ academic_background:
   work_experience: 5
   
 preferences:
-  target_budget_eur: 15000
+  target_budget_eur: 12500 #per year
   risk_tolerance: "medium"
 ```
 
