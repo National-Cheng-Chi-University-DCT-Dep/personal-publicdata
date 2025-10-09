@@ -57,18 +57,35 @@ pipeline:
                     command: |
                       #!/bin/bash
 
+                      echo "=== Configuring Git ==="
                       git config --local user.email "harness@automation.com"
                       git config --local user.name "Harness Automation"
 
-                      git add reports/status_history/
-                      git add source_data/application_status.yml
+                      echo "=== Setting up GitHub authentication ==="
+                      # 使用 Personal Access Token 配置 HTTPS 認證
+                      git config --local credential.helper store
+                      echo "https://${GITHUB_TOKEN}@github.com" > ~/.git-credentials
+
+                      echo "=== Staging changes ==="
+                      git add reports/status_history/ || true
+                      git add source_data/application_status.yml || true
 
                       if git diff --staged --quiet; then
-                        echo "No changes to commit"
+                        echo "✅ No changes to commit"
                       else
+                        echo "=== Committing changes ==="
                         git commit -m "🔄 Update application status [Harness automated]"
-                        git push origin main
+                        
+                        echo "=== Pushing to GitHub ==="
+                        git push origin main || {
+                          echo "⚠️ Push failed, but continuing pipeline"
+                          exit 0
+                        }
+                        
+                        echo "✅ Changes pushed successfully"
                       fi
+                    envVariables:
+                      GITHUB_TOKEN: <+secrets.getValue("github_token")>
                   timeout: 10m
         tags: {}
     - stage:
