@@ -1,0 +1,205 @@
+pipeline:
+  name: Application Monitoring Pipeline
+  identifier: application_monitoring
+  projectIdentifier: default_project
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: github_connector
+        repoName: personal-publicdata
+        build: <+input>
+  stages:
+    - stage:
+        name: Pre-Application Monitoring
+        identifier: pre_application_monitoring
+        description: Monitor application opening status
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Check Application Opening Status
+                  identifier: check_opening_status
+                  spec:
+                    shell: Bash
+                    command: |
+                      #!/bin/bash
+                      set -e
+
+                      echo "=== Installing Dependencies ==="
+                      pip install -r requirements.txt
+                      playwright install chromium
+
+                      echo "=== Running Pre-Application Monitor ==="
+                      python monitoring/pre_application/check_opening_status.py
+                    envVariables:
+                      NOTIFICATION_WEBHOOK: <+secrets.getValue("notification_webhook")>
+                  timeout: 30m
+              - step:
+                  type: Run
+                  name: Commit Status Changes
+                  identifier: commit_status
+                  spec:
+                    shell: Bash
+                    command: |
+                      #!/bin/bash
+
+                      git config --local user.email "harness@automation.com"
+                      git config --local user.name "Harness Automation"
+
+                      git add reports/status_history/
+                      git add source_data/application_status.yml
+
+                      if git diff --staged --quiet; then
+                        echo "No changes to commit"
+                      else
+                        git commit -m "🔄 Update application status [Harness automated]"
+                        git push origin main
+                      fi
+                  timeout: 10m
+        tags: {}
+    - stage:
+        name: Post-Application Monitoring
+        identifier: post_application_monitoring
+        description: Monitor application progress across platforms
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Monitor Sweden
+                  identifier: monitor_sweden
+                  spec:
+                    shell: Bash
+                    command: |
+                      #!/bin/bash
+                      set -e
+                      echo "=== Monitoring Sweden Applications ==="
+                      python monitoring/post_application/check_status_sweden.py
+                    envVariables:
+                      SWEDEN_USERNAME: <+secrets.getValue("sweden_username")>
+                      SWEDEN_PASSWORD: <+secrets.getValue("sweden_password")>
+                      NOTIFICATION_WEBHOOK: <+secrets.getValue("notification_webhook")>
+                  timeout: 20m
+              - step:
+                  type: Run
+                  name: Monitor DreamApply
+                  identifier: monitor_dreamapply
+                  spec:
+                    shell: Bash
+                    command: |
+                      #!/bin/bash
+                      set -e
+                      echo "=== Monitoring DreamApply Applications ==="
+                      python monitoring/post_application/check_status_dreamapply.py
+                    envVariables:
+                      DREAMAPPLY_USERNAME: <+secrets.getValue("dreamapply_username")>
+                      DREAMAPPLY_PASSWORD: <+secrets.getValue("dreamapply_password")>
+                      NOTIFICATION_WEBHOOK: <+secrets.getValue("notification_webhook")>
+                  timeout: 20m
+              - step:
+                  type: Run
+                  name: Monitor Saarland
+                  identifier: monitor_saarland
+                  spec:
+                    shell: Bash
+                    command: |
+                      #!/bin/bash
+                      set -e
+                      echo "=== Monitoring Saarland Applications ==="
+                      python monitoring/post_application/check_status_saarland.py
+                    envVariables:
+                      SAARLAND_USERNAME: <+secrets.getValue("saarland_username")>
+                      SAARLAND_PASSWORD: <+secrets.getValue("saarland_password")>
+                      NOTIFICATION_WEBHOOK: <+secrets.getValue("notification_webhook")>
+                  timeout: 20m
+        tags: {}
+    - stage:
+        name: Integration Services
+        identifier: integration_services
+        description: Run integration services (Calendar, Dashboard)
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Sync Google Calendar
+                  identifier: sync_calendar
+                  spec:
+                    shell: Bash
+                    command: |
+                      #!/bin/bash
+                      set -e
+
+                      echo "=== Setting up Google Calendar credentials ==="
+                      echo "$GOOGLE_CREDENTIALS_JSON" | base64 -d > credentials.json
+                      echo "$GOOGLE_TOKEN_JSON" | base64 -d > token.pickle
+
+                      echo "=== Syncing Google Calendar ==="
+                      python integrations/calendar_integration.py --sync
+
+                      echo "=== Cleaning up credentials ==="
+                      rm -f credentials.json token.pickle
+                    envVariables:
+                      GOOGLE_CREDENTIALS_JSON: <+secrets.getValue("google_credentials_json")>
+                      GOOGLE_TOKEN_JSON: <+secrets.getValue("google_token_json")>
+                  timeout: 15m
+              - step:
+                  type: Run
+                  name: Update Dashboard
+                  identifier: update_dashboard
+                  spec:
+                    shell: Bash
+                    command: |
+                      #!/bin/bash
+                      set -e
+
+                      echo "=== Updating Recommendation Tracker ==="
+                      python analysis/recommendation_tracker.py
+
+                      echo "=== Updating Budget Analyzer ==="
+                      python analysis/budget_analyzer.py --live-rates
+
+                      echo "=== Dashboard Updated ==="
+                  timeout: 10m
+        tags: {}
+  triggers:
+    - trigger:
+        name: Daily Schedule
+        identifier: daily_schedule
+        enabled: true
+        description: Run monitoring daily
+        type: Cron
+        spec:
+          type: Cron
+          spec:
+            expression: 0 2 * * *
+            inputYaml: |
+              pipeline:
+                identifier: application_monitoring
