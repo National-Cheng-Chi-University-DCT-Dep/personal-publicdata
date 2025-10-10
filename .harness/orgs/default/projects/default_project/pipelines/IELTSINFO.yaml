@@ -1,19 +1,17 @@
-﻿pipeline:
+pipeline:
   name: University Application Intelligence System v2.0 - Harness
   identifier: university_application_intelligence
-  projectIdentifier: personal_publicdata
+  projectIdentifier: default_project
   orgIdentifier: default
-  tags: 
-    system: "application-intelligence"
-    version: "2.0.0"
-  
+  tags:
+    system: application-intelligence
+    version: 2.0.0
   properties:
     ci:
       codebase:
         connectorRef: github_connector
         repoName: personal-publicdata
         build: <+input>
-
   stages:
     - stage:
         name: Environment Setup and Dependencies
@@ -37,12 +35,11 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "[SETUP] System Setup - Application Intelligence System v2.0"
+                      echo "🔧 System Setup - Application Intelligence System v2.0"
                       echo "Date: $(date)"
                       echo "Python version: $(python3 --version)"
                       echo "Pip version: $(pip3 --version)"
                       echo "Git commit: $(git rev-parse --short HEAD)"
-                      
               - step:
                   type: Run
                   name: Install Dependencies
@@ -50,9 +47,9 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "[INSTALL] Installing Python dependencies..."
+                      echo "📦 Installing Python dependencies..."
                       cd build_scripts
-                      
+
                       # Install core dependencies
                       pip3 install --upgrade pip
                       pip3 install PyYAML requests beautifulsoup4 selenium
@@ -64,19 +61,18 @@
                       pip3 install tqdm click
                       pip3 install jsonschema
                       pip3 install GitPython
-                      
-                      echo "[SUCCESS] Core dependencies installed"
-                      
-                      # Try to install optional dependencies
-                      echo "[INSTALL] Installing optional dependencies..."
-                      pip3 install selenium webdriver-manager || echo "[WARNING] Selenium dependencies failed"
-                      pip3 install lxml html5lib || echo "[WARNING] HTML parsing libraries failed"
-                      pip3 install pillow opencv-python || echo "[WARNING] Image processing libraries failed"
-                      pip3 install markdown || echo "[WARNING] Markdown processing failed"
-                      
-                      echo "[LIST] Installed packages:"
-                      pip3 list | grep -E "(PyYAML|requests|beautifulsoup4|pandas|nltk|PyGithub)"
 
+                      echo "✅ Core dependencies installed"
+
+                      # Try to install optional dependencies
+                      echo "📦 Installing optional dependencies..."
+                      pip3 install selenium webdriver-manager || echo "⚠️ Selenium dependencies failed"
+                      pip3 install lxml html5lib || echo "⚠️ HTML parsing libraries failed"
+                      pip3 install pillow opencv-python || echo "⚠️ Image processing libraries failed"
+                      pip3 install markdown || echo "⚠️ Markdown processing failed"
+
+                      echo "📋 Installed packages:"
+                      pip3 list | grep -E "(PyYAML|requests|beautifulsoup4|pandas|nltk|PyGithub)"
     - stage:
         name: Data Collection and Validation
         identifier: data_pipeline
@@ -99,28 +95,27 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "[VALIDATE] Validating system configuration..."
-                      
+                      echo "🔍 Validating system configuration..."
+
                       # Check if required files exist
                       if [ ! -f "source_data/schools.yml" ]; then
-                        echo "[ERROR] schools.yml not found"
+                        echo "❌ schools.yml not found"
                         exit 1
                       fi
-                      
+
                       # Validate YAML syntax
                       python3 -c "import yaml; yaml.safe_load(open('source_data/schools.yml'))"
-                      echo "[SUCCESS] schools.yml is valid"
-                      
+                      echo "✅ schools.yml is valid"
+
                       if [ -f "source_data/recommenders.yml" ]; then
                         python3 -c "import yaml; yaml.safe_load(open('source_data/recommenders.yml'))"
-                        echo "[SUCCESS] recommenders.yml is valid"
+                        echo "✅ recommenders.yml is valid"
                       fi
-                      
+
                       # List available schools
-                      echo "[LIST] Available schools:"
+                      echo "📋 Available schools:"
                       cd build_scripts
                       python3 generate_docs.py --list
-                      
               - step:
                   type: Run
                   name: Data Collection - Web Scraping
@@ -128,24 +123,24 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "[VALIDATE] Starting automated data collection..."
-                      
+                      echo "🔍 Starting automated data collection..."
+
                       # Set up environment variables for web scraping
                       export DISPLAY=:99
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)"
-                      
+
                       # Run data collection with error handling
                       cd data_collection
-                      
-                      echo "[SCRAPER] Running university data scraper..."
+
+                      echo "🕷️ Running university data scraper..."
                       timeout 300 python3 scraper.py || {
                         echo "⚠️ Scraper timeout or error, continuing with existing data..."
                       }
-                      
+
                       # Check if live data was created
                       if [ -f "../source_data/schools_live_data.yml" ]; then
-                        echo "[SUCCESS] Live data collection successful"
-                        echo "[SUMMARY] Live data summary:"
+                        echo "✅ Live data collection successful"
+                        echo "📊 Live data summary:"
                         python3 -c "
                         import yaml
                         with open('../source_data/schools_live_data.yml') as f:
@@ -159,7 +154,6 @@
                       else
                         echo "⚠️ No live data collected, using static configuration"
                       fi
-                      
               - step:
                   type: Run
                   name: Data Validation and Eligibility Check
@@ -167,26 +161,25 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "[SUCCESS] Starting comprehensive data validation..."
-                      
+                      echo "✅ Starting comprehensive data validation..."
+
                       cd data_collection
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
-                      
-                      echo "[VALIDATE] Running application eligibility validator..."
+
+                      echo "🔍 Running application eligibility validator..."
                       python3 validator.py
-                      
+
                       # Check validation results
                       if [ -f "../final_applications/validation_report.md" ]; then
-                        echo "[SUCCESS] Validation completed successfully"
-                        echo "[SUMMARY] Validation summary:"
+                        echo "✅ Validation completed successfully"
+                        echo "📊 Validation summary:"
                         
                         # Use the safe validation summary script to avoid indentation errors
                         python3 validation_summary.py
                       else
-                        echo "[ERROR] Validation failed"
+                        echo "❌ Validation failed"
                         exit 1
                       fi
-
     - stage:
         name: Intelligence and Analysis
         identifier: intelligence
@@ -209,27 +202,39 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "[ACADEMIC] Starting academic intelligence gathering..."
-                      
+                      echo "🔬 Starting academic intelligence gathering..."
+
                       cd analysis
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
-                      
+
                       # Run academic radar with timeout
-                      echo "[ANALYZE] Analyzing research opportunities and professor networks..."
+                      echo "🎯 Analyzing research opportunities and professor networks..."
                       timeout 180 python3 academic_radar.py || {
                         echo "⚠️ Academic radar timeout, continuing with basic analysis..."
                       }
-                      
+
                       # Check results
                       if [ -f "../final_applications/academic_intelligence_report.md" ]; then
-                        echo "[SUCCESS] Academic intelligence completed"
+                        echo "✅ Academic intelligence completed"
                         
-                        # Use the safe academic summary script to avoid indentation errors
-                        python3 ../data_collection/academic_summary.py
+                        # Show summary
+                        python3 -c "
+                        import json
+                        try:
+                            with open('../final_applications/academic_intelligence.json') as f:
+                                data = json.load(f)
+                                summary = data.get('summary', {})
+                                print(f'📊 Academic Intelligence Summary:')
+                                print(f'  Schools: {summary.get(\"total_schools\", 0)}')
+                                print(f'  Professors: {summary.get(\"total_professors\", 0)}')
+                                print(f'  Publications: {summary.get(\"total_publications\", 0)}')
+                                print(f'  GitHub Repos: {summary.get(\"total_repositories\", 0)}')
+                        except:
+                            print('Academic intelligence data not available')
+                        "
                       else
                         echo "⚠️ Academic intelligence not completed, continuing..."
                       fi
-              
               - step:
                   type: Run
                   name: Generate Monitoring Dashboard
@@ -237,23 +242,22 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "[SUMMARY] Generating application monitoring dashboard..."
-                      
+                      echo "📊 Generating application monitoring dashboard..."
+
                       cd monitoring
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
-                      
+
                       python3 dashboard.py
-                      
+
                       if [ -f "../final_applications/application_dashboard.md" ]; then
-                        echo "[SUCCESS] Dashboard generation successful"
+                        echo "✅ Dashboard generation successful"
                         
                         # Show dashboard summary
                         head -20 ../final_applications/application_dashboard.md
                       else
-                        echo "[ERROR] Dashboard generation failed"
+                        echo "❌ Dashboard generation failed"
                         exit 1
                       fi
-
     - stage:
         name: Document Generation
         identifier: document_generation
@@ -276,40 +280,63 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "[DOCUMENTS] Generating customized application documents..."
-                      
+                      echo "📝 Generating customized application documents..."
+
                       cd build_scripts
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
-                      
+
                       # Determine which schools to generate based on validation results
-                      echo "[LIST] Determining priority schools for document generation..."
-                      
-                      # Use dedicated Python script to extract priority schools
-                      python3 extract_priority_schools.py
-                      
+                      python3 -c "
+                      import json
+                      import sys
+
+                      try:
+                          with open('../final_applications/validation_results.json') as f:
+                              data = json.load(f)
+                              results = data.get('results', {})
+                              
+                          # Get eligible and warning schools
+                          priority_schools = [
+                              school_id for school_id, result in results.items()
+                              if result.get('overall_status') in ['ELIGIBLE', 'WARNING']
+                          ]
+                          
+                          print('Priority schools for document generation:')
+                          for school in priority_schools:
+                              print(f'  - {school}')
+                              
+                          # Save school list for next step
+                          with open('priority_schools.txt', 'w') as f:
+                              f.write(' '.join(priority_schools))
+                              
+                      except Exception as e:
+                          print(f'Using all active schools: {e}')
+                          with open('priority_schools.txt', 'w') as f:
+                              f.write('all')
+                      "
+
                       # Generate documents
                       if [ -f "priority_schools.txt" ]; then
                         SCHOOLS=$(cat priority_schools.txt)
                         if [ "$SCHOOLS" = "all" ]; then
-                          echo "[DOCUMENTS] Generating documents for all active schools..."
+                          echo "📝 Generating documents for all active schools..."
                           python3 generate_docs.py --all
                         else
-                          echo "[DOCUMENTS] Generating documents for priority schools..."
+                          echo "📝 Generating documents for priority schools..."
                           for school in $SCHOOLS; do
                             echo "  Generating for $school..."
                             python3 generate_docs.py --school "$school"
                           done
                         fi
                       else
-                        echo "[DOCUMENTS] Generating documents for all active schools..."
+                        echo "📝 Generating documents for all active schools..."
                         python3 generate_docs.py --all
                       fi
-                      
+
                       # Document generation summary
-                      echo "[SUMMARY] Document Generation Summary:"
+                      echo "📊 Document Generation Summary:"
                       find ../final_applications -name "*.md" -path "*/CV_*" | wc -l | xargs echo "  CV documents generated:"
                       find ../final_applications -name "*.md" -path "*/SOP_*" | wc -l | xargs echo "  SOP documents generated:"
-
     - stage:
         name: Notifications and Task Management
         identifier: notifications
@@ -332,32 +359,47 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "[NOTIFICATIONS] Processing alerts and notifications..."
-                      
+                      echo "🔔 Processing alerts and notifications..."
+
                       cd notifications
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
-                      
+
                       # Set GitHub token if available
                       if [ -n "$GITHUB_TOKEN" ]; then
                         export GITHUB_TOKEN="$GITHUB_TOKEN"
-                        echo "[SUCCESS] GitHub token configured for issue creation"
+                        echo "✅ GitHub token configured for issue creation"
                       else
-                        echo "[WARNING] No GitHub token - issues will be logged but not created"
+                        echo "⚠️ No GitHub token - issues will be logged but not created"
                       fi
-                      
+
                       # Run notification system
                       python3 alert_system.py
-                      
+
                       # Check results
                       if [ -f "../final_applications/alert_summary.json" ]; then
-                        echo "[SUCCESS] Alert processing completed"
+                        echo "✅ Alert processing completed"
                         
-                        # Use the safe alert summary script to avoid indentation errors
-                        python3 ../data_collection/alert_summary.py
+                        # Show alert summary
+                        python3 -c "
+                        import json
+                        try:
+                            with open('../final_applications/alert_summary.json') as f:
+                                data = json.load(f)
+                                
+                            print('📊 Alert Summary:')
+                            print(f'  Total alerts: {data.get(\"total_alerts\", 0)}')
+                            print(f'  GitHub issues created: {data.get(\"created_github_issues\", 0)}')
+                            
+                            by_severity = data.get('alerts_by_severity', {})
+                            for severity, count in by_severity.items():
+                                print(f'  {severity}: {count}')
+                                
+                        except Exception as e:
+                            print(f'Could not parse alert summary: {e}')
+                        "
                       else
-                        echo "[WARNING] Alert processing completed with no summary"
+                        echo "⚠️ Alert processing completed with no summary"
                       fi
-                      
               - step:
                   type: Run
                   name: Master Controller Summary
@@ -365,36 +407,31 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "[CONTROLLER] Running master controller for final summary..."
-                      
-                      # Ensure required dependencies are available
-                      echo "[DEPENDENCIES] Checking and installing required dependencies..."
-                      pip3 install --quiet beautifulsoup4 selenium requests PyYAML || echo "[WARNING] Some dependencies may have failed to install"
-                      
+                      echo "🎯 Running master controller for final summary..."
+
                       cd build_scripts
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
-                      
+
                       # Run master controller in report mode
-                      echo "[REPORT] Generating comprehensive execution report..."
+                      echo "📋 Generating comprehensive execution report..."
                       python3 master_controller.py --save-report --quick
-                      
+
                       if [ -f "../final_applications/execution_report.md" ]; then
-                        echo "[SUCCESS] Master execution report generated"
+                        echo "✅ Master execution report generated"
                         
-                        echo "[SUMMARY] Final System Status:"
+                        echo "📊 Final System Status:"
                         echo "========================================"
                         
                         # Show key sections of the execution report
-                        grep -A 10 "## \[RESULTS\] Pipeline Results" ../final_applications/execution_report.md || echo "Report sections not found"
+                        grep -A 10 "## 📊 Pipeline Results" ../final_applications/execution_report.md || echo "Report sections not found"
                         
                         echo ""
-                        echo "[FILES] Generated Files:"
+                        echo "📁 Generated Files:"
                         ls -la ../final_applications/*.md ../final_applications/*.json 2>/dev/null || echo "No files generated"
                         
                       else
                         echo "⚠️ Master execution report not generated"
                       fi
-
     - stage:
         name: Advanced Intelligence Features
         identifier: advanced_features
@@ -418,19 +455,18 @@
                     shell: Bash
                     command: |
                       echo "🎮 Running gamification system..."
-                      
+
                       cd build_scripts
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
-                      
-                      echo "[ACHIEVEMENTS] Updating achievements and progress tracking..."
-                      python3 advanced_controller.py --gamification || echo "[WARNING] Gamification system failed"
-                      
+
+                      echo "🏆 Updating achievements and progress tracking..."
+                      python3 advanced_controller.py --gamification || echo "⚠️ Gamification system failed"
+
                       if [ -f "../final_applications/gamification_dashboard.md" ]; then
-                        echo "[SUCCESS] Gamification system completed"
-                        echo "[SUMMARY] Achievements summary:"
-                        grep -A 5 "## \[ACHIEVEMENTS\] Achievement Progress" ../final_applications/gamification_dashboard.md || echo "Achievements section not found"
+                        echo "✅ Gamification system completed"
+                        echo "📊 Achievements summary:"
+                        grep -A 5 "## 🏆 Achievement Progress" ../final_applications/gamification_dashboard.md || echo "Achievements section not found"
                       fi
-                      
               - step:
                   type: Run
                   name: Narrative Consistency Analysis
@@ -438,20 +474,19 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "[NARRATIVE] Running narrative consistency analysis..."
-                      
+                      echo "📖 Running narrative consistency analysis..."
+
                       cd build_scripts
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
-                      
-                      echo "[VALIDATE] Analyzing document consistency and narrative flow..."
-                      python3 advanced_controller.py --narrative || echo "[WARNING] Narrative analysis failed"
-                      
+
+                      echo "🔍 Analyzing document consistency and narrative flow..."
+                      python3 advanced_controller.py --narrative || echo "⚠️ Narrative analysis failed"
+
                       if [ -f "../final_applications/narrative_consistency_report.md" ]; then
-                        echo "[SUCCESS] Narrative analysis completed"
-                        echo "[SUMMARY] Consistency summary:"
+                        echo "✅ Narrative analysis completed"
+                        echo "📊 Consistency summary:"
                         grep -A 3 "## 📊 Overall Consistency Score" ../final_applications/narrative_consistency_report.md || echo "Consistency summary not found"
                       fi
-                      
               - step:
                   type: Run
                   name: Risk Portfolio Analysis
@@ -459,20 +494,19 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "[SUMMARY] Running risk portfolio analysis..."
-                      
+                      echo "📊 Running risk portfolio analysis..."
+
                       cd build_scripts
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
-                      
-                      echo "[ANALYZE] Optimizing school portfolio using financial theory..."
-                      python3 advanced_controller.py --portfolio || echo "[WARNING] Portfolio analysis failed"
-                      
+
+                      echo "🎯 Optimizing school portfolio using financial theory..."
+                      python3 advanced_controller.py --portfolio || echo "⚠️ Portfolio analysis failed"
+
                       if [ -f "../final_applications/risk_portfolio_analysis.md" ]; then
-                        echo "[SUCCESS] Portfolio analysis completed"
-                        echo "[SUMMARY] Portfolio recommendations:"
+                        echo "✅ Portfolio analysis completed"
+                        echo "📊 Portfolio recommendations:"
                         grep -A 5 "## 🎯 Recommended Portfolio" ../final_applications/risk_portfolio_analysis.md || echo "Portfolio recommendations not found"
                       fi
-                      
               - step:
                   type: Run
                   name: What-If Scenario Simulator
@@ -480,20 +514,19 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "[WHATIF] Running What-If scenario simulator..."
-                      
+                      echo "🔮 Running What-If scenario simulator..."
+
                       cd build_scripts
                       export PYTHONPATH="${PYTHONPATH}:$(pwd)/.."
-                      
-                      echo "[SCENARIO] Testing strategic scenarios and optimization..."
-                      python3 advanced_controller.py --whatif || echo "[WARNING] What-If simulator failed"
-                      
+
+                      echo "🎲 Testing strategic scenarios and optimization..."
+                      python3 advanced_controller.py --whatif || echo "⚠️ What-If simulator failed"
+
                       if [ -f "../final_applications/whatif_optimization_report.md" ]; then
-                        echo "[SUCCESS] What-If simulation completed"
-                        echo "[SUMMARY] Scenario results:"
+                        echo "✅ What-If simulation completed"
+                        echo "📊 Scenario results:"
                         grep -A 3 "## 🎯 Best Scenario" ../final_applications/whatif_optimization_report.md || echo "Scenario results not found"
                       fi
-
     - stage:
         name: Artifact Management and Deployment
         identifier: artifacts
@@ -516,69 +549,69 @@
                   spec:
                     shell: Bash
                     command: |
-                      echo "[FILES] Organizing generated artifacts..."
-                      
+                      echo "📁 Organizing generated artifacts..."
+
                       # Create artifacts directory
                       mkdir -p artifacts/reports artifacts/documents artifacts/data
-                      
+
                       # Copy reports
                       if [ -f "final_applications/validation_report.md" ]; then
                         cp final_applications/validation_report.md artifacts/reports/
-                        echo "[SUCCESS] Validation report archived"
+                        echo "✅ Validation report archived"
                       fi
-                      
+
                       if [ -f "final_applications/application_dashboard.md" ]; then
                         cp final_applications/application_dashboard.md artifacts/reports/
-                        echo "[SUCCESS] Dashboard archived"
+                        echo "✅ Dashboard archived"
                       fi
-                      
+
                       if [ -f "final_applications/academic_intelligence_report.md" ]; then
                         cp final_applications/academic_intelligence_report.md artifacts/reports/
-                        echo "[SUCCESS] Academic intelligence report archived"
+                        echo "✅ Academic intelligence report archived"
                       fi
-                      
+
                       if [ -f "final_applications/execution_report.md" ]; then
                         cp final_applications/execution_report.md artifacts/reports/
-                        echo "[SUCCESS] Execution report archived"
+                        echo "✅ Execution report archived"
                       fi
-                      
+
                       # Archive advanced features reports
                       if [ -f "final_applications/gamification_dashboard.md" ]; then
                         cp final_applications/gamification_dashboard.md artifacts/reports/
-                        echo "[SUCCESS] Gamification dashboard archived"
+                        echo "✅ Gamification dashboard archived"
                       fi
-                      
+
                       if [ -f "final_applications/narrative_consistency_report.md" ]; then
                         cp final_applications/narrative_consistency_report.md artifacts/reports/
-                        echo "[SUCCESS] Narrative analysis report archived"
+                        echo "✅ Narrative analysis report archived"
                       fi
-                      
+
                       if [ -f "final_applications/risk_portfolio_analysis.md" ]; then
                         cp final_applications/risk_portfolio_analysis.md artifacts/reports/
-                        echo "[SUCCESS] Portfolio analysis report archived"
+                        echo "✅ Portfolio analysis report archived"
                       fi
-                      
+
                       if [ -f "final_applications/whatif_optimization_report.md" ]; then
                         cp final_applications/whatif_optimization_report.md artifacts/reports/
-                        echo "[SUCCESS] What-If simulation report archived"
+                        echo "✅ What-If simulation report archived"
                       fi
-                      
+
                       # Copy structured data
                       if [ -f "final_applications/validation_results.json" ]; then
                         cp final_applications/validation_results.json artifacts/data/
                       fi
-                      
+
                       if [ -f "final_applications/academic_intelligence.json" ]; then
                         cp final_applications/academic_intelligence.json artifacts/data/
                       fi
-                      
+
                       # Copy application documents
                       find final_applications -name "*.md" -path "*/CV_*" -o -name "*.md" -path "*/SOP_*" | while read file; do
                         if [ -f "$file" ]; then
                           cp "$file" artifacts/documents/
                         fi
                       done
-                      
+
                       # Create manifest
                       cat > artifacts/MANIFEST.txt << EOF
                       University Application Intelligence System v2.0
@@ -586,87 +619,28 @@
                       Commit: $(git rev-parse --short HEAD)
                       Branch: $(git rev-parse --abbrev-ref HEAD)
                       Pipeline ID: <+pipeline.sequenceId>
-                      
+
                       Files Generated:
                       EOF
-                      
+
                       find artifacts -type f | sort >> artifacts/MANIFEST.txt
-                      
-                      echo "[SUMMARY] Artifact Summary:"
+
+                      echo "📊 Artifact Summary:"
                       echo "  Reports: $(ls artifacts/reports/*.md 2>/dev/null | wc -l)"
                       echo "  Documents: $(ls artifacts/documents/*.md 2>/dev/null | wc -l)"
                       echo "  Data Files: $(ls artifacts/data/*.json 2>/dev/null | wc -l)"
-                      
               - step:
-                  type: Run
-                  name: Commit Artifacts to Repository
-                  identifier: commit_artifacts
+                  type: SaveCacheS3
+                  name: Archive Artifacts
+                  identifier: save_artifacts
                   spec:
-                    shell: Bash
-                    command: |
-                      echo "[ARTIFACTS] Committing generated artifacts to repository..."
-                      
-                      # Configure git
-                      git config user.name "Application Intelligence Bot"
-                      git config user.email "bot@dennisleehappy.org"
-                      
-                      # Create archive directory with timestamp
-                      TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-                      ARCHIVE_DIR="archived_reports/${TIMESTAMP}_pipeline_<+pipeline.sequenceId>"
-                      
-                      # Copy artifacts to archive directory
-                      mkdir -p "${ARCHIVE_DIR}"
-                      cp -r artifacts/* "${ARCHIVE_DIR}/" 2>/dev/null || echo "[INFO] No artifacts to archive"
-                      
-                      # Also update latest reports in final_applications
-                      cp -r final_applications/*.md final_applications/*.json artifacts/reports/ 2>/dev/null || echo "[INFO] No reports to update"
-                      
-                      # Check if there are changes
-                      if [ -n "$(git status --porcelain)" ]; then
-                        echo "[COMMIT] Changes detected, committing..."
-                        
-                        # Add files
-                        git add final_applications/*.md final_applications/*.json 2>/dev/null || true
-                        git add "${ARCHIVE_DIR}/" 2>/dev/null || true
-                        
-                        # Create commit message
-                        cat > /tmp/commit_msg.txt << EOF
-                      [CI] Application Intelligence Report - $(date +%Y-%m-%d)
-                      
-                      Pipeline: <+pipeline.sequenceId>
-                      Commit: <+codebase.commitSha>
-                      Branch: <+codebase.branch>
-                      
-                      Generated Files:
-                      - Validation reports
-                      - Application documents
-                      - Dashboard updates
-                      - Alert summaries
-                      
-                      Archived in: ${ARCHIVE_DIR}
-                      EOF
-                        
-                        # Commit
-                        git commit -F /tmp/commit_msg.txt
-                        
-                        # Push (will be handled by git credentials in Harness)
-                        git push origin HEAD:<+codebase.branch> || {
-                          echo "[WARNING] Git push failed. Artifacts available in pipeline workspace."
-                          echo "[INFO] You can download artifacts from Harness UI"
-                        }
-                        
-                        echo "[SUCCESS] Artifacts committed and pushed to repository"
-                      else
-                        echo "[INFO] No changes to commit"
-                      fi
-                      
-                      # Display summary
-                      echo ""
-                      echo "[SUMMARY] Artifact Management Complete"
-                      echo "  Archived to: ${ARCHIVE_DIR}"
-                      echo "  Reports: $(ls artifacts/reports/*.md 2>/dev/null | wc -l)"
-                      echo "  Documents: $(ls artifacts/documents/*.md 2>/dev/null | wc -l)"
-                      echo "  Data: $(ls artifacts/data/*.json 2>/dev/null | wc -l)"
+                    connectorRef: aws_connector
+                    region: us-east-1
+                    bucket: university-application-artifacts
+                    key: intelligence-system/<+pipeline.sequenceId>-<+codebase.commitSha>
+                    sourcePaths:
+                      - artifacts/
+                    archiveFormat: Tar
                   when:
                     stageStatus: Success
                   failureStrategies:
@@ -675,8 +649,6 @@
                           - AllErrors
                         action:
                           type: Ignore
-
-  # Enhanced trigger configuration
   triggers:
     - trigger:
         name: Scheduled Daily Intelligence Run
@@ -687,12 +659,11 @@
         spec:
           type: Cron
           spec:
-            expression: "0 6 * * *"  # 6 AM UTC daily
+            expression: 0 6 * * *
             inputYaml: |
               pipeline_mode: "full"
               skip_scraping: false
               run_advanced_features: true
-
     - trigger:
         name: Advanced Features Only
         identifier: advanced_only
@@ -703,7 +674,6 @@
           inputYaml: |
             pipeline_mode: "advanced_only"
             skip_scraping: true
-
     - trigger:
         name: Source Data Changes
         identifier: source_data_changes
@@ -729,7 +699,6 @@
             inputYaml: |
               pipeline_mode: "quick"
               skip_scraping: true
-
     - trigger:
         name: Template Updates
         identifier: template_updates
@@ -750,7 +719,6 @@
               headerConditions: []
             inputYaml: |
               pipeline_mode: "docs_only"
-
     - trigger:
         name: Manual Full Pipeline
         identifier: manual_full
@@ -761,13 +729,11 @@
           inputYaml: |
             pipeline_mode: "full"
             skip_scraping: false
-
-  # Pipeline variables
   variables:
     - name: pipeline_mode
       type: String
       description: Pipeline execution mode (full, quick, docs_only)
-      value: "quick"
+      value: quick
     - name: skip_scraping
       type: String
       description: Skip web scraping to speed up execution
@@ -779,7 +745,7 @@
     - name: notification_level
       type: String
       description: Notification verbosity level
-      value: "normal"
+      value: normal
     - name: run_advanced_features
       type: String
       description: Run advanced AI-powered features (gamification, narrative, portfolio, whatif)
@@ -788,8 +754,6 @@
       type: String
       description: Timeout for advanced features in seconds
       value: "300"
-
-  # Enhanced notification rules
   notificationRules:
     - name: Pipeline Success Notification
       identifier: success_notification
@@ -801,20 +765,19 @@
           userGroups: []
           recipients:
             - admin@dennisleehappy.org
-          subject: "✅ Application Intelligence Pipeline Completed Successfully"
+          subject: ✅ Application Intelligence Pipeline Completed Successfully
           body: |
             The University Application Intelligence System pipeline has completed successfully.
-            
+
             Pipeline ID: <+pipeline.sequenceId>
             Execution Time: <+pipeline.startTs>
             Commit: <+codebase.commitSha>
-            
+
             Generated artifacts are available in the S3 bucket.
-            
+
             Best regards,
             Application Intelligence System
       enabled: true
-    
     - name: Pipeline Failure Notification
       identifier: failure_notification
       pipelineEvents:
@@ -825,20 +788,19 @@
           userGroups: []
           recipients:
             - admin@dennisleehappy.org
-          subject: "❌ Application Intelligence Pipeline Failed"
+          subject: ❌ Application Intelligence Pipeline Failed
           body: |
             The University Application Intelligence System pipeline has failed.
-            
+
             Pipeline ID: <+pipeline.sequenceId>
             Failed Stage: <+pipeline.stage.name>
             Error Details: <+pipeline.stage.spec.execution.steps.step.failureStrategies>
-            
+
             Please check the pipeline logs for detailed error information.
-            
+
             Best regards,
             Application Intelligence System
       enabled: true
-
     - name: High Priority Alerts
       identifier: high_priority_alerts
       pipelineEvents:
@@ -848,13 +810,13 @@
         spec:
           webhookUrl: <+secrets.getValue("slack_webhook_url")>
           message: |
-            [UPDATE] *Application Intelligence Update*
-            
+            🎓 *Application Intelligence Update*
+
             Pipeline completed with new high-priority alerts detected.
             Check GitHub Issues for action items.
-            
+
             Pipeline: <+pipeline.sequenceId>
-      enabled: false  # Enable when Slack webhook is configured
+      enabled: false
       conditions:
         - key: pipeline.variables.high_priority_alerts
           operator: Equals

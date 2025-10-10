@@ -20,8 +20,8 @@ import requests
 from datetime import datetime, date, timedelta
 from typing import Dict, List, Optional, Any
 from pathlib import Path
-from email.mime.text import MimeText
-from email.mime.multipart import MimeMultipart
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 class GitHubIntegration:
     """GitHub Issues integration for task management"""
@@ -33,12 +33,12 @@ class GitHubIntegration:
         self.base_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}"
         
         if not self.token:
-            print("⚠️  GitHub token not found. Set GITHUB_TOKEN environment variable for issue creation.")
+            print("WARNING: GitHub token not found. Set GITHUB_TOKEN environment variable for issue creation.")
     
     def create_issue(self, title: str, body: str, labels: List[str] = None) -> Optional[str]:
         """Create a GitHub issue"""
         if not self.token:
-            print(f"💡 Would create GitHub issue: {title}")
+            print(f"[INFO] Would create GitHub issue: {title}")
             return None
         
         headers = {
@@ -64,14 +64,14 @@ class GitHubIntegration:
             if response.status_code == 201:
                 issue_data = response.json()
                 issue_url = issue_data['html_url']
-                print(f"✅ Created GitHub issue: {issue_url}")
+                print(f"[SUCCESS] Created GitHub issue: {issue_url}")
                 return issue_url
             else:
-                print(f"❌ Failed to create issue: {response.status_code} - {response.text}")
+                print(f"[ERROR] Failed to create issue: {response.status_code} - {response.text}")
                 return None
                 
         except Exception as e:
-            print(f"❌ GitHub API error: {str(e)}")
+            print(f"[ERROR] GitHub API error: {str(e)}")
             return None
     
     def list_issues(self, state: str = 'open', labels: List[str] = None) -> List[Dict]:
@@ -110,9 +110,21 @@ class NotificationCenter:
     """Central notification management system"""
     
     def __init__(self):
-        self.base_dir = Path(__file__).parent.parent
-        self.source_data_dir = self.base_dir / "source_data"
-        self.output_dir = self.base_dir / "final_applications"
+        # Use the dedicated path resolver for robust path handling
+        try:
+            import sys
+            sys.path.insert(0, str(Path(__file__).parent))
+            from path_resolver import resolve_project_paths
+            self.base_dir, self.source_data_dir, self.output_dir = resolve_project_paths()
+        except (ImportError, Exception) as e:
+            # Fallback if path_resolver is not available or fails
+            print(f"[WARNING] Path resolver failed ({e}), using fallback")
+            script_dir = Path(__file__).parent.absolute()
+            self.base_dir = script_dir.parent
+            self.source_data_dir = self.base_dir / "source_data"
+            self.output_dir = self.base_dir / "final_applications"
+            self.output_dir.mkdir(parents=True, exist_ok=True)
+        
         
         # Load configuration
         self.load_config()
@@ -416,12 +428,12 @@ class NotificationCenter:
         
         try:
             # Create message
-            msg = MimeMultipart()
+            msg = MIMEMultipart()
             msg['From'] = email_config['sender_email']
             msg['To'] = email_config['recipient_email']
             msg['Subject'] = subject
             
-            msg.attach(MimeText(body, 'plain'))
+            msg.attach(MIMEText(body, 'plain'))
             
             # Send email
             with smtplib.SMTP(email_config['smtp_server'], email_config['smtp_port']) as server:
@@ -441,7 +453,7 @@ class NotificationCenter:
     
     def process_all_alerts(self) -> Dict[str, Any]:
         """Process all types of alerts and notifications"""
-        print("🔔 Processing alerts and notifications...")
+        print("[NOTIFY] Processing alerts and notifications...")
         
         # Collect all alerts
         deadline_alerts = self.check_deadline_alerts()
@@ -481,12 +493,36 @@ class NotificationCenter:
             summary['alerts_by_severity'][severity] = summary['alerts_by_severity'].get(severity, 0) + 1
             summary['alerts_by_type'][alert_type] = summary['alerts_by_type'].get(alert_type, 0) + 1
         
-        # Save summary
+        # Save summary with detailed error handling
         summary_file = self.output_dir / "alert_summary.json"
-        with open(summary_file, 'w', encoding='utf-8') as f:
-            json.dump(summary, f, indent=2)
         
-        print(f"📊 Alert summary saved to {summary_file}")
+        try:
+            print(f"[DEBUG] Attempting to save alert summary to: {summary_file}")
+            print(f"[DEBUG] Output directory exists: {self.output_dir.exists()}")
+            print(f"[DEBUG] Output directory is writable: {os.access(self.output_dir, os.W_OK)}")
+            
+            # Ensure the directory exists and is writable
+            self.output_dir.mkdir(parents=True, exist_ok=True)
+            
+            with open(summary_file, 'w', encoding='utf-8') as f:
+                json.dump(summary, f, indent=2)
+            
+            print(f"[SUMMARY] Alert summary saved to {summary_file}")
+            print(f"[DEBUG] File size: {summary_file.stat().st_size} bytes")
+            
+        except PermissionError as e:
+            print(f"[ERROR] Permission denied saving alert summary: {e}")
+            print(f"[DEBUG] Directory permissions: {oct(self.output_dir.stat().st_mode)}")
+            raise
+        except OSError as e:
+            print(f"[ERROR] OS error saving alert summary: {e}")
+            print(f"[DEBUG] Available disk space: {os.statvfs(self.output_dir).f_bavail if hasattr(os, 'statvfs') else 'Unknown'}")
+            raise
+        except Exception as e:
+            print(f"[ERROR] Unexpected error saving alert summary: {e}")
+            print(f"[DEBUG] Summary data type: {type(summary)}")
+            print(f"[DEBUG] Summary keys: {list(summary.keys()) if isinstance(summary, dict) else 'Not a dict'}")
+            raise
         
         return summary
     
@@ -537,7 +573,7 @@ def main():
         summary = notification_center.process_all_alerts()
         
         # Print summary
-        print(f"\n📊 Alert Processing Summary:")
+        print(f"\n[SUMMARY] Alert Processing Summary:")
         print(f"   Total alerts: {summary['total_alerts']}")
         print(f"   GitHub issues created: {summary['created_github_issues']}")
         
@@ -547,7 +583,7 @@ def main():
         return 0
         
     except Exception as e:
-        print(f"❌ Alert processing failed: {str(e)}")
+        print(f"[ERROR] Alert processing failed: {str(e)}")
         return 1
 
 if __name__ == "__main__":

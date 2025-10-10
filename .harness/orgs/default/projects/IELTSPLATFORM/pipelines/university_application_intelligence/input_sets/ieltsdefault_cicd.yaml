@@ -1,0 +1,14 @@
+inputSet:
+  pipeline:
+    identifier: university_application_intelligence
+    properties:
+      ci:
+        codebase:
+          build:
+            spec:
+              branch: main
+            type: branch
+  name: ielts-default cicd
+  identifier: ieltsdefault_cicd
+  orgIdentifier: default
+  projectIdentifier: IELTSPLATFORM

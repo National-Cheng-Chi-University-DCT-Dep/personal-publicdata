@@ -22,13 +22,42 @@ from typing import Dict, List, Optional
 # Add parent directory to path for imports
 sys.path.append(str(Path(__file__).parent.parent))
 
-# Import system modules
-from build_scripts.generate_docs import DocumentGenerator
-from data_collection.scraper import UniversityScraper
-from data_collection.validator import ApplicationValidator
-from monitoring.dashboard import ApplicationDashboard
-from notifications.alert_system import NotificationCenter
-from analysis.academic_radar import AcademicRadar
+# Import system modules with error handling
+try:
+    from build_scripts.generate_docs import DocumentGenerator
+except ImportError as e:
+    print(f"[WARNING] Could not import DocumentGenerator: {e}")
+    DocumentGenerator = None
+
+try:
+    from data_collection.scraper import UniversityScraper
+except ImportError as e:
+    print(f"[WARNING] Could not import UniversityScraper: {e}")
+    UniversityScraper = None
+
+try:
+    from data_collection.validator import ApplicationValidator
+except ImportError as e:
+    print(f"[WARNING] Could not import ApplicationValidator: {e}")
+    ApplicationValidator = None
+
+try:
+    from monitoring.dashboard import ApplicationDashboard
+except ImportError as e:
+    print(f"[WARNING] Could not import ApplicationDashboard: {e}")
+    ApplicationDashboard = None
+
+try:
+    from notifications.alert_system import NotificationCenter
+except ImportError as e:
+    print(f"[WARNING] Could not import NotificationCenter: {e}")
+    NotificationCenter = None
+
+try:
+    from analysis.academic_radar import AcademicRadar
+except ImportError as e:
+    print(f"[WARNING] Could not import AcademicRadar: {e}")
+    AcademicRadar = None
 
 class ApplicationIntelligenceSystem:
     """Master controller for the complete application intelligence system"""
@@ -37,13 +66,27 @@ class ApplicationIntelligenceSystem:
         self.verbose = verbose
         self.base_dir = Path(__file__).parent.parent
         
-        # Initialize system components
-        self.document_generator = DocumentGenerator()
-        self.scraper = UniversityScraper()
-        self.validator = ApplicationValidator()
-        self.dashboard = ApplicationDashboard()
-        self.notification_center = NotificationCenter()
-        self.academic_radar = AcademicRadar()
+        # Initialize system components with error handling
+        self.document_generator = DocumentGenerator() if DocumentGenerator else None
+        self.scraper = UniversityScraper() if UniversityScraper else None
+        self.validator = ApplicationValidator() if ApplicationValidator else None
+        self.dashboard = ApplicationDashboard() if ApplicationDashboard else None
+        self.notification_center = NotificationCenter() if NotificationCenter else None
+        self.academic_radar = AcademicRadar() if AcademicRadar else None
+        
+        # Check which components are available
+        available_components = []
+        if self.document_generator: available_components.append("DocumentGenerator")
+        if self.scraper: available_components.append("UniversityScraper")
+        if self.validator: available_components.append("ApplicationValidator")
+        if self.dashboard: available_components.append("ApplicationDashboard")
+        if self.notification_center: available_components.append("NotificationCenter")
+        if self.academic_radar: available_components.append("AcademicRadar")
+        
+        if self.verbose:
+            print(f"[COMPONENTS] Available components: {', '.join(available_components)}")
+            if len(available_components) < 6:
+                print("[WARNING] Some components are unavailable due to missing dependencies")
         
         # Execution results
         self.execution_log = []
@@ -64,7 +107,11 @@ class ApplicationIntelligenceSystem:
     
     def run_data_collection(self) -> bool:
         """Execute data collection pipeline"""
-        self.log("🔍 Starting data collection pipeline...")
+        self.log("[COLLECTION] Starting data collection pipeline...")
+        
+        if not self.scraper:
+            self.log("[WARNING] Scraper not available - skipping data collection", "WARNING")
+            return False
         
         try:
             # Run web scraper
@@ -83,11 +130,16 @@ class ApplicationIntelligenceSystem:
             return False
         
         finally:
-            self.scraper.cleanup()
+            if self.scraper:
+                self.scraper.cleanup()
     
     def run_data_validation(self) -> bool:
         """Execute data validation pipeline"""
-        self.log("✅ Starting data validation pipeline...")
+        self.log("[VALIDATION] Starting data validation pipeline...")
+        
+        if not self.validator:
+            self.log("[WARNING] Validator not available - skipping data validation", "WARNING")
+            return False
         
         try:
             # Run validator
@@ -137,7 +189,7 @@ class ApplicationIntelligenceSystem:
     
     def run_document_generation(self, school_ids: Optional[List[str]] = None) -> bool:
         """Execute document generation"""
-        self.log("📝 Starting document generation...")
+        self.log("[DOCUMENTS] Starting document generation...")
         
         try:
             if school_ids:
@@ -159,7 +211,7 @@ class ApplicationIntelligenceSystem:
     
     def run_monitoring_dashboard(self) -> bool:
         """Generate monitoring dashboard"""
-        self.log("📊 Generating monitoring dashboard...")
+        self.log("[DASHBOARD] Generating monitoring dashboard...")
         
         try:
             self.dashboard.save_dashboard()
@@ -172,7 +224,11 @@ class ApplicationIntelligenceSystem:
     
     def run_notifications(self) -> bool:
         """Execute notification and alerting system"""
-        self.log("🔔 Processing notifications and alerts...")
+        self.log("[NOTIFICATIONS] Processing notifications and alerts...")
+        
+        if not self.notification_center:
+            self.log("[WARNING] Notification center not available - skipping notifications", "WARNING")
+            return False
         
         try:
             summary = self.notification_center.process_all_alerts()
@@ -185,6 +241,39 @@ class ApplicationIntelligenceSystem:
             
         except Exception as e:
             self.log(f"Notification processing failed: {str(e)}", "ERROR")
+            return False
+    
+    def run_validation_summary(self) -> bool:
+        """Execute validation summary safely"""
+        self.log("[SUMMARY] Generating validation summary...")
+        
+        try:
+            # Import the validation summary module
+            import sys
+            validation_summary_path = self.base_dir / "data_collection" / "validation_summary.py"
+            
+            if validation_summary_path.exists():
+                # Run the validation summary script
+                import subprocess
+                result = subprocess.run([
+                    sys.executable, str(validation_summary_path)
+                ], capture_output=True, text=True, cwd=str(self.base_dir))
+                
+                if result.returncode == 0:
+                    # Print the summary output
+                    if result.stdout:
+                        print(result.stdout)
+                    self.log("Validation summary completed successfully")
+                    return True
+                else:
+                    self.log(f"Validation summary failed: {result.stderr}", "ERROR")
+                    return False
+            else:
+                self.log("Validation summary script not found", "WARNING")
+                return False
+                
+        except Exception as e:
+            self.log(f"Validation summary failed: {str(e)}", "ERROR")
             return False
     
     def run_full_pipeline(self, skip_scraping: bool = False, 
@@ -203,6 +292,10 @@ class ApplicationIntelligenceSystem:
         
         # Stage 2: Data Validation
         pipeline_results['data_validation'] = self.run_data_validation()
+        
+        # Run validation summary if validation was successful
+        if pipeline_results['data_validation']:
+            self.run_validation_summary()
         
         # Stage 3: Academic Intelligence
         pipeline_results['academic_intelligence'] = self.run_academic_intelligence()
@@ -223,18 +316,22 @@ class ApplicationIntelligenceSystem:
         self.log(f"🏁 Pipeline completed: {successful_stages}/{total_stages} stages successful")
         
         if self.errors:
-            self.log(f"⚠️  {len(self.errors)} errors encountered during execution", "WARNING")
+            self.log(f"[WARNING] {len(self.errors)} errors encountered during execution", "WARNING")
         
         return pipeline_results
     
     def run_quick_update(self) -> Dict[str, bool]:
         """Execute quick update pipeline (no scraping, focus on analysis)"""
-        self.log("⚡ Running quick update pipeline...")
+        self.log("[QUICK] Running quick update pipeline...")
         
         results = {}
         
         # Quick validation with existing data
         results['validation'] = self.run_data_validation()
+        
+        # Run validation summary if validation was successful
+        if results['validation']:
+            self.run_validation_summary()
         
         # Generate documents
         results['documents'] = self.run_document_generation()
@@ -255,7 +352,7 @@ class ApplicationIntelligenceSystem:
             f"**Execution Time**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
             f"**Pipeline Version**: 2.0.0",
             "",
-            "## 📊 Pipeline Results",
+            "## [RESULTS] Pipeline Results",
             ""
         ]
         
@@ -266,17 +363,17 @@ class ApplicationIntelligenceSystem:
         ])
         
         stage_names = {
-            'data_collection': '🔍 Data Collection',
-            'data_validation': '✅ Data Validation',
+            'data_collection': '[COLLECTION] Data Collection',
+            'data_validation': '[VALIDATION] Data Validation',
             'academic_intelligence': '🔬 Academic Intelligence',
-            'document_generation': '📝 Document Generation',
-            'monitoring_dashboard': '📊 Monitoring Dashboard', 
-            'notifications': '🔔 Notifications & Alerts'
+            'document_generation': '[DOCUMENTS] Document Generation',
+            'monitoring_dashboard': '[DASHBOARD] Monitoring Dashboard', 
+            'notifications': '[NOTIFICATIONS] Notifications & Alerts'
         }
         
         for stage_key, success in pipeline_results.items():
             stage_name = stage_names.get(stage_key, stage_key)
-            status_icon = "✅" if success else "❌"
+            status_icon = "[SUCCESS]" if success else "[FAILED]"
             status_text = "SUCCESS" if success else "FAILED"
             
             report_lines.append(f"| {stage_name} | {status_icon} {status_text} | - |")
@@ -285,7 +382,7 @@ class ApplicationIntelligenceSystem:
         if self.execution_log:
             report_lines.extend([
                 "",
-                "## 📋 Detailed Execution Log",
+                "## [LOG] Detailed Execution Log",
                 "",
                 "```"
             ])
@@ -302,7 +399,7 @@ class ApplicationIntelligenceSystem:
         # Errors summary
         if self.errors:
             report_lines.extend([
-                "## ❌ Errors Encountered",
+                "## [ERRORS] Errors Encountered",
                 ""
             ])
             
@@ -318,7 +415,7 @@ class ApplicationIntelligenceSystem:
             
             if files:
                 report_lines.extend([
-                    "## 📁 Generated Files",
+                    "## [FILES] Generated Files",
                     ""
                 ])
                 
@@ -335,7 +432,7 @@ class ApplicationIntelligenceSystem:
         
         if successful_stages == total_stages:
             report_lines.extend([
-                "## ✅ Next Steps",
+                "## [NEXT] Next Steps",
                 "",
                 "All pipeline stages completed successfully. You can now:",
                 "",
@@ -347,7 +444,7 @@ class ApplicationIntelligenceSystem:
             ])
         else:
             report_lines.extend([
-                "## ⚠️ Action Required",
+                "## [ACTION] Action Required",
                 "",
                 "Some pipeline stages failed. Please:",
                 "",
@@ -377,7 +474,7 @@ class ApplicationIntelligenceSystem:
         with open(report_file, 'w', encoding='utf-8') as f:
             f.write(report_content)
         
-        self.log(f"📋 Execution report saved to {report_file}")
+        self.log(f"[REPORT] Execution report saved to {report_file}")
 
 def main():
     """Main execution function"""
@@ -465,21 +562,21 @@ def main():
         if pipeline_results:
             failed_stages = [stage for stage, success in pipeline_results.items() if not success]
             if failed_stages:
-                print(f"\n❌ Pipeline completed with {len(failed_stages)} failed stages")
+                print(f"\n[FAILED] Pipeline completed with {len(failed_stages)} failed stages")
                 return 1
             else:
-                print(f"\n✅ Pipeline completed successfully!")
+                print(f"\n[SUCCESS] Pipeline completed successfully!")
                 return 0
         else:
-            print("\n❌ No pipeline executed")
+            print("\n[ERROR] No pipeline executed")
             return 1
     
     except KeyboardInterrupt:
-        print("\n⚠️ Pipeline interrupted by user")
+        print("\n[INTERRUPTED] Pipeline interrupted by user")
         return 130
     
     except Exception as e:
-        print(f"\n❌ Pipeline failed with error: {str(e)}")
+        print(f"\n[ERROR] Pipeline failed with error: {str(e)}")
         return 1
 
 if __name__ == "__main__":

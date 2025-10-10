@@ -1,0 +1,125 @@
+#!/usr/bin/env python3
+"""
+Robust path resolver for different execution environments
+"""
+
+import os
+from pathlib import Path
+
+def resolve_project_paths():
+    """
+    Resolve project paths in different execution environments
+    Returns: (base_dir, source_data_dir, output_dir)
+    """
+    
+    # Get current script location
+    script_file = Path(__file__).absolute()
+    script_dir = script_file.parent
+    current_dir = Path.cwd()
+    
+    print(f"[PATH_RESOLVER] Script: {script_file}")
+    print(f"[PATH_RESOLVER] Script dir: {script_dir}")
+    print(f"[PATH_RESOLVER] Current dir: {current_dir}")
+    
+    # Strategy 1: Standard project structure (script in notifications/)
+    base_dir = script_dir.parent
+    if (base_dir / "source_data").exists():
+        print(f"[PATH_RESOLVER] Found standard structure at: {base_dir}")
+        output_dir = base_dir / "final_applications"
+        
+        try:
+            print(f"[PATH_RESOLVER] Attempting to create output directory: {output_dir}")
+            output_dir.mkdir(parents=True, exist_ok=True)
+            print(f"[PATH_RESOLVER] Created/verified output directory: {output_dir}")
+            print(f"[PATH_RESOLVER] Directory exists: {output_dir.exists()}")
+            print(f"[PATH_RESOLVER] Directory is writable: {os.access(output_dir, os.W_OK)}")
+            
+            # If directory is not writable, try alternative location
+            if not os.access(output_dir, os.W_OK):
+                print(f"[PATH_RESOLVER] Directory not writable, trying alternative location")
+                alt_output_dir = current_dir / "final_applications"
+                alt_output_dir.mkdir(parents=True, exist_ok=True)
+                print(f"[PATH_RESOLVER] Alternative output directory: {alt_output_dir}")
+                print(f"[PATH_RESOLVER] Alternative directory is writable: {os.access(alt_output_dir, os.W_OK)}")
+                if os.access(alt_output_dir, os.W_OK):
+                    output_dir = alt_output_dir
+                    print(f"[PATH_RESOLVER] Using alternative output directory: {output_dir}")
+                
+        except Exception as e:
+            print(f"[PATH_RESOLVER] ERROR creating directory: {e}")
+            print(f"[PATH_RESOLVER] Trying alternative location in current directory")
+            try:
+                alt_output_dir = current_dir / "final_applications"
+                alt_output_dir.mkdir(parents=True, exist_ok=True)
+                output_dir = alt_output_dir
+                print(f"[PATH_RESOLVER] Using alternative output directory: {output_dir}")
+            except Exception as e2:
+                print(f"[PATH_RESOLVER] Alternative location also failed: {e2}")
+                print(f"[PATH_RESOLVER] Continuing with original path...")
+        
+        return base_dir, base_dir / "source_data", output_dir
+    
+    # Strategy 2: Check current working directory
+    if (current_dir / "source_data").exists():
+        print(f"[PATH_RESOLVER] Found project in current dir: {current_dir}")
+        output_dir = current_dir / "final_applications"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        print(f"[PATH_RESOLVER] Created/verified output directory: {output_dir}")
+        return current_dir, current_dir / "source_data", output_dir
+    
+    # Strategy 3: Check parent of current directory
+    if (current_dir.parent / "source_data").exists():
+        print(f"[PATH_RESOLVER] Found project in parent dir: {current_dir.parent}")
+        output_dir = current_dir.parent / "final_applications"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        print(f"[PATH_RESOLVER] Created/verified output directory: {output_dir}")
+        return current_dir.parent, current_dir.parent / "source_data", output_dir
+    
+    # Strategy 4: CI/CD environment handling
+    if str(current_dir).startswith('/harness') or os.environ.get('HARNESS_BUILD_ID'):
+        print(f"[PATH_RESOLVER] Detected CI/CD environment")
+        
+        # In CI/CD, files might be in various locations
+        potential_bases = [
+            current_dir,
+            Path('/harness'),
+            Path('/harness/workspace'),
+            script_dir.parent,
+            current_dir.parent
+        ]
+        
+        for base in potential_bases:
+            print(f"[PATH_RESOLVER] Checking CI/CD base: {base}")
+            if base.exists() and (base / "source_data").exists():
+                print(f"[PATH_RESOLVER] Found CI/CD project at: {base}")
+                output_dir = base / "final_applications"
+                output_dir.mkdir(parents=True, exist_ok=True)
+                print(f"[PATH_RESOLVER] Created/verified output directory: {output_dir}")
+                return base, base / "source_data", output_dir
+        
+        # If no source_data found in CI/CD, use current directory as base
+        # and create necessary structure
+        print(f"[PATH_RESOLVER] Using CI/CD fallback: {current_dir}")
+        output_dir = current_dir / "final_applications"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Create a minimal source_data structure if needed
+        source_dir = current_dir / "source_data"
+        source_dir.mkdir(parents=True, exist_ok=True)
+        
+        return current_dir, source_dir, output_dir
+    
+    # Strategy 5: Final fallback
+    print(f"[PATH_RESOLVER] Using final fallback: {script_dir.parent}")
+    base_dir = script_dir.parent
+    output_dir = base_dir / "final_applications"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    
+    return base_dir, base_dir / "source_data", output_dir
+
+if __name__ == "__main__":
+    base, source, output = resolve_project_paths()
+    print(f"Base directory: {base}")
+    print(f"Source data directory: {source}")
+    print(f"Output directory: {output}")
+    print(f"Output directory exists: {output.exists()}")

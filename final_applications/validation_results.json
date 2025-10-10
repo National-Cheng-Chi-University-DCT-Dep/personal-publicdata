@@ -1,0 +1,54 @@
+{
+  "generated_at": "2025-10-07T13:47:04.757396",
+  "profile_summary": {
+    "ielts_overall": 7.0,
+    "ielts_writing": 5.5,
+    "budget_eur": 12500
+  },
+  "results": {
+    "taltech": {
+      "overall_status": "ELIGIBLE",
+      "confidence_score": 1.0,
+      "validation_details": {
+        "ielts_status": "ELIGIBLE",
+        "budget_status": "ELIGIBLE",
+        "deadline_status": "ELIGIBLE"
+      },
+      "risk_count": 1,
+      "advantage_count": 3
+    },
+    "aalto": {
+      "overall_status": "NEEDS_REVIEW",
+      "confidence_score": 1.0,
+      "validation_details": {
+        "ielts_status": "ELIGIBLE",
+        "budget_status": "NEEDS_REVIEW",
+        "deadline_status": "ELIGIBLE"
+      },
+      "risk_count": 2,
+      "advantage_count": 2
+    },
+    "linkoping": {
+      "overall_status": "ELIGIBLE",
+      "confidence_score": 1.0,
+      "validation_details": {
+        "ielts_status": "ELIGIBLE",
+        "budget_status": "ELIGIBLE",
+        "deadline_status": "ELIGIBLE"
+      },
+      "risk_count": 1,
+      "advantage_count": 3
+    },
+    "darmstadt": {
+      "overall_status": "ELIGIBLE",
+      "confidence_score": 1.0,
+      "validation_details": {
+        "ielts_status": "ELIGIBLE",
+        "budget_status": "ELIGIBLE",
+        "deadline_status": "ELIGIBLE"
+      },
+      "risk_count": 1,
+      "advantage_count": 3
+    }
+  }
+}
