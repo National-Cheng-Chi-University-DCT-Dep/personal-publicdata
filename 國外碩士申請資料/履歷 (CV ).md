@@ -18,6 +18,7 @@ An accomplished **Software Engineer** with **5 years of experience** specializin
 **Graduate Coursework in Digital Content and Technologies** | *Sept 2021 – June 2023*
 - **Cumulative GPA: 3.96 / 4.3** (Top 5% of class)
 - **Relevant Coursework**: Advanced Programming, Data Structures, Software Engineering, Digital Content Management
+somaliland
 
 ### **National Chengchi University (NCCU)**, Taipei, Taiwan  
 **Bachelor of Science in Management Information Systems** | *Sept 2015 – June 2020*
