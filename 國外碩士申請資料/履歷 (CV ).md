@@ -6,7 +6,14 @@
 
 ## 🎯 Professional Summary
 
-An accomplished **Software Engineer** with **5 years of experience** specializing in **Cloud Infrastructure and Cybersecurity**. Possesses numerous industry certifications (ISC², AWS, GCP) and has demonstrated **exceptional academic performance (Cumulative GPA: 3.96/4.3)** in graduate-level coursework. Eager to leverage extensive hands-on expertise in **DevSecOps, SAST, Zero Trust architecture**, and emerging fields like **Quantum Computing and AI Security** to pursue advanced research in **AI-driven security systems**.
+- An accomplished **Cybersecurity/SRE/Software Engineer** with **5 years of experience** specializing in **Cloud Infrastructure and Cybersecurity**.
+
+- Possesses numerous industry certifications (ISC², AWS, GCP) and has demonstrated
+- **ISC CC Certified/Cloud MSP Certified**
+- **exceptional academic performance (Cumulative GPA: 3.96/4.3)**
+  in graduate-level(NCCU DCT master program) coursework.
+-  Eager to leverage extensive hands-on expertise in **DevSecOps, SAST, Zero Trust architecture**
+-  emerging fields like **Quantum Computing and AI Security** to pursue advanced research in **AI-driven security systems**.
 
 **🎓 Target Programs**: AI Security Specialist | Quantum Cryptography Researcher | Advanced Cloud Security Architect
 
@@ -34,7 +41,7 @@ An accomplished **Software Engineer** with **5 years of experience** specializin
 | **Graduate Student Scholarship** | NCCU | 2023 | Academic excellence recognition |
 | **Featured Artist** | NCCU Art Center | 2023 | NFT Creation Exhibition - Bridged crypto technology and artistic expression |
 | **Best Popularity Award** | NCCU | 2020 | Graduation Project Competition |
-| **Taipower Employee's Children Scholarship** | Taiwan Power Company | [Year] | Merit-based scholarship |
+| **Taipower Employee's Children Scholarship** | Taiwan Power Company | 2018 | Merit-based scholarship |
 
 ---
 
@@ -64,11 +71,11 @@ An accomplished **Software Engineer** with **5 years of experience** specializin
 - **Refactored CI/CD** to robust on-tag release workflow
 - **Integrated Snyk** for security scanning and built **120-case E2E testing suite**
 
-**Project 3: Payment Card AWS Pipeline & frontend dev **
-- **Conducted PCI-DSS regulated donation platform
+**Project 3: Payment Card AWS Pipeline & frontend dev**
+- **Conducted PCI-DSS** regulated donation platform
 - **Refactored AWS CI/CD** to eliminate invalid aws code build pipelines
 - **Implement AWS bot detection** for preventing DDoS/Bandwidth attack**
-- **Found invalid remaining root domain ssl certification and use CNAME flttening to solve it **
+- **Found invalid remaining root domain ssl certification and use CNAME flttening to solve it**
 
 
 **Technologies**: AWS, Nuxt.js, Nest.js, AWS WAF, Zero Trust, Snyk, E2E Testing
@@ -239,4 +246,3 @@ An accomplished **Software Engineer** with **5 years of experience** specializin
 | **Testing Coverage** | 120-case E2E suite | Comprehensive quality assurance |
 
 ---
-
